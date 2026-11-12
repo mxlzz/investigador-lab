@@ -23,3 +23,11 @@
 - Estado: pendiente de auditoría técnica
 - Motivo: aprovechar orquestación, evaluación, ablaciones y evidencias donde resulte apropiado.
 - Pendiente: examinar código, licencia, dependencias, seguridad y costos antes de integrar.
+
+## DEC-0005 — Gobernanza de la etapa de diseño
+- Fecha: 2026-11-12
+- Estado: acordada
+- Decisión: el proyecto permanece en fase de discusión y diseño hasta que el usuario autorice explícitamente comenzar su implementación.
+- Alcance: se pueden contrastar alternativas, investigar referencias y registrar en GitHub las decisiones efectivamente acordadas. Las ideas pendientes se identifican como propuestas y no se presentan como aprobadas.
+- Restricciones: no implementar código, configurar OpenClaw, activar automatizaciones, iniciar experimentos ni crear tareas de ejecución por iniciativa propia. El registro de diseño no implica autorización para ejecutar la hoja de ruta.
+- Motivo: separar la definición del sistema de su construcción y evitar compromisos prematuros.
