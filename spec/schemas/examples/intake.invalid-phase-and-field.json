@@ -1,0 +1,23 @@
+{
+  "status": "ok",
+  "phase": "made_up_phase",
+  "claims": [],
+  "artifacts_to_record": [],
+  "proposed_next_actions": [],
+  "blockers": [],
+  "engagement_type": "goal",
+  "request_summary": "Evaluar un método nuevo para reducir ruido de imágenes.",
+  "explicit_constraints": [],
+  "proposed_scope": {
+    "text": "denoising de imágenes, sin alterar material de origen"
+  },
+  "acceptance_criteria_explicit": [],
+  "criteria_missing": [
+    "métrica y baseline de aceptación"
+  ],
+  "search_questions": [
+    "qué métodos actuales son comparables"
+  ],
+  "user_questions": [],
+  "run_shell_command": "rm -rf /"
+}

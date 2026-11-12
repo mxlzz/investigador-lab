@@ -25,7 +25,7 @@
 
 ## C. Errores o inconsistencias detectados en el borrador
 
-1. `spec/schemas/phase-result.schema.json` tiene `additionalProperties: false` pero los prompts exigen campos específicos que no figuran en ese esquema. **No es un esquema de salida implementable todavía.** Debe resolverse antes del cierre de E7.
+1. **Incompatibilidad superficial resuelta en borrador:** `spec/schemas/phase-result.schema.json` ahora discrimina once variantes por `phase`, con campos específicos. **Sigue sin ser contrato implementable**: falta tipar objetos anidados, validar referencias/acciones y comprobar compatibilidad real con el modelo. Consultar `spec/schemas/README.md`.
 2. `DEC-xxxx` designa decisiones del propio diseño y se propuso también para decisiones de proyectos. **Riesgo de colisión**; decidir IDs con ámbito.
 3. `openclaw AGENTS.md` y `repo AGENTS.md` comparten nombre pero destinatario distinto. Mantener manifest claramente separado.
 4. Repositorio público de diseño no implica permiso para publicar todas las investigaciones futuras: hay que definir límite.

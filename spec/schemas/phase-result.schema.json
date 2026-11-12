@@ -1,99 +1,1379 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/mxlzz/investigador-lab/blob/main/spec/schemas/phase-result.schema.json",
-  "title": "Investigador — salida común de fase (BORRADOR, NO APROBADO)",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "status",
-    "phase",
-    "claims",
-    "artifacts_to_record",
-    "proposed_next_actions",
-    "blockers"
-  ],
-  "properties": {
-    "status": {
-      "enum": [
-        "ok",
-        "needs_evidence",
-        "blocked",
-        "error"
-      ]
-    },
-    "phase": {
-      "enum": [
-        "intake",
-        "search_plan",
-        "extract_evidence",
-        "map_knowledge",
-        "hypotheses",
-        "novelty_review",
-        "experiment_design",
-        "evaluation",
-        "next_cycle",
-        "report",
-        "audit"
-      ]
-    },
-    "claims": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "text",
-          "support_ids",
-          "certainty"
-        ],
-        "properties": {
-          "text": {
+  "title": "Investigador — salida de fase tipificada (BORRADOR, NO APROBADO)",
+  "description": "Borrador discriminado por phase: resuelve la colisión del envoltorio cerrado con campos específicos. No define aún los subesquemas internos ni valida permisos/evidencia.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "engagement_type",
+        "request_summary",
+        "explicit_constraints",
+        "proposed_scope",
+        "acceptance_criteria_explicit",
+        "criteria_missing",
+        "search_questions",
+        "user_questions"
+      ],
+      "properties": {
+        "phase": {
+          "const": "intake"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
             "type": "string"
-          },
-          "support_ids": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "uniqueItems": true
-          },
-          "certainty": {
-            "enum": [
-              "observed",
-              "source_claim",
-              "inference",
-              "hypothesis"
-            ]
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "engagement_type": {
+          "enum": [
+            "goal",
+            "topic"
+          ]
+        },
+        "request_summary": {
+          "type": "string"
+        },
+        "explicit_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "proposed_scope": {
+          "type": "object"
+        },
+        "acceptance_criteria_explicit": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "criteria_missing": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "search_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "user_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
     },
-    "artifacts_to_record": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      },
-      "description": "Esquema específico a definir."
-    },
-    "proposed_next_actions": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      },
-      "description": "Acciones semánticas controladas, nunca comandos arbitrarios."
-    },
-    "blockers": {
-      "type": "array",
-      "items": {
-        "type": "string"
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "research_questions",
+        "planned_queries",
+        "source_families",
+        "coverage_targets",
+        "known_gaps",
+        "stop_review_proposal"
+      ],
+      "properties": {
+        "phase": {
+          "const": "search_plan"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "research_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "planned_queries": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "source_families": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "coverage_targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "known_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stop_review_proposal": {
+          "type": [
+            "object",
+            "string",
+            "null"
+          ]
+        }
       }
     },
-    "notes": {
-      "type": [
-        "string",
-        "null"
-      ]
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "source_identifier",
+        "access_level",
+        "bibliographic_metadata",
+        "reported_experiments",
+        "reported_limitations",
+        "candidate_relations",
+        "unverified_fields"
+      ],
+      "properties": {
+        "phase": {
+          "const": "extract_evidence"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_identifier": {
+          "type": "string"
+        },
+        "access_level": {
+          "enum": [
+            "metadata",
+            "abstract",
+            "full_text",
+            "code",
+            "other"
+          ]
+        },
+        "bibliographic_metadata": {
+          "type": "object"
+        },
+        "reported_experiments": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "reported_limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "candidate_relations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "unverified_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "method_families",
+        "supported_findings",
+        "contradictions",
+        "open_questions",
+        "proposed_edges",
+        "coverage_gaps"
+      ],
+      "properties": {
+        "phase": {
+          "const": "map_knowledge"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method_families": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "supported_findings": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_edges": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "coverage_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "candidates",
+        "future_opportunities",
+        "reasons_not_to_test_yet"
+      ],
+      "properties": {
+        "phase": {
+          "const": "hypotheses"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "future_opportunities": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "reasons_not_to_test_yet": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "hypothesis_id",
+        "prior_art_classification",
+        "equivalent_or_related_work",
+        "searches_reviewed",
+        "missing_searches",
+        "expected_new_information",
+        "recommendation"
+      ],
+      "properties": {
+        "phase": {
+          "const": "novelty_review"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hypothesis_id": {
+          "type": "string"
+        },
+        "prior_art_classification": {
+          "enum": [
+            "documented",
+            "equivalent",
+            "partially_explored",
+            "no_prior_art_located",
+            "insufficient_evidence"
+          ]
+        },
+        "equivalent_or_related_work": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "searches_reviewed": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "missing_searches": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "expected_new_information": {
+          "type": "string"
+        },
+        "recommendation": {
+          "enum": [
+            "reuse_existing",
+            "replicate_for_validation",
+            "differentiate",
+            "experiment",
+            "defer",
+            "discard",
+            "request_authorization"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "hypothesis_id",
+        "protocol_draft",
+        "baselines",
+        "metrics_and_criteria",
+        "controls",
+        "reproducibility_requirements",
+        "resources",
+        "failure_conditions"
+      ],
+      "properties": {
+        "phase": {
+          "const": "experiment_design"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hypothesis_id": {
+          "type": "string"
+        },
+        "protocol_draft": {
+          "type": "object"
+        },
+        "baselines": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "metrics_and_criteria": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "controls": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "reproducibility_requirements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "resources": {
+          "type": "object"
+        },
+        "failure_conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "experiment_id",
+        "interpretability_checks",
+        "baseline_comparisons",
+        "primary_findings",
+        "limitations",
+        "verdict",
+        "recommendation"
+      ],
+      "properties": {
+        "phase": {
+          "const": "evaluation"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "experiment_id": {
+          "type": "string"
+        },
+        "interpretability_checks": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "baseline_comparisons": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "primary_findings": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "verdict": {
+          "enum": [
+            "supported",
+            "not_supported",
+            "inconclusive",
+            "invalid"
+          ]
+        },
+        "recommendation": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "state_snapshot_id",
+        "candidate_actions",
+        "selected_action",
+        "selection_rationale",
+        "preconditions",
+        "expected_artifacts",
+        "budget_check"
+      ],
+      "properties": {
+        "phase": {
+          "const": "next_cycle"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "state_snapshot_id": {
+          "type": "string"
+        },
+        "candidate_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "selected_action": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "selection_rationale": {
+          "type": "string"
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "budget_check": {
+          "type": "object"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "summary",
+        "verified_changes",
+        "findings",
+        "negative_results",
+        "future_opportunities",
+        "uncertainties",
+        "decision_requests",
+        "next_step"
+      ],
+      "properties": {
+        "phase": {
+          "const": "report"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "verified_changes": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "negative_results": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "future_opportunities": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "uncertainties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision_requests": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "next_step": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "phase",
+        "claims",
+        "artifacts_to_record",
+        "proposed_next_actions",
+        "blockers",
+        "scope_reviewed",
+        "materials_accessed",
+        "materials_not_accessed",
+        "findings",
+        "evidence_gaps",
+        "recommendations"
+      ],
+      "properties": {
+        "phase": {
+          "const": "audit"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "needs_evidence",
+            "blocked",
+            "error"
+          ]
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "support_ids",
+              "certainty"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "support_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "certainty": {
+                "enum": [
+                  "observed",
+                  "source_claim",
+                  "inference",
+                  "hypothesis"
+                ]
+              }
+            }
+          }
+        },
+        "artifacts_to_record": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "proposed_next_actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope_reviewed": {
+          "type": [
+            "object",
+            "string"
+          ]
+        },
+        "materials_accessed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "materials_not_accessed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "evidence_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
     }
-  },
-  "description": "Este borrador cubre solamente el envoltorio común; las extensiones por fase no están especificadas y se deben definir antes de programar."
+  ]
 }

@@ -1,0 +1,17 @@
+{
+  "status": "needs_evidence",
+  "phase": "novelty_review",
+  "claims": [],
+  "artifacts_to_record": [],
+  "proposed_next_actions": [],
+  "blockers": [
+    "Falta revisar equivalencias matemáticas"
+  ],
+  "hypothesis_id": "HYP-0001",
+  "prior_art_classification": "insufficient_evidence",
+  "equivalent_or_related_work": [],
+  "searches_reviewed": [],
+  "missing_searches": [],
+  "expected_new_information": "Determinar si la técnica fue utilizada con otra nomenclatura.",
+  "recommendation": "defer"
+}

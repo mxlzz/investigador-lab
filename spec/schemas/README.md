@@ -3,14 +3,17 @@
 **Estado: borrador.** Los archivos JSON de este directorio son contratos de datos **propuestos**, no código listo para ejecutar ni autorización para implementar.
 
 - `record.schema.json`: mínimos de procedencia, trazabilidad y relaciones.
-- `phase-result.schema.json`: campos comunes de salida de un prompt.
+- `phase-result.schema.json`: once variantes de fase discriminadas por `phase` mediante `oneOf`; acepta solamente campos comunes + los declarados para la fase.
+- `examples/`: ejemplos de respuestas estructuralmente válidas e inválidas, para convertir en pruebas de contrato antes de la implementación.
 - **No son definitivos**: faltan subtipos de registros y esquemas por fase, ejemplos válidos/inválidos, auditoría de referencias cruzadas, semántica de estados, versión, manejo de migraciones y colisión de IDs.
 
-## Problema detectado
+## Problema técnico abordado (borrador)
 
-Los prompts por fase agregan campos específicos; el envoltorio común declara `additionalProperties: false`. Una implementación **no puede** tomar estos dos borradores juntos como una validación final. Habrá que definir `$defs`, `oneOf` o una variante consistente por fase.
+El esquema previo tenía `additionalProperties: false` a nivel común y rechazaba los campos específicos exigidos por cada prompt. El esquema actual utiliza **`oneOf` con once objetos estrictos por fase**, cada uno con campos comunes y específicos. Se elimina esa incompatibilidad **de estructura superficial**, pero el contrato **sigue sin estar listo** para implementación.
 
-Se deja deliberadamente explicitado para que Codex no invente una corrección por su cuenta durante la implementación.
+Quedan abiertos: subesquemas estrictos de `artifacts_to_record`, `proposed_next_actions`, objetos específicos, validación semántica de referencias y permisos, distinción de los distintos estados por fase y los formatos de salida realmente soportados por los modelos objetivo. Los ejemplos son fixtures de diseño, no evidencia de pruebas ejecutadas.
+
+No se delega a Codex completar estos contratos: diseño y aprobación siguen siendo nuestros.
 
 ## Lo que verificará una futura validación
 

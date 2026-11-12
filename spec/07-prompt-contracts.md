@@ -49,7 +49,7 @@ Todas las fases devuelven un **objeto JSON** con:
 - `blockers`: datos faltantes, permisos o límites;
 - `notes`: solo explicación adicional, sin reemplazar los campos anteriores.
 
-Un esquema JSON Schema formal y validadores de IDs, referencias y enumeraciones será definido en E5/E10. Un JSON sintácticamente válido no implica que las fuentes citadas existan; eso también debe validarse.
+Se redactó un esquema JSON Schema **preliminar** con una variante de salida por fase (`spec/schemas/phase-result.schema.json`), sin cerrar aún tipos anidados ni validadores de IDs, referencias, permisos o recursos. Esos contratos se completarán en E5/E10. Un JSON sintácticamente válido no implica que las fuentes citadas existan; eso también debe validarse.
 
 ## Catálogo de prompts redactados (BORRADOR)
 
