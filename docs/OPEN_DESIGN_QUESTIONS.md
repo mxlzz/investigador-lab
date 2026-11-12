@@ -6,11 +6,11 @@
 ## A. Decisiones que sí requieren criterio del usuario
 
 1. **Frontera de autonomía — RESUELTA (DEC-0010):** investigación, archivos, desarrollo, pruebas aisladas y ramas experimentales permitidos dentro de presupuestos, recursos y permisos aprobados. Requieren autorización: ampliación de permisos, exceso de presupuesto, configuración central de OpenClaw y versiones estables. **Pendiente:** límites cuantitativos y matriz concreta de permisos, no la frontera conceptual.
-2. **Presupuesto monetario — RESUELTO (DEC-0011):** libre utilización de cuotas gratuitas sujetas a los límites del proveedor; servicios pagos con presupuesto por proyecto y valor predeterminado cero. **Pendiente:** límites de CPU/RAM/GPU, horarios y prioridad entre proyectos, recuperación tras agotamiento de cuotas.
-3. **Comunicación y revisiones:** frecuencia de mensajes y auditorías ChatGPT, notificaciones urgentes, aprobación de cambios de prioridad, formato de reportes. Se discutió una revisión corta y otra profunda, pero no se definió un horario.
-4. **Varios proyectos:** número simultáneo, prioridades y condiciones para pausar o comenzar una oportunidad futura.
+2. **Cuotas y gasto — RESUELTO (DEC-0011); PC libre — RESUELTO EN PRINCIPIO (DEC-0012):** cuotas gratuitas disponibles, pagas a cero por defecto y cargas intensivas locales solo si la PC está libre. Pendientes de precisión: umbrales, interrupción, horarios y tareas remotas.
+3. **Informe diario y alertas — RESUELTO (DEC-0015):** un informe diario y avisos importantes. **Pendiente:** hora, canal, umbral de alerta; la auditoría externa de ChatGPT todavía no tiene cadencia ni autoridad acordada.
+4. **Concurrencia — RESUELTA EN PRINCIPIO (DEC-0013):** varios proyectos con prioridades y recursos compartidos. **Pendiente:** criterios de priorización, límite de tareas simultáneas y reparto de recursos.
 5. **Éxito y cierre:** ¿Investigador declara automáticamente `meta_cumplida` si se verifican criterios acordados, o solicita confirmación final?
-6. **Privacidad y publicación:** repositorio de diseño público; ¿los proyectos y su base Obsidian son públicos por defecto o requieren elección por proyecto? Nunca publicar secretos o datos sin autorización.
+6. **Visibilidad — DECIDIDA CON PREFERENCIA PÚBLICA (DEC-0014):** elegir visibilidad por proyecto, favoreciendo repositorios públicos para usar runners estándar gratuitos; privados cuando corresponda. Nunca publicar secretos o datos no autorizados. **Pendiente:** controles y decisión de publicación por tipo de artefacto.
 7. **Interfaz y despliegue final:** grado de interacción gráfica sin terminal, capacidad de ejecutar con PC apagada, quién autoriza instalación, actualización y desinstalación.
 
 ## B. Análisis técnico que podemos seguir completando antes de consultarte
@@ -35,4 +35,4 @@
 
 Preguntar cuando una elección cambie la autoridad del agente, costos, privacidad, compromisos del usuario o el significado de éxito. Para detalles de ingeniería sin impacto funcional, continuar investigando y proponiendo alternativas justificadas.
 
-**Próximas decisiones a consultar:** uso de recursos locales y horarios, concurrencia entre proyectos, privacidad por proyecto y frecuencia de comunicación.
+**Próximas decisiones a consultar:** definir operativamente «PC libre» y qué hacer al volver a usarla; criterio de prioridad entre proyectos; horario/canal del informe; declaración de meta cumplida y autoridad de auditoría.

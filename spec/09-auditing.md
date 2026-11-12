@@ -21,7 +21,7 @@ Separar producción de afirmaciones y verificación de evidencia. El auditor pue
 
 **Profunda:** seleccionar muestras de fuentes/experimentos, abrir evidencia, repetir cálculos o comparar artefactos cuando el entorno lo permita, buscar precedentes omitidos, revisar contradicciones y detectar desviaciones del contrato aprobado.
 
-La periodicidad diaria o dos veces al día es una **posibilidad discutida**, no un horario aprobado. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
+El **informe de progreso de Investigador** es diario (DEC-0015); esto no determina la frecuencia de las **auditorías independientes de ChatGPT**, que sigue pendiente de acuerdo. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
 
 ## 4. Informe de auditoría (PROPUESTA)
 

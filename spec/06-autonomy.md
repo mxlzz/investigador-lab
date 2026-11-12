@@ -42,11 +42,13 @@ Para resultados voluminosos o carreras paralelas, usar publicación atómica de 
 
 **Pendiente:** separar cuotas por proyecto y globales: tiempo total, duración por ejecución, CPU, RAM, GPU, disco/red y prioridades, independientemente de si el proveedor del modelo cobra o no.
 
-Propuesto: las tareas pesadas se programan con ventanas de recursos o se trasladan a runners remotos aprobados. El uso de un workspace propio no limita CPU ni impide interferir con otras aplicaciones; requiere límites reales del entorno.
+**Acordado (DEC-0012):** las tareas intensivas de CPU/GPU locales se ejecutan únicamente si la PC está libre; los umbrales y la política de interrupción siguen por definir. Como propuesta técnica, las tareas pesadas se pueden programar con ventanas de recursos o trasladar a runners remotos aprobados. El uso de un workspace propio no limita CPU ni impide interferir con otras aplicaciones; requiere límites reales del entorno.
 
 Se deben medir consumos; si se alcanzan límites, suspender de manera segura, persistir el estado y notificar según las reglas de comunicación.
 
 ## 5. Concurrencia y dependencia de herramientas
+
+**Acordado (DEC-0013):** pueden existir varios proyectos activos con prioridades y recursos compartidos. Está pendiente definir prioridades, límites de ejecución simultánea, equidad entre proyectos y suspensión preventiva.
 
 Una sola acción que modifique un mismo recurso a la vez salvo mecanismo de concurrencia explícito. Subagentes pueden investigar en paralelo pero sus informes no se integran como evidencia validada sin revisión de fuentes y deduplicación.
 
@@ -73,6 +75,8 @@ La matriz exacta de permisos debe fijarse en E8; aquí es diseño, no política 
 
 ## 8. Cierre de ciclo y comunicación
 
+**Acordado (DEC-0015):** un informe diario y alertas importantes, aún sin horario/canal/umbrales definidos.
+
 Propuesto: reporte corto basado en cambios verificables (`state_before`, `action`, `evidence`, `state_after`, `next`, `blocked_on`). Cada notificación incluye vínculos/IDs; si no hay nueva evidencia, no declarar progreso.
 
 ## 9. Escenarios de aceptación
@@ -85,8 +89,8 @@ Propuesto: reporte corto basado en cambios verificables (`state_before`, `action
 - A06: corre otra instancia en el mismo proyecto → conflicto detectable, sin sobrescritura silenciosa.
 
 ## Pendientes de diseño
-- Cadencia de ciclos y ventanas de recursos.
-- Límites de recursos locales, concurrencia permitida y prioridades (la política monetaria está acordada en DEC-0011).
+- Cadencia de ciclos y ventanas de recursos; cómo detectar que la PC está libre y reaccionar cuando deja de estarlo (DEC-0012).
+- Límites de recursos locales, concurrencia real y reglas de prioridad entre múltiples proyectos (DEC-0013; política monetaria DEC-0011).
 - Aprobaciones exactas, canales y reglas de escalamiento.
 - Motor de ejecución y nivel de disponibilidad (PC local vs remoto).
 - Política de seguimiento y de errores repetidos.

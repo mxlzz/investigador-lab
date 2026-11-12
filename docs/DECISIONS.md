@@ -97,3 +97,34 @@
 - Ante agotamiento de cuota, pausar la operación afectada, persistir el estado y, si existe otra ruta gratuita/autorizada equivalente, continuar sin incumplir condiciones; si no, esperar la reposición o solicitar presupuesto al usuario.
 - Esta decisión no activa cuentas, modelos, servicios ni tareas; sigue vigente la restricción de implementación de DEC-0005.
 - Motivo: aprovechar capacidades gratuitas y eliminar intervenciones innecesarias evitando gastos no autorizados.
+
+
+## DEC-0012 — Cargas intensivas locales solo con PC libre
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador puede ejecutar trabajos intensivos de CPU/GPU en la computadora del usuario **solo cuando la PC esté libre**. Las tareas ligeras se sujetarán a los límites de recursos de la implementación futura.
+- Pendiente: definición verificable de «libre», umbrales de intensidad, comportamiento ante la reanudación del uso, política de horarios y ejecución remota.
+- Motivo: aprovechar capacidad local sin interferir con el uso personal.
+
+## DEC-0013 — Varios proyectos concurrentes, prioridades y recursos compartidos
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador puede mantener **varios proyectos activos simultáneamente**, con priorización y administración de recursos compartidos. No hay un límite fijo de proyectos acordado todavía.
+- Pendiente: regla de prioridad, concurrencia real permitida, prevención de conflictos de escritura y reparto de cuotas de servicios gratuitos.
+- Motivo: permitir continuidad de investigaciones independientes y aprovechar recursos disponibles.
+
+## DEC-0014 — Visibilidad por proyecto, con preferencia por repositorios públicos
+- Fecha: 2026-11-12
+- Estado: acordada (dirección de diseño)
+- Decisión: la visibilidad se **elige al iniciar cada proyecto**. Preferencia operativa expresada posteriormente: favorecer **repositorios públicos** para aprovechar la gratuidad de GitHub Actions en runners estándar; conservar elección de repositorio privado si el proyecto lo requiere.
+- Restricción: nunca subir credenciales, información privada, datos protegidos o artefactos que no puedan divulgarse. La visibilidad pública de código no obliga a publicar datos de investigación, logs o resultados restringidos.
+- Fundamento externo: GitHub indica uso gratuito e ilimitado **en minutos** para runners estándar alojados por GitHub en repositorios públicos; esto no elimina límites de concurrencia, almacenamiento, duración ni cargos por runners grandes/GPU. Referencias: https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job y https://docs.github.com/en/billing/reference/actions-runner-pricing
+- Pendiente: cómo elegir la visibilidad dentro del formulario inicial y reglas de publicación de resultados/artefactos por proyecto.
+- Motivo: aprovechar la infraestructura gratuita de Actions sin imponer visibilidad pública a todo contenido.
+
+## DEC-0015 — Informe diario y alertas importantes
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador entrega **un informe de progreso al día** y avisa fuera de ese informe ante eventos importantes. Los informes deben resumir avances verificables, bloqueos y oportunidades laterales que ameriten atención.
+- Pendiente: hora, zona horaria, canal de entrega y criterios exactos para clasificar una alerta importante; esto no implica crear automatizaciones durante el diseño.
+- Motivo: seguimiento útil sin exigir confirmación o atención continua.

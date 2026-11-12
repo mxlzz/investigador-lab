@@ -62,6 +62,10 @@ La futura configuración de herramientas y repositorios **debe permitir** invest
 
 Estas restricciones deberán probarse en la capa de ejecución/autorización, no depender solamente de instrucciones de lenguaje natural. Todavía falta elegir valores concretos de recursos y verificar cómo imponerlos en la versión de OpenClaw elegida.
 
+**Acordado (DEC-0014):** cada proyecto define visibilidad al iniciarse, con preferencia por repositorio público para usar runners estándar gratuitos; datos y materiales no publicables se mantienen fuera del repositorio público. Los runners grandes/GPU siguen sujetos a presupuesto autorizado.
+
+**Acordado (DEC-0012):** las cargas intensivas de CPU/GPU de la PC se restringen a momentos de equipo libre; el detalle de la detección y los límites está pendiente.
+
 ## 6. Aislamiento propuesto
 
 - Agente `investigador` separado del agente personal principal.
@@ -99,6 +103,6 @@ Cada modo termina con la **misma** batería de tests y un reporte de conformidad
 - Modelo(s) y ruta de fallback; disponibilidad y cuotas gratuitas reales, con garantía de no incurrir en gastos sin presupuesto aprobado (DEC-0011).
 - Dónde persistir la base de datos estructurada y artefactos pesados.
 - Qué herramientas/skills deben existir obligatoriamente frente a opcionales.
-- Si el repositorio público es solo la especificación general o si algunos datos de proyectos deberán ir a repositorios privados.
+- Implementar elección de visibilidad por proyecto con preferencia por público (DEC-0014); definir separación de datos públicos/privados y permisos de Actions.
 - Licencias de referencias reutilizadas; límites de CPU/RAM/GPU y horarios.
 - Responsable del paso final de instalación, permisos y aprobación de cambios persistentes.

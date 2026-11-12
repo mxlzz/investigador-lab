@@ -1,7 +1,7 @@
 # E1 — Contrato funcional y experiencia de uso
 
 **Estado:** borrador de especificación, NO aprobado en conjunto.  
-**Decisiones existentes:** DEC-0002, DEC-0005, DEC-0006, DEC-0007, DEC-0008, DEC-0010.  
+**Decisiones existentes:** DEC-0002, DEC-0005, DEC-0006, DEC-0007, DEC-0008, DEC-0010, DEC-0012, DEC-0013, DEC-0014, DEC-0015.  
 **Objetivo:** definir lo que debe suceder desde un encargo hasta su entrega, independientemente de la plataforma que lo ejecute.
 
 ## 1. Dos formas de encargo (ACORDADO)
@@ -54,7 +54,7 @@ El agente podrá investigar, escribir, desarrollar, experimentar de modo aislado
 - Separar lo **observado**, lo **inferido**, lo **propuesto** y lo **aprobado**.
 - Notificar que una meta fue cumplida o que una investigación se cerró, junto a resultados y pendientes.
 
-La frecuencia, los canales y el umbral de avisos quedan **ABIERTOS**.
+**Acordado (DEC-0015):** un informe diario y alertas importantes. **Pendientes:** canal, hora, zona horaria y umbral de importancia.
 
 ## 7. Cambios de prioridad (PROPUESTA)
 
@@ -72,8 +72,8 @@ Cambios en una meta → versionar el encargo y revisar criterios de éxito, ante
 - F06: dos proyectos compiten por recursos; no ejecuta ambos simultáneamente sin política.
 
 ## Pendientes para cerrar E1
-1. ¿Cuántos proyectos activos en paralelo y cómo asignar prioridades?
-2. ¿Qué aprobaciones pide en cada tipo de acción?
-3. ¿Cadencia y canal de notificaciones?
+1. Varios proyectos activos acordados (DEC-0013); falta política concreta de prioridades y concurrencia.
+2. Frontera principal de aprobaciones acordada (DEC-0010); faltan detalles de herramientas.
+3. Informe diario y alertas acordados (DEC-0015); faltan horario, canal y criterios de alertas.
 4. ¿Puede declarar la meta cumplida automáticamente basándose en criterios previos, o exige confirmación final del usuario?
 5. ¿Qué entregables mínimos se esperan en una exploración abierta?
