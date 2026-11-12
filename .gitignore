@@ -1,0 +1,15 @@
+# Credenciales y datos locales
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+__pycache__/
+.venv/
+node_modules/
+.DS_Store
+Thumbs.db
+vault/.obsidian/workspace.json
+vault/.obsidian/cache
+results/
+artifacts/
