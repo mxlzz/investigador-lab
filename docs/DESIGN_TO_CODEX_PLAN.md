@@ -15,6 +15,14 @@ Diseñar un agente universal de investigación y desarrollo: recibe **metas** o 
 
 Ver [DEC-0005](DECISIONS.md), [DEC-0006](DECISIONS.md), [DEC-0007](DECISIONS.md) y [DEC-0008](DECISIONS.md). Las etapas de este documento son **etapas de especificación**; [ROADMAP.md](ROADMAP.md) describe una hoja de ruta preliminar de *implementación*, no el trabajo que se ejecuta ahora.
 
+## Orden de prioridad y criterio para pedir decisiones al usuario
+
+El orden operativo del trabajo de diseño privilegia **E1–E4 y E7**: experiencia del encargo, antecedentes, hipótesis, experimentación, evaluación y prompts. La autonomía, almacenamiento y tecnología de soporte se diseñan para **servir a ese ciclo**, sin convertir incidencias de mensajería o detalles de APIs en el centro del proyecto.
+
+Resolver técnicamente lo ordinario (reintentos, codificación, formatos, estructura interna, temporizadores, errores recuperables) y presentarlo como especificación revisable. Solicitar decisiones al usuario solamente si afectan la finalidad del Investigador, el presupuesto, la privacidad, una autorización, o una elección científica significativa. No convertir cada detalle del diseño en una pregunta.
+
+Documento principal del comportamiento: [`spec/CORE_RESEARCH_LOOP.md`](../spec/CORE_RESEARCH_LOOP.md).
+
 ## Método de trabajo por etapa
 
 1. Recuperar las decisiones existentes y evidencias de referencia.

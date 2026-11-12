@@ -3,6 +3,10 @@
 **Fase:** diseño. **No implementar todavía.**  
 **Regla:** cada archivo identifica expresamente qué está acordado, qué es propuesta y qué sigue abierto. No se debe interpretar una propuesta como requisito aprobado.
 
+## Punto de entrada prioritario
+
+- [Núcleo científico: cómo investiga, experimenta, aprende y continúa](CORE_RESEARCH_LOOP.md)
+
 ## Índice
 - [01 — Contrato funcional](01-functional.md)
 - [02 — Investigación previa](02-prior-art.md)
