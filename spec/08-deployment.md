@@ -64,7 +64,7 @@ Estas restricciones deberán probarse en la capa de ejecución/autorización, no
 
 **Acordado (DEC-0014):** cada proyecto define visibilidad al iniciarse, con preferencia por repositorio público para usar runners estándar gratuitos; datos y materiales no publicables se mantienen fuera del repositorio público. Los runners grandes/GPU siguen sujetos a presupuesto autorizado.
 
-**Acordado (DEC-0012):** las cargas intensivas de CPU/GPU de la PC se restringen a momentos de equipo libre; el detalle de la detección y los límites está pendiente.
+**Acordado (DEC-0016):** cargas intensivas de CPU/GPU tras 15 minutos de inactividad de usuario y pausa controlada al detectar su regreso. La implementación deberá probar suspensión y reanudación sin capturar teclas o contenidos del usuario; queda abierta la definición técnica exacta.
 
 ## 6. Aislamiento propuesto
 
@@ -104,5 +104,5 @@ Cada modo termina con la **misma** batería de tests y un reporte de conformidad
 - Dónde persistir la base de datos estructurada y artefactos pesados.
 - Qué herramientas/skills deben existir obligatoriamente frente a opcionales.
 - Implementar elección de visibilidad por proyecto con preferencia por público (DEC-0014); definir separación de datos públicos/privados y permisos de Actions.
-- Licencias de referencias reutilizadas; límites de CPU/RAM/GPU y horarios.
-- Responsable del paso final de instalación, permisos y aprobación de cambios persistentes.
+- Licencias de referencias reutilizadas; límites de CPU/RAM/GPU, detector de inactividad de 15 minutos y suspensión segura (DEC-0016).
+- Responsable del paso final de instalación y permisos. La publicación estable exige aprobación del usuario aun si el agente declara la meta cumplida (DEC-0019).

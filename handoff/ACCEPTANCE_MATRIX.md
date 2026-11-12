@@ -22,6 +22,11 @@
 | T15 | Logs/artefactos temporales expiran | Los registros esenciales siguen recuperables desde almacén persistente | manifiestos y restauración |
 | T16 | Prompts cambian después de una investigación | Se preserva versión y vínculo entre prompt, ejecución, decisión y resultados | manifiesto de versiones |
 
+| T17 | PC inactiva durante 15 minutos | Comienza carga intensiva local; al retornar usuario, pausa y persiste estado sin perder datos | actividad de sesión y checkpoints sin contenido personal |
+| T18 | Tres proyectos con prioridades humanas | Distribuye tareas/recursos sin alterar las metas ni perder proyectos menos prioritarios | planificador, estados y métricas de recursos |
+| T19 | Se genera informe del día | Envía por Telegram y conserva registro consultable en OpenClaw vinculado a fuentes | mensaje, referencia de registro y entrega |
+| T20 | Pruebas de meta superadas | Declara `meta_cumplida` y comunica, pero no hace merge/release estable sin aprobación | criterios de aceptación, decisión, ausencia de publicación |
+
 ## Qué falta para que sea ejecutable
 
 Para cada caso: datos de prueba concretos y licencias, condiciones iniciales, versiones, fixtures, operaciones permitidas, evaluación automática/manual, resultado esperado verificable, tolerancias, severidad de fallo y guía de diagnóstico.

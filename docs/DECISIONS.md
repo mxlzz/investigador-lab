@@ -128,3 +128,37 @@
 - Decisión: Investigador entrega **un informe de progreso al día** y avisa fuera de ese informe ante eventos importantes. Los informes deben resumir avances verificables, bloqueos y oportunidades laterales que ameriten atención.
 - Pendiente: hora, zona horaria, canal de entrega y criterios exactos para clasificar una alerta importante; esto no implica crear automatizaciones durante el diseño.
 - Motivo: seguimiento útil sin exigir confirmación o atención continua.
+
+
+## DEC-0016 — Inactividad local de 15 minutos y pausa al regresar
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: en la PC local, Investigador solo inicia cargas intensivas de CPU/GPU luego de **15 minutos sin actividad del usuario**. Si se detecta actividad nuevamente, debe **pausar de manera controlada** las cargas intensivas, conservando progreso y estado para reanudarlas cuando vuelva a cumplirse la condición.
+- Alcance: la regla de inactividad no afecta por sí sola tareas de bajo consumo ni procesos remotos; todos siguen sujetos a permisos y presupuestos.
+- Pendiente: sensor de actividad compatible con Windows, qué operaciones se pueden suspender de forma segura frente a cuáles deben terminar la unidad atómica vigente, umbrales de intensidad y recuperación tras reinicio.
+- Motivo: utilizar recursos locales disponibles sin competir con el uso del equipo.
+
+## DEC-0017 — Prioridades humanas y planificación autónoma entre proyectos
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: el usuario establece las **prioridades iniciales de los proyectos**. Dentro de ellas y de los límites autorizados, Investigador puede **distribuir recursos y reorganizar el orden de tareas** según dependencias, oportunidades, bloqueos y eficiencia operativa.
+- Restricción: reorganizar tareas no equivale a cambiar unilateralmente las metas del usuario, autorizar una investigación lateral independiente ni ignorar de forma permanente un proyecto prioritario.
+- Pendiente: criterios exactos de planificación, equidad, contención de recursos y procedimiento para modificar prioridades expresas.
+- Motivo: equilibrar control del usuario y eficiencia de la ejecución autónoma.
+
+## DEC-0018 — Informe diario en Telegram y registro persistente en OpenClaw
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador envía **un informe diario por Telegram**, manteniendo el mismo progreso **consultable desde OpenClaw**; las alertas importantes conservan canal de notificación independiente según DEC-0015.
+- Restricción: el registro de referencia del trabajo sigue siendo persistente y trazable en GitHub/almacenamiento aprobado; el mensaje de Telegram y su vista en OpenClaw no sustituyen los registros verificables. No divulgar material reservado en avisos.
+- Pendiente: horario y zona horaria del envío, destino de Telegram y reglas de reintento, formato y definición de alertas; esta decisión no configura Telegram ni crea tareas todavía.
+- Motivo: seguimiento diario accesible sin perder historial verificable.
+
+## DEC-0019 — Declaración automática de meta cumplida con publicación estable autorizada
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador puede **declarar una meta cumplida** cuando la evidencia y las pruebas satisfacen los criterios de aceptación establecidos y verificables. Debe registrar la evidencia, estado y limitaciones y comunicar la conclusión al usuario; no necesita una confirmación adicional únicamente para reconocer ese estado.
+- Límite: **publicar una versión estable sigue requiriendo autorización humana**, aunque se haya declarado la meta cumplida. La declaración tampoco autoriza merges, tags, releases ni cambios de configuración central.
+- Si la evidencia es incompleta, la evaluación queda pendiente o inconclusa; no declarar éxito por el relato de un LLM. No confundir meta cumplida con investigación cerrada o con resultados negativos (DEC-0007).
+- Pendiente: nivel de auditoría independiente exigible antes de declarar cumplimiento y protocolos específicos por tipo de meta.
+- Motivo: permitir resultados autónomos verificables sin delegar la decisión de publicación estable.

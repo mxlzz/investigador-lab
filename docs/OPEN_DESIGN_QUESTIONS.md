@@ -6,10 +6,10 @@
 ## A. Decisiones que sí requieren criterio del usuario
 
 1. **Frontera de autonomía — RESUELTA (DEC-0010):** investigación, archivos, desarrollo, pruebas aisladas y ramas experimentales permitidos dentro de presupuestos, recursos y permisos aprobados. Requieren autorización: ampliación de permisos, exceso de presupuesto, configuración central de OpenClaw y versiones estables. **Pendiente:** límites cuantitativos y matriz concreta de permisos, no la frontera conceptual.
-2. **Cuotas y gasto — RESUELTO (DEC-0011); PC libre — RESUELTO EN PRINCIPIO (DEC-0012):** cuotas gratuitas disponibles, pagas a cero por defecto y cargas intensivas locales solo si la PC está libre. Pendientes de precisión: umbrales, interrupción, horarios y tareas remotas.
-3. **Informe diario y alertas — RESUELTO (DEC-0015):** un informe diario y avisos importantes. **Pendiente:** hora, canal, umbral de alerta; la auditoría externa de ChatGPT todavía no tiene cadencia ni autoridad acordada.
-4. **Concurrencia — RESUELTA EN PRINCIPIO (DEC-0013):** varios proyectos con prioridades y recursos compartidos. **Pendiente:** criterios de priorización, límite de tareas simultáneas y reparto de recursos.
-5. **Éxito y cierre:** ¿Investigador declara automáticamente `meta_cumplida` si se verifican criterios acordados, o solicita confirmación final?
+2. **Cuotas y gasto — RESUELTO (DEC-0011); inactividad local — RESUELTA (DEC-0016):** cuotas gratuitas disponibles, pagas a cero por defecto; cargas intensivas tras 15 minutos sin actividad y pausa controlada al regresar. Pendientes técnicos: detector Windows, umbrales de intensidad, pausas seguras y ejecución remota.
+3. **Informe diario y canal — RESUELTO (DEC-0018):** envío diario por Telegram con registro consultable en OpenClaw y avisos importantes (DEC-0015). **Pendiente:** horario, zona horaria, condiciones de alerta, destino Telegram, cadencia y autoridad de auditoría independiente.
+4. **Concurrencia y priorización — RESUELTA EN PRINCIPIO (DEC-0017):** varios proyectos; usuario fija prioridades iniciales y agente reorganiza tareas y recursos dentro de límites. **Pendiente:** equidad, prioridad de urgencias, límites de paralelismo y cambios de prioridad expresa.
+5. **Éxito y publicación — RESUELTO (DEC-0019):** agente declara automáticamente meta cumplida cuando supera pruebas acordadas; usuario autoriza publicación estable. **Pendiente:** papel del auditor antes del dictamen, tipos de metas y evidencia requerida.
 6. **Visibilidad — DECIDIDA CON PREFERENCIA PÚBLICA (DEC-0014):** elegir visibilidad por proyecto, favoreciendo repositorios públicos para usar runners estándar gratuitos; privados cuando corresponda. Nunca publicar secretos o datos no autorizados. **Pendiente:** controles y decisión de publicación por tipo de artefacto.
 7. **Interfaz y despliegue final:** grado de interacción gráfica sin terminal, capacidad de ejecutar con PC apagada, quién autoriza instalación, actualización y desinstalación.
 
@@ -35,4 +35,4 @@
 
 Preguntar cuando una elección cambie la autoridad del agente, costos, privacidad, compromisos del usuario o el significado de éxito. Para detalles de ingeniería sin impacto funcional, continuar investigando y proponiendo alternativas justificadas.
 
-**Próximas decisiones a consultar:** definir operativamente «PC libre» y qué hacer al volver a usarla; criterio de prioridad entre proyectos; horario/canal del informe; declaración de meta cumplida y autoridad de auditoría.
+**Próximas decisiones a consultar:** hora y zona horaria del informe, umbral de alertas; autoridad/frecuencia de auditoría externa, ejecución remota cuando la PC está apagada, y reserva de datos de proyectos públicos.
