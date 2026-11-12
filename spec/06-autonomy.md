@@ -1,7 +1,7 @@
 # E6 — Autonomía, transiciones y recuperación
 
 **Estado:** propuesta técnica, no final.  
-**Acordado:** metas frente a temas; oportunidades laterales no reemplazan metas activas; documentación por ciclo y bloqueo de decisiones no autorizadas.
+**Acordado:** metas frente a temas; oportunidades laterales no reemplazan metas activas; documentación por ciclo y bloqueo de decisiones no autorizadas; frontera de autonomía operativa de DEC-0010.
 
 ## 1. Estado operativo de un proyecto (PROPUESTA)
 
@@ -50,7 +50,15 @@ Una sola acción que modifique un mismo recurso a la vez salvo mecanismo de conc
 
 El programador de OpenClaw se ejecuta en su Gateway: con equipo apagado o en suspensión local, los ciclos no pueden ejecutarse allí. Un servidor remoto o GitHub Actions son posibles motores alternativos para tareas definidas, sujetos a límites y permisos.
 
-## 6. Eventos que requieren autorización (PROPUESTA)
+## 6. Frontera de autonomía operativa (ACORDADA, DEC-0010)
+
+Tras autorizar el despliegue y fijar los límites de cada proyecto, Investigador **puede ejecutar sin autorización por acción** búsquedas e investigación, escritura de archivos de trabajo, desarrollo, experimentos en sandbox y publicación de avances en ramas experimentales autorizadas.
+
+**Requieren autorización específica:** ampliar permisos o ámbito de acceso, superar presupuesto o recursos aprobados, modificar la configuración central de OpenClaw y publicar una versión estable. Los controles operativos se aplicarán fuera del texto del LLM. Sin política aprobada, la acción dependiente queda bloqueada; no se inventan límites por defecto.
+
+Esta autorización conceptual rige el diseño futuro y **no activa** herramientas ahora.
+
+## 7. Otros eventos y detalles sujetos a política (PROPUESTA)
 
 - Gasto por encima de presupuesto aprobado; descarga/pago sujeto a licencia.
 - Escribir fuera de workspace o repositorio de proyecto.
@@ -61,11 +69,11 @@ El programador de OpenClaw se ejecuta en su Gateway: con equipo apagado o en sus
 
 La matriz exacta de permisos debe fijarse en E8; aquí es diseño, no política aplicada.
 
-## 7. Cierre de ciclo y comunicación
+## 8. Cierre de ciclo y comunicación
 
 Propuesto: reporte corto basado en cambios verificables (`state_before`, `action`, `evidence`, `state_after`, `next`, `blocked_on`). Cada notificación incluye vínculos/IDs; si no hay nueva evidencia, no declarar progreso.
 
-## 8. Escenarios de aceptación
+## 9. Escenarios de aceptación
 
 - A01: se interrumpe tras ejecutar pero antes de registrar → reconciliar, no duplicar.
 - A02: supera presupuesto → suspende de forma recuperable.

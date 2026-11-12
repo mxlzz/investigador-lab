@@ -74,3 +74,14 @@
 - Criterio de portabilidad: el contrato funcional y las pruebas de aceptación no dependerán del implementador. Los detalles de plataforma quedan en adaptadores/configuración separados.
 - Restricción: seguimos en fase de diseño (DEC-0005). No se autorizan scripts ejecutables ni modificaciones de OpenClaw en esta fase.
 - Motivo: evitar dependencia de Codex, permitir configuración propia y simplificar reinstalación, migración y auditoría.
+
+
+## DEC-0010 — Autonomía operativa dentro de límites aprobados
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: una vez autorizado el funcionamiento del sistema y definidos sus límites cuantitativos, Investigador puede **sin autorización por cada operación** investigar, consultar fuentes, escribir archivos de trabajo, desarrollar código, ejecutar experimentos en un entorno aislado y publicar resultados y avances en ramas experimentales de sus repositorios autorizados.
+- Condición: estas acciones deben mantenerse dentro del **alcance, permisos, recursos y presupuesto previamente aprobados**, con registro verificable de acciones y resultados; esta decisión no establece todavía importes ni límites concretos.
+- Requieren autorización humana específica: ampliar permisos o ámbitos de acceso, superar presupuestos o límites aprobados, modificar la configuración central de OpenClaw y publicar versiones estables. No convertir una rama experimental en estable mediante merge, tag/release u otra vía indirecta.
+- Los controles deben aplicarse por un ejecutor/verificador independiente de la respuesta del modelo, no depender solo del contenido de los prompts. Sin permiso verificable o sin límite aprobado, la operación afectada queda bloqueada o se solicita autorización; no se presume consentimiento.
+- Esta decisión define el **comportamiento futuro** de Investigador, no autoriza implementarlo ni activar ninguna operación ahora (DEC-0005).
+- Motivo: permitir investigación y desarrollo autónomos sin otorgar control irrestricto del equipo ni de las versiones publicadas.

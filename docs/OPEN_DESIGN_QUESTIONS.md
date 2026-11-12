@@ -5,7 +5,7 @@
 
 ## A. Decisiones que sí requieren criterio del usuario
 
-1. **Autorización y límites:** ¿qué puede investigar, modificar y ejecutar autónomamente? Diferenciar lectura/búsqueda, descargas, ejecución de código aislado, gastos, escritura GitHub, merges, releases y alteraciones de OpenClaw. Propuesta para debate: autonomía plena solo dentro de un entorno de pruebas y presupuesto autorizado; cambios de permisos y publicación estable requieren aprobación humana.
+1. **Frontera de autonomía — RESUELTA (DEC-0010):** investigación, archivos, desarrollo, pruebas aisladas y ramas experimentales permitidos dentro de presupuestos, recursos y permisos aprobados. Requieren autorización: ampliación de permisos, exceso de presupuesto, configuración central de OpenClaw y versiones estables. **Pendiente:** límites cuantitativos y matriz concreta de permisos, no la frontera conceptual.
 2. **Presupuesto y recursos:** topes por día/proyecto/API; CPU/RAM/GPU y ventanas de uso de la PC; detenerse o pasar a tareas documentales al agotarse; disponibilidad cuando se apaga el equipo.
 3. **Comunicación y revisiones:** frecuencia de mensajes y auditorías ChatGPT, notificaciones urgentes, aprobación de cambios de prioridad, formato de reportes. Se discutió una revisión corta y otra profunda, pero no se definió un horario.
 4. **Varios proyectos:** número simultáneo, prioridades y condiciones para pausar o comenzar una oportunidad futura.
@@ -35,4 +35,4 @@
 
 Preguntar cuando una elección cambie la autoridad del agente, costos, privacidad, compromisos del usuario o el significado de éxito. Para detalles de ingeniería sin impacto funcional, continuar investigando y proponiendo alternativas justificadas.
 
-**Prioridad sugerida:** decidir primero la frontera de autonomía y permisos. Condiciona E1, E4, E6, E8 y E9.
+**Próxima prioridad sugerida:** presupuestos y límites de recursos, porque materializan la frontera acordada en DEC-0010; luego privacidad de repositorios por proyecto y comunicaciones.

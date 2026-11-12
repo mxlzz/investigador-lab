@@ -1,7 +1,7 @@
 # E1 — Contrato funcional y experiencia de uso
 
 **Estado:** borrador de especificación, NO aprobado en conjunto.  
-**Decisiones existentes:** DEC-0002, DEC-0005, DEC-0006, DEC-0007, DEC-0008.  
+**Decisiones existentes:** DEC-0002, DEC-0005, DEC-0006, DEC-0007, DEC-0008, DEC-0010.  
 **Objetivo:** definir lo que debe suceder desde un encargo hasta su entrega, independientemente de la plataforma que lo ejecute.
 
 ## 1. Dos formas de encargo (ACORDADO)
@@ -42,7 +42,11 @@ Al recibir el encargo, crear un expediente de proyecto con:
 
 Las metas abiertas de conocimiento necesitan condiciones de entrega específicas; no forzar el estado `meta_cumplida` de una herramienta cuando no hay herramienta.
 
-## 5. Comunicación con el usuario (PROPUESTA)
+## 5. Frontera operativa (ACORDADA, DEC-0010)
+
+El agente podrá investigar, escribir, desarrollar, experimentar de modo aislado y publicar ramas experimentales sin solicitudes repetidas **dentro de límites aprobados**. Necesita autorización para ampliar permisos, superar presupuesto, modificar configuración central de OpenClaw y publicar versiones estables. Valores exactos y permisos por herramienta siguen abiertos.
+
+## 6. Comunicación con el usuario (PROPUESTA)
 
 - Resumen al iniciar proyecto: interpretación, límites y próximos pasos de investigación.
 - Informes periódicos con avances **verificables** (fuente, expediente, experimento, commit), obstáculos y cambios de hipótesis.
@@ -52,13 +56,13 @@ Las metas abiertas de conocimiento necesitan condiciones de entrega específicas
 
 La frecuencia, los canales y el umbral de avisos quedan **ABIERTOS**.
 
-## 6. Cambios de prioridad (PROPUESTA)
+## 7. Cambios de prioridad (PROPUESTA)
 
 Nuevo encargo del usuario → conservar expediente de lo que estaba ejecutándose, evaluar conflictos de tiempo y permisos, solicitar prioridad solo si dos objetivos aprobados compiten por el mismo recurso. No cancelar silenciosamente un proyecto.
 
 Cambios en una meta → versionar el encargo y revisar criterios de éxito, antecedentes y experimentos afectados; no reinterpretar retroactivamente resultados de un criterio antiguo.
 
-## 7. Casos para la batería de aceptación (BORRADOR)
+## 8. Casos para la batería de aceptación (BORRADOR)
 
 - F01: meta clara, investigación previa, eventual versión y comparación.
 - F02: tema abierto, mapa y agenda sin fabricar una promesa de software.

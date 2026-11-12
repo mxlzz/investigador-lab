@@ -10,15 +10,15 @@
 | E3 Hipótesis | `spec/03-hypotheses.md` | Borrador; admisión y equivalencia por precisar |
 | E4 Experimentos | `spec/04-experiments.md` | Borrador; límites y métricas por definir |
 | E5 Conocimiento | `spec/05-knowledge.md`, `spec/schemas/` | Borrador; esquemas inconsistentes e IDs por resolver |
-| E6 Autonomía | `spec/06-autonomy.md` | Borrador; presupuesto/permisos/agenda por resolver |
+| E6 Autonomía | `spec/06-autonomy.md` | Frontera de autonomía acordada (DEC-0010); presupuesto, límites y agenda por resolver |
 | E7 Prompts | `spec/07-prompts/`, `spec/07-prompt-contracts.md` | Textos v0.1 redactados; no aprobados ni validados |
-| E8 Infraestructura | `spec/08-deployment.md` | Borrador; plataforma/versiones y paquetes pendientes |
+| E8 Infraestructura | `spec/08-deployment.md` | Política conceptual de permisos definida; límites concretos, plataforma/versiones y paquetes pendientes |
 | E9 Auditoría | `spec/09-auditing.md` | Borrador; autoridad y cadencia pendientes |
 | E10 Entrega | `handoff/` | Manifiesto/matriz preliminares; no aptos para implementar |
 
 ## Qué sí se consiguió
 
-Se tradujeron las decisiones acordadas DEC-0001…DEC-0009 en una primera capa de documentación por capacidad. Se redactaron **borradores literales** para 12 funciones de prompts, y se dispuso una matriz inicial de pruebas. El repositorio contiene evidencia/obligaciones de trazabilidad y una base Obsidian.
+Se tradujeron las decisiones acordadas DEC-0001…DEC-0010 en una primera capa de documentación por capacidad. Se redactaron **borradores literales** para 12 funciones de prompts, y se dispuso una matriz inicial de pruebas. El repositorio contiene evidencia/obligaciones de trazabilidad y una base Obsidian.
 
 ## Qué NO se consiguió
 

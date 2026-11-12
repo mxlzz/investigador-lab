@@ -54,7 +54,13 @@ https://docs.openclaw.ai/tools/subagents
 - Reglas de archivo local, repositorio remoto y sincronicidad.
 - Plantillas de proyecto, repositorio, Obsidian y manifiestos de evidencia.
 
-## 5. Aislamiento propuesto
+## 5. Permisos operativos aprobados conceptualmente (DEC-0010)
+
+La futura configuración de herramientas y repositorios **debe permitir** investigación, edición de archivos de proyecto, desarrollo, pruebas aisladas y escritura en ramas experimentales dentro de límites autorizados; **debe exigir aprobación** para elevar permisos, exceder presupuestos, cambiar configuración central de OpenClaw o publicar versiones estables.
+
+Estas restricciones deberán probarse en la capa de ejecución/autorización, no depender solamente de instrucciones de lenguaje natural. Todavía falta elegir valores concretos de límites y verificar cómo imponerlos en la versión de OpenClaw elegida.
+
+## 6. Aislamiento propuesto
 
 - Agente `investigador` separado del agente personal principal.
 - Ejecución de código externo en entorno con permisos limitados por defecto.
@@ -65,7 +71,7 @@ https://docs.openclaw.ai/tools/subagents
 
 **Nota importante:** el aislamiento de herramientas no protege automáticamente todos los canales de comunicación entre agentes; revisar permisos de sesiones/agente-a-agente.
 
-## 6. Instalación manual, asistida y automática (PROPUESTA)
+## 7. Instalación manual, asistida y automática (PROPUESTA)
 
 El paquete futuro deberá proporcionar **equivalencia funcional**:
 1. **Manual:** instrucciones con pasos verificables, priorizando UI de la app de escritorio cuando exista; terminal solo para operaciones técnicamente necesarias, con alternativa documentada.
@@ -74,7 +80,7 @@ El paquete futuro deberá proporcionar **equivalencia funcional**:
 
 Cada modo termina con la **misma** batería de tests y un reporte de conformidad. Si una funcionalidad no puede instalarse desde UI, la guía debe decirlo en vez de fingirlo.
 
-## 7. Contrato preliminar de verificación de instalación
+## 8. Contrato preliminar de verificación de instalación
 
 - Versión exacta OpenClaw y compatibilidad.
 - Identidad/modelo/Workspace correspondiente al agente investigador.
@@ -85,7 +91,7 @@ Cada modo termina con la **misma** batería de tests y un reporte de conformidad
 - Confirmación de que el asistente principal no fue alterado.
 - Consumo de recursos dentro del presupuesto.
 
-## 8. Cuestiones ABIERTAS
+## 9. Cuestiones ABIERTAS
 
 - Versión concreta de OpenClaw, sistema de instalación, forma de ejecutar en Windows, y eventual recurso remoto.
 - Modelo(s) y ruta de fallback; disponibilidad, cuotas y costes reales.
