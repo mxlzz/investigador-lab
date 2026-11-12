@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mxlzz/investigador-lab/blob/main/spec/schemas/record.schema.json",
+  "title": "Investigador — registro base (BORRADOR, NO APROBADO)",
+  "description": "Propuesta común mínima para entidades de investigación, sin fijar aún sus esquemas específicos.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "record_type",
+    "project_id",
+    "status",
+    "created_at",
+    "origin",
+    "title",
+    "evidence_refs",
+    "links",
+    "payload"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1-draft"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "record_type": {
+      "enum": [
+        "project",
+        "search",
+        "source",
+        "finding",
+        "question",
+        "hypothesis",
+        "opportunity",
+        "experiment",
+        "decision",
+        "audit",
+        "release",
+        "run_event"
+      ]
+    },
+    "project_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "minLength": 2
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "actor_id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "human",
+            "agent",
+            "tool",
+            "external"
+          ]
+        },
+        "actor_id": {
+          "type": "string"
+        },
+        "model_or_tool_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "relation",
+          "target_id",
+          "status"
+        ],
+        "properties": {
+          "relation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "proposed",
+              "verified",
+              "disputed",
+              "superseded"
+            ]
+          },
+          "basis_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "Campos específicos por tipo; no deben quedar libres en la versión final."
+    },
+    "content_digest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Algoritmo y formato deberán fijarse antes de implementación."
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

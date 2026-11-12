@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mxlzz/investigador-lab/blob/main/spec/schemas/phase-result.schema.json",
+  "title": "Investigador — salida común de fase (BORRADOR, NO APROBADO)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "phase",
+    "claims",
+    "artifacts_to_record",
+    "proposed_next_actions",
+    "blockers"
+  ],
+  "properties": {
+    "status": {
+      "enum": [
+        "ok",
+        "needs_evidence",
+        "blocked",
+        "error"
+      ]
+    },
+    "phase": {
+      "enum": [
+        "intake",
+        "search_plan",
+        "extract_evidence",
+        "map_knowledge",
+        "hypotheses",
+        "novelty_review",
+        "experiment_design",
+        "evaluation",
+        "next_cycle",
+        "report",
+        "audit"
+      ]
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "support_ids",
+          "certainty"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "support_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "certainty": {
+            "enum": [
+              "observed",
+              "source_claim",
+              "inference",
+              "hypothesis"
+            ]
+          }
+        }
+      }
+    },
+    "artifacts_to_record": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Esquema específico a definir."
+    },
+    "proposed_next_actions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Acciones semánticas controladas, nunca comandos arbitrarios."
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "description": "Este borrador cubre solamente el envoltorio común; las extensiones por fase no están especificadas y se deben definir antes de programar."
+}
