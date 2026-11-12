@@ -53,3 +53,14 @@
 - **Investigación concluida sin meta cumplida:** es un desenlace válido si no se logra el resultado buscado y se conservan evidencias, resultados negativos, limitaciones y explicación de por qué se detuvo. No presentar este estado como éxito técnico.
 - **Oportunidades futuras:** no impiden reconocer una meta cumplida; se registran para posible autorización posterior (ver DEC-0006).
 - Motivo: evitar investigaciones indefinidas o declaraciones de éxito sin respaldo y distinguir entrega, validación y cierre exploratorio.
+
+
+## DEC-0008 — Especificación completa de prompts y comportamiento antes de Codex
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: el usuario y ChatGPT definen y revisan **todo el comportamiento de Investigador antes de autorizar la implementación**. Esto incluye prompts e instrucciones permanentes, prompts de cada rol/fase, plantillas de mensajes, contratos de entrada y salida, reglas de decisión, estado/memoria, herramientas, límites, criterios de validación, casos de error y pruebas de aceptación. Nada de ese diseño se delega inicialmente a Codex.
+- Rol de Codex: **implementador** de una especificación cerrada. Puede tomar decisiones de ingeniería que no alteren el comportamiento diseñado (estructura del código, integración, implementación técnica, corrección de bugs) y debe señalar vacíos, contradicciones o imposibilidades; no inventar prompts ni establecer por cuenta propia reglas funcionales para completar la especificación.
+- Cuando una definición requerida falte o sea ambigua, Codex debe reportar el bloqueo para que se resuelva en la etapa de diseño, en vez de suplirlo unilateralmente.
+- Entregables de diseño para el traspaso: especificación funcional, prompts versionados exactos, flujos y estados, contratos/esquemas, matriz de permisos y herramientas, trazabilidad/almacenamiento, comportamiento ante errores, pruebas y criterios de aceptación, todos coherentes entre sí.
+- Gobernanza: mientras se diseña, documentar acuerdos en GitHub con estado explícito; no ejecutar implementación, instalar herramientas ni configurar OpenClaw por iniciativa propia. El traspaso a Codex requerirá aprobación expresa del usuario (DEC-0005).
+- Motivo: asegurar que Codex implemente la visión discutida sin redefinirla ni decidir cómo debe razonar Investigador.
