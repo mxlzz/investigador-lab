@@ -88,7 +88,7 @@ Los documentos podrán corregirse por decisiones posteriores; las sustituciones 
 
 La documentación oficial confirma que OpenClaw lee archivos de bootstrap desde el workspace y que Codex usa `AGENTS.md` del repositorio para guía de trabajo:
 - https://docs.openclaw.ai/concepts/agent-workspace
-- https://learn.chatgpt.com/docs/agent-configuration/agents-md
+- https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide
 
 **Nota:** si cambia la versión de OpenClaw o de modelos antes de implementar, se revisan las interfaces y limitaciones afectadas antes de congelar la especificación.
 
