@@ -5,15 +5,15 @@
 
 | Etapa | Material creado | Estado |
 | --- | --- | --- |
-| E1 Contrato funcional | `spec/01-functional.md` | Metas/temas, prioridades humanas, canal diario y cierre automático acordados; reglas finas pendientes |
+| E1 Contrato funcional | `spec/01-functional.md`, `spec/contracts/notification-delivery.md` | Informe 20:00 con reintento acordado; entrega de resultado incierto sigue abierta |
 | E2 Antecedentes | `spec/02-prior-art.md` | Borrador; criterios de cobertura por cerrar |
 | E3 Hipótesis | `spec/03-hypotheses.md` | Borrador; admisión y equivalencia por precisar |
 | E4 Experimentos | `spec/04-experiments.md` | Borrador; límites y métricas por definir |
 | E5 Conocimiento | `spec/05-knowledge.md`, `spec/schemas/` | Esquema de fases discriminado en borrador; subesquemas, referencias e IDs por resolver |
 | E6 Autonomía | `spec/06-autonomy.md` | Inactividad local de 15 min, pausa al regreso y prioridades humanas acordadas; límites y recuperación por concretar |
 | E7 Prompts | `spec/07-prompts/`, `spec/07-prompt-contracts.md` | Doce prompts v0.1 y once variantes de salida; faltan aprobación, subtipos y validación con modelo |
-| E8 Infraestructura | `spec/08-deployment.md`, `docs/REMOTE_EXECUTION_ANALYSIS.md` | Ejecución gratuita remota restringida a datos públicos/autorizados (DEC-0026); mecanismo de coordinación aún abierto |
-| E9 Auditoría | `spec/09-auditing.md`, `docs/AUDIT_TRIGGER_DESIGN.md` | Hitos principales y bloqueo crítico de release acordados (DEC-0024/25); resolución y contingencia pendientes |
+| E8 Infraestructura | `spec/08-deployment.md`, `docs/REMOTE_EXECUTION_ANALYSIS.md`, `spec/contracts/remote-data-admission.md` | Restricción de datos aprobada; contrato de admisión propuesto, sin implementación |
+| E9 Auditoría | `spec/09-auditing.md`, `docs/AUDIT_TRIGGER_DESIGN.md`, `spec/contracts/release-audit-gate.md` | Hitos y bloqueo acordados; gate propuesto, resolución de hallazgos y contingencia pendientes |
 | E10 Entrega | `handoff/` | Manifiesto/matriz preliminares; no aptos para implementar |
 
 ## Qué sí se consiguió

@@ -13,6 +13,9 @@
 - [07 — Prompts y contratos](07-prompt-contracts.md)
 - [08 — Despliegue e instalación](08-deployment.md)
 - [09 — Auditoría](09-auditing.md)
+- [Contrato propuesto: gate de publicación estable](contracts/release-audit-gate.md)
+- [Contrato propuesto: informes a Telegram](contracts/notification-delivery.md)
+- [Contrato propuesto: admisión de datos remotos](contracts/remote-data-admission.md)
 - [Pendientes de diseño](../docs/OPEN_DESIGN_QUESTIONS.md)
 
 Los documentos de diseño tienen cuatro tipos de declaraciones:
