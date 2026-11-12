@@ -64,3 +64,13 @@
 - Entregables de diseño para el traspaso: especificación funcional, prompts versionados exactos, flujos y estados, contratos/esquemas, matriz de permisos y herramientas, trazabilidad/almacenamiento, comportamiento ante errores, pruebas y criterios de aceptación, todos coherentes entre sí.
 - Gobernanza: mientras se diseña, documentar acuerdos en GitHub con estado explícito; no ejecutar implementación, instalar herramientas ni configurar OpenClaw por iniciativa propia. El traspaso a Codex requerirá aprobación expresa del usuario (DEC-0005).
 - Motivo: asegurar que Codex implemente la visión discutida sin redefinirla ni decidir cómo debe razonar Investigador.
+
+
+## DEC-0009 — Especificación portable e implementación independiente
+- Fecha: 2026-11-12
+- Estado: acordada (dirección de diseño)
+- Decisión: el repositorio debe permitir que un implementador humano, Codex u otro agente, incluido un agente instalador de OpenClaw, materialice **el mismo sistema especificado**, sin definir por su cuenta el comportamiento ni los prompts. Debe existir una guía de instalación manual verificable una vez desarrollado el software.
+- Distinción: diseño, implementación funcional e instalación/distribución son productos distintos; no confundir instrucciones completas de diseño con un instalador ya operativo.
+- Criterio de portabilidad: el contrato funcional y las pruebas de aceptación no dependerán del implementador. Los detalles de plataforma quedan en adaptadores/configuración separados.
+- Restricción: seguimos en fase de diseño (DEC-0005). No se autorizan scripts ejecutables ni modificaciones de OpenClaw en esta fase.
+- Motivo: evitar dependencia de Codex, permitir configuración propia y simplificar reinstalación, migración y auditoría.
