@@ -54,11 +54,13 @@ https://docs.openclaw.ai/tools/subagents
 - Reglas de archivo local, repositorio remoto y sincronicidad.
 - Plantillas de proyecto, repositorio, Obsidian y manifiestos de evidencia.
 
-## 5. Permisos operativos aprobados conceptualmente (DEC-0010)
+## 5. Permisos operativos y gastos aprobados conceptualmente (DEC-0010, DEC-0011)
 
 La futura configuración de herramientas y repositorios **debe permitir** investigación, edición de archivos de proyecto, desarrollo, pruebas aisladas y escritura en ramas experimentales dentro de límites autorizados; **debe exigir aprobación** para elevar permisos, exceder presupuestos, cambiar configuración central de OpenClaw o publicar versiones estables.
 
-Estas restricciones deberán probarse en la capa de ejecución/autorización, no depender solamente de instrucciones de lenguaje natural. Todavía falta elegir valores concretos de límites y verificar cómo imponerlos en la versión de OpenClaw elegida.
+**Cuotas y gastos (acordado, DEC-0011):** uso autónomo de niveles gratuitos autorizados dentro de sus condiciones; todo servicio facturable tiene presupuesto monetario predeterminado cero para cada proyecto y requiere un importe explícitamente aprobado. Agotamiento gratuito no permite cobro ni upgrade automático. Los límites de recursos de la PC se definirán independientemente.
+
+Estas restricciones deberán probarse en la capa de ejecución/autorización, no depender solamente de instrucciones de lenguaje natural. Todavía falta elegir valores concretos de recursos y verificar cómo imponerlos en la versión de OpenClaw elegida.
 
 ## 6. Aislamiento propuesto
 
@@ -94,7 +96,7 @@ Cada modo termina con la **misma** batería de tests y un reporte de conformidad
 ## 9. Cuestiones ABIERTAS
 
 - Versión concreta de OpenClaw, sistema de instalación, forma de ejecutar en Windows, y eventual recurso remoto.
-- Modelo(s) y ruta de fallback; disponibilidad, cuotas y costes reales.
+- Modelo(s) y ruta de fallback; disponibilidad y cuotas gratuitas reales, con garantía de no incurrir en gastos sin presupuesto aprobado (DEC-0011).
 - Dónde persistir la base de datos estructurada y artefactos pesados.
 - Qué herramientas/skills deben existir obligatoriamente frente a opcionales.
 - Si el repositorio público es solo la especificación general o si algunos datos de proyectos deberán ir a repositorios privados.

@@ -6,7 +6,7 @@
 ## A. Decisiones que sí requieren criterio del usuario
 
 1. **Frontera de autonomía — RESUELTA (DEC-0010):** investigación, archivos, desarrollo, pruebas aisladas y ramas experimentales permitidos dentro de presupuestos, recursos y permisos aprobados. Requieren autorización: ampliación de permisos, exceso de presupuesto, configuración central de OpenClaw y versiones estables. **Pendiente:** límites cuantitativos y matriz concreta de permisos, no la frontera conceptual.
-2. **Presupuesto y recursos:** topes por día/proyecto/API; CPU/RAM/GPU y ventanas de uso de la PC; detenerse o pasar a tareas documentales al agotarse; disponibilidad cuando se apaga el equipo.
+2. **Presupuesto monetario — RESUELTO (DEC-0011):** libre utilización de cuotas gratuitas sujetas a los límites del proveedor; servicios pagos con presupuesto por proyecto y valor predeterminado cero. **Pendiente:** límites de CPU/RAM/GPU, horarios y prioridad entre proyectos, recuperación tras agotamiento de cuotas.
 3. **Comunicación y revisiones:** frecuencia de mensajes y auditorías ChatGPT, notificaciones urgentes, aprobación de cambios de prioridad, formato de reportes. Se discutió una revisión corta y otra profunda, pero no se definió un horario.
 4. **Varios proyectos:** número simultáneo, prioridades y condiciones para pausar o comenzar una oportunidad futura.
 5. **Éxito y cierre:** ¿Investigador declara automáticamente `meta_cumplida` si se verifican criterios acordados, o solicita confirmación final?
@@ -35,4 +35,4 @@
 
 Preguntar cuando una elección cambie la autoridad del agente, costos, privacidad, compromisos del usuario o el significado de éxito. Para detalles de ingeniería sin impacto funcional, continuar investigando y proponiendo alternativas justificadas.
 
-**Próxima prioridad sugerida:** presupuestos y límites de recursos, porque materializan la frontera acordada en DEC-0010; luego privacidad de repositorios por proyecto y comunicaciones.
+**Próximas decisiones a consultar:** uso de recursos locales y horarios, concurrencia entre proyectos, privacidad por proyecto y frecuencia de comunicación.

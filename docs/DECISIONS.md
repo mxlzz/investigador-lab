@@ -85,3 +85,15 @@
 - Los controles deben aplicarse por un ejecutor/verificador independiente de la respuesta del modelo, no depender solo del contenido de los prompts. Sin permiso verificable o sin límite aprobado, la operación afectada queda bloqueada o se solicita autorización; no se presume consentimiento.
 - Esta decisión define el **comportamiento futuro** de Investigador, no autoriza implementarlo ni activar ninguna operación ahora (DEC-0005).
 - Motivo: permitir investigación y desarrollo autónomos sin otorgar control irrestricto del equipo ni de las versiones publicadas.
+
+
+## DEC-0011 — Cuotas gratuitas y presupuesto monetario de servicios pagos
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador puede utilizar autónomamente las **cuotas gratuitas** de modelos, APIs y servicios habilitados, sin solicitar aprobación por cada llamada ni imponer un tope monetario artificial dentro del nivel gratuito.
+- Las cuotas gratuitas están sujetas a los límites y condiciones reales de cada proveedor; no se interpretan como uso ilimitado ni autorizan eludir restricciones o cambiar a un plan facturable automáticamente.
+- **Presupuesto monetario por defecto de cada proyecto: cero** para servicios pagos. Todo gasto debe contar con un monto y alcance aprobados específicamente para ese proyecto antes de ejecutarse. Agotar una cuota gratuita no autoriza consumo pago ni conversión automática a modalidad facturable.
+- Los límites de CPU, RAM, GPU, tiempo y uso de la computadora se definirán por separado, porque una API gratuita puede utilizar recursos locales o afectar otros proyectos.
+- Ante agotamiento de cuota, pausar la operación afectada, persistir el estado y, si existe otra ruta gratuita/autorizada equivalente, continuar sin incumplir condiciones; si no, esperar la reposición o solicitar presupuesto al usuario.
+- Esta decisión no activa cuentas, modelos, servicios ni tareas; sigue vigente la restricción de implementación de DEC-0005.
+- Motivo: aprovechar capacidades gratuitas y eliminar intervenciones innecesarias evitando gastos no autorizados.

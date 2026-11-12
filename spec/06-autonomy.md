@@ -38,7 +38,9 @@ Para resultados voluminosos o carreras paralelas, usar publicación atómica de 
 
 ## 4. Presupuestos y uso de la PC
 
-Separar cuotas por proyecto y globales: tokens/API, tiempo total, duración por ejecución, CPU, RAM, GPU, disco/red y costos monetarios.
+**Acordado (DEC-0011):** las cuotas gratuitas disponibles de modelos, APIs y servicios autorizados pueden consumirse sin aprobación por llamada, respetando límites y condiciones del proveedor. Los servicios pagos tienen **presupuesto monetario predeterminado cero por proyecto**; solo podrán utilizarse después de una asignación explícita. No convertir automáticamente una cuota gratuita agotada en gasto ni usar mecanismos para eludir límites. Ante agotamiento: registrar estado y esperar reposición o cambiar a ruta gratuita equivalente y permitida.
+
+**Pendiente:** separar cuotas por proyecto y globales: tiempo total, duración por ejecución, CPU, RAM, GPU, disco/red y prioridades, independientemente de si el proveedor del modelo cobra o no.
 
 Propuesto: las tareas pesadas se programan con ventanas de recursos o se trasladan a runners remotos aprobados. El uso de un workspace propio no limita CPU ni impide interferir con otras aplicaciones; requiere límites reales del entorno.
 
@@ -84,7 +86,7 @@ Propuesto: reporte corto basado en cambios verificables (`state_before`, `action
 
 ## Pendientes de diseño
 - Cadencia de ciclos y ventanas de recursos.
-- Límites cuantitativos, concurrencia permitida y prioridades.
+- Límites de recursos locales, concurrencia permitida y prioridades (la política monetaria está acordada en DEC-0011).
 - Aprobaciones exactas, canales y reglas de escalamiento.
 - Motor de ejecución y nivel de disponibilidad (PC local vs remoto).
 - Política de seguimiento y de errores repetidos.
