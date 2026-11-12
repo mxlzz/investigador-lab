@@ -12,8 +12,8 @@
 | E5 Conocimiento | `spec/05-knowledge.md`, `spec/schemas/` | Esquema de fases discriminado en borrador; subesquemas, referencias e IDs por resolver |
 | E6 Autonomía | `spec/06-autonomy.md` | Inactividad local de 15 min, pausa al regreso y prioridades humanas acordadas; límites y recuperación por concretar |
 | E7 Prompts | `spec/07-prompts/`, `spec/07-prompt-contracts.md` | Doce prompts v0.1 y once variantes de salida; faltan aprobación, subtipos y validación con modelo |
-| E8 Infraestructura | `spec/08-deployment.md` | Continuidad de tareas remotas gratuitas acordada (DEC-0023); arquitectura de coordinación y despliegue pendientes |
-| E9 Auditoría | `spec/09-auditing.md` | Auditoría breve diaria y profunda por hito acordada (DEC-0022); disparadores/autoridad pendientes |
+| E8 Infraestructura | `spec/08-deployment.md`, `docs/REMOTE_EXECUTION_ANALYSIS.md` | Continuidad remota gratuita acordada; alternativas de coordinación documentadas, sin elección técnica todavía |
+| E9 Auditoría | `spec/09-auditing.md`, `docs/AUDIT_TRIGGER_DESIGN.md` | Cadencia acordada; catálogo de hitos y autoridad de bloqueo propuestos, aún por aprobar |
 | E10 Entrega | `handoff/` | Manifiesto/matriz preliminares; no aptos para implementar |
 
 ## Qué sí se consiguió

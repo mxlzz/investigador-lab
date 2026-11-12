@@ -25,7 +25,10 @@ Infraestructura universal de investigación y desarrollo autónomo, coordinable 
 - [Especificaciones E1–E9 y prompts en borrador](spec/README.md)
 - [Casos de aceptación del futuro sistema](handoff/ACCEPTANCE_MATRIX.md)
 - [Guía de portabilidad y futura instalación](docs/PORTABILITY_PRINCIPLE.md)
-- [Referencias técnicas verificadas](docs/TECHNICAL_REFERENCES.md)\n- [Hoja de ruta de implementación propuesta](docs/ROADMAP.md) — aún no autorizada
+- [Análisis técnico de continuidad remota (propuesta)](docs/REMOTE_EXECUTION_ANALYSIS.md)
+- [Auditorías y disparadores por hito (propuesta)](docs/AUDIT_TRIGGER_DESIGN.md)
+- [Referencias técnicas verificadas](docs/TECHNICAL_REFERENCES.md)
+- [Hoja de ruta de implementación propuesta](docs/ROADMAP.md) — aún no autorizada
 - [Decisiones](docs/DECISIONS.md)
 - [Proyectos de referencia](docs/REFERENCE_PROJECTS.md)
 - [Mapa de conocimientos para Obsidian](vault/Inicio.md)
