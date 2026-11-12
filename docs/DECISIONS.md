@@ -31,3 +31,14 @@
 - Alcance: se pueden contrastar alternativas, investigar referencias y registrar en GitHub las decisiones efectivamente acordadas. Las ideas pendientes se identifican como propuestas y no se presentan como aprobadas.
 - Restricciones: no implementar código, configurar OpenClaw, activar automatizaciones, iniciar experimentos ni crear tareas de ejecución por iniciativa propia. El registro de diseño no implica autorización para ejecutar la hoja de ruta.
 - Motivo: separar la definición del sistema de su construcción y evitar compromisos prematuros.
+
+
+## DEC-0006 — Doble autonomía y conservación de descubrimientos laterales
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador admite encargos orientados a una **meta concreta** y encargos de **exploración abierta de un tema**.
+- Con meta concreta: el objetivo encomendado conserva prioridad. El agente puede detectar hipótesis, aplicaciones y líneas de investigación no previstas; las documenta con antecedentes, justificación, vínculo con el trabajo original, incertidumbres y posibles próximos pasos, y se las comunica al usuario sin abandonar ni redefinir unilateralmente la meta.
+- Las oportunidades laterales se incorporan a una cartera de **investigaciones futuras**, separada de los compromisos activos. El agente no inicia automáticamente una línea independiente que se aparte de la meta: el usuario puede autorizarla posteriormente, por ejemplo después de completar la meta inicial.
+- Con tema abierto: el agente puede definir y explorar sus propias preguntas, priorizándolas y documentando por qué las considera relevantes, dentro del alcance y límites acordados.
+- Una oportunidad sugerida no se presenta como innovación comprobada: antes de tratarla como novedosa, debe pasar por contraste de antecedentes y conservar el grado de incertidumbre.
+- Motivo: permitir descubrimientos inesperados sin perder el foco de los encargos concretos, y conservarlos para futuras decisiones del usuario.
