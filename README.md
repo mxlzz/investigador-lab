@@ -20,7 +20,7 @@ Infraestructura universal de investigación y desarrollo autónomo, coordinable 
 - [Visión y alcance](docs/VISION.md)
 - [Arquitectura](docs/ARCHITECTURE.md)
 - [Protocolo de investigación](docs/RESEARCH_PROTOCOL.md)
-- [Hoja de ruta](docs/ROADMAP.md)
+- [Plan de especificación y entrega a Codex](docs/DESIGN_TO_CODEX_PLAN.md) — etapa actual: diseño\n- [Hoja de ruta de implementación propuesta](docs/ROADMAP.md) — aún no autorizada
 - [Decisiones](docs/DECISIONS.md)
 - [Proyectos de referencia](docs/REFERENCE_PROJECTS.md)
 - [Mapa de conocimientos para Obsidian](vault/Inicio.md)
