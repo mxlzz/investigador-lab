@@ -59,7 +59,7 @@ Otros estados posibles: `not_authorized`, `blocked_resources`, `expired`, `faile
 
 ## 5. Seguridad y publicación (PROPUESTA)
 
-1. Verificar que cada insumo está habilitado para salir a runner remoto y, si corresponde, a repositorio público. Datos privados o material con licencia restrictiva quedan fuera.
+1. **Acordado (DEC-0026):** cada insumo a runner remoto debe ser **público o contar con autorización expresa de transferencia y procesamiento**. Datos privados sin autorización, material de terceros no transferible y secretos locales quedan fuera. Antes de enviar un derivado, verificar también si contiene material restringido.
 2. Separar **ejecución de código experimental** de **envío a Telegram / escritura al repositorio**. El proceso que ejecute código no confiable no recibe secretos, tokens de publicación ni permisos de release.
 3. Tokens de menor privilegio por repositorio/proyecto y almacenamiento seguro; nunca copiar secretos a prompts, PRs, logs o artefactos.
 4. No permitir acceso a la PC mediante el mero hecho de que exista una conexión GitHub; la migración de archivos se diseña separadamente.
@@ -67,7 +67,7 @@ Otros estados posibles: `not_authorized`, `blocked_resources`, `expired`, `faile
 
 ## 6. Entrega diaria y supervisión (PROPUESTA)
 
-- **Informe 20:00 Buenos Aires (DEC-0020):** objetivo de publicación consolidada; un disparador remoto puede crearlo y enviarlo incluso con la PC apagada, **si** dispone de registros actualizados y credenciales mínimas autorizadas para Telegram.
+- **Informe 20:00 Buenos Aires (DEC-0020 y DEC-0027):** objetivo de publicación consolidada; ante fallo, **reintentar y entregar en cuanto sea posible sin duplicados**. Un disparador remoto puede crearlo y enviarlo con la PC apagada **si** dispone de registros actualizados y credenciales mínimas autorizadas para Telegram.
 - **No se puede prometer entrega exactamente a las 20:00 si se depende solo de `schedule` de Actions**, porque la plataforma permite retrasos y omisiones. Diseñar ventana tolerable, reintentos y deduplicación de informes; distinguir hora prevista de la real.
 - **Auditoría breve diaria (DEC-0022):** debe identificar qué eventos verificables fueron revisados y qué acceso tuvo. La auditoría profunda se activa ante un **hito definido y validado** en vez de ejecutarse sin evidencia.
 - Si el componente de auditoría de ChatGPT no puede ser activado automáticamente por los mecanismos permitidos, **no simular una auditoría realizada**; registrar la pendiente para su ejecución autorizada posterior.
@@ -108,7 +108,7 @@ Otros estados posibles: `not_authorized`, `blocked_resources`, `expired`, `faile
 
 ## Pendientes que requieren decisiones humanas
 
-- Cuáles datos privados pueden enviarse a remoto y bajo qué alcance.
+- Está acordado que solo datos públicos o expresamente autorizados pueden enviarse a remoto (DEC-0026); falta especificar clasificación, autorizaciones por artefacto y retención.
 - Si el informe de Telegram debe depender de GitHub Actions aun cuando esto no asegure puntualidad exacta.
 - Grado de supervisión/auditoría exigible antes de promover un resultado candidato.
 - Configuración del bot/destino Telegram y permisos de lectura/escritura del repositorio.

@@ -52,7 +52,7 @@ Se deben medir consumos; si se alcanzan límites, suspender de manera segura, pe
 
 Una sola acción que modifique un mismo recurso a la vez salvo mecanismo de concurrencia explícito. Subagentes pueden investigar en paralelo pero sus informes no se integran como evidencia validada sin revisión de fuentes y deduplicación.
 
-El programador de OpenClaw se ejecuta en su Gateway: con equipo apagado o en suspensión local, los ciclos no pueden ejecutarse allí. **Acordado (DEC-0023):** cuando la PC está apagada, tareas compatibles continúan en GitHub Actions u otros ejecutores remotos gratuitos autorizados. **No** implica que OpenClaw Gateway continúe funcionando localmente. Los procesos necesitan un disparador remoto y estado/checkpoints durables; runners efímeros no son memoria persistente. Las tareas que requieran acceso o GPU locales se suspenden hasta recuperación del recurso. Ver `spec/08-deployment.md` y el análisis técnico en `docs/REMOTE_EXECUTION_ANALYSIS.md`.
+El programador de OpenClaw se ejecuta en su Gateway: con equipo apagado o en suspensión local, los ciclos no pueden ejecutarse allí. **Acordado (DEC-0023):** cuando la PC está apagada, tareas compatibles continúan en GitHub Actions u otros ejecutores remotos gratuitos autorizados. **No** implica que OpenClaw Gateway continúe funcionando localmente. Los procesos necesitan un disparador remoto y estado/checkpoints durables; runners efímeros no son memoria persistente. **DEC-0026:** solo datos públicos o expresamente autorizados pueden enviarse a ejecutores remotos. Las tareas que requieran acceso o GPU locales se suspenden hasta recuperación del recurso. Ver `spec/08-deployment.md` y el análisis técnico en `docs/REMOTE_EXECUTION_ANALYSIS.md`.
 
 ## 6. Frontera de autonomía operativa (ACORDADA, DEC-0010)
 
@@ -75,7 +75,7 @@ La matriz exacta de permisos debe fijarse en E8; aquí es diseño, no política 
 
 ## 8. Cierre de ciclo y comunicación
 
-**Acordado (DEC-0020/0021):** informe consolidado de todos los proyectos a las 20:00 (zona `America/Argentina/Buenos_Aires`) por Telegram y registro OpenClaw. Alertas fuera del informe solo por permisos/aprobaciones, fallos graves y hallazgos excepcionalmente relevantes. Umbrales, deduplicación y reintentos pendientes.
+**Acordado (DEC-0020/0021/0027):** informe consolidado de todos los proyectos a las 20:00 (zona `America/Argentina/Buenos_Aires`) por Telegram y registro OpenClaw. Ante falla, reintentar y entregar cuanto antes sin duplicación. Alertas fuera del informe solo por permisos/aprobaciones, fallos graves y hallazgos excepcionalmente relevantes. Umbrales, ritmo de reintentos y manejo de acuses inciertos pendientes.
 
 Propuesto: reporte corto basado en cambios verificables (`state_before`, `action`, `evidence`, `state_after`, `next`, `blocked_on`). Cada notificación incluye vínculos/IDs; si no hay nueva evidencia, no declarar progreso.
 

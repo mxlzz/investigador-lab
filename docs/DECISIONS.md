@@ -195,3 +195,35 @@
 - Restricción: la elección de un runner gratuito no autoriza uso de runners grandes/GPU pagos, acceso a secretos locales, publicación estable ni ejecución remota de toda la instalación de OpenClaw. No se presume que GitHub Actions sea un proceso persistente o un scheduler infalible.
 - Pendiente: origen fiable de disparos, continuidad del coordinador, datos accesibles, credenciales, recuperación, límites de concurrencia y qué categorías de trabajo se delegan a remoto.
 - Motivo: mantener progreso útil fuera del horario de encendido de la PC, aprovechando infraestructura gratuita autorizada.
+
+
+## DEC-0024 — Auditor bloquea publicaciones estables ante errores críticos
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: un hallazgo **crítico fundamentado** de la auditoría independiente de ChatGPT puede **bloquear la publicación de versiones estables**, aun cuando el agente declare una meta cumplida o se solicite un release. El bloqueo afecta a la **promoción estable**, no necesariamente a la investigación ni a las ramas experimentales dentro de su autorización.
+- Debe existir una restricción verificable en la capa de publicación, independiente del texto generado por el LLM: no basta una recomendación del auditor. Se conserva la aprobación humana de publicación exigida por DEC-0019, que por sí sola no borra un bloqueo crítico.
+- Pendiente: definir condiciones verificables de «crítico», procedimiento de subsanación, quién puede levantar o disputar un bloqueo, qué ocurre si el auditor está indisponible y cómo integrar de forma fiable su resultado al control de publicación.
+- Motivo: impedir publicar como estable un resultado con deficiencias de evidencia o seguridad graves.
+
+## DEC-0025 — Auditoría profunda ante mejoras importantes, cierre y publicación
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: ejecutar **auditoría profunda** ante (a) **mejoras importantes** reportadas con evidencia; (b) **cierres de metas** o investigaciones; y (c) **candidatos a publicación estable**. Se mantiene además la auditoría breve diaria (DEC-0022).
+- No se equiparan experimentos aislados ni cambios menores a hitos obligatorios. La definición operacional de «mejora importante» y el momento preciso de cada disparador quedan pendientes.
+- Motivo: concentrar revisión rigurosa en resultados con consecuencias técnicas o de cierre.
+
+## DEC-0026 — Datos públicos o expresamente autorizados para ejecutores remotos
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: los ejecutores remotos gratuitos únicamente pueden **recibir o procesar datos públicos, o datos cuya transferencia y procesamiento remotos hayan sido autorizados expresamente** para el proyecto y alcance correspondiente.
+- La autorización de ejecutar un proyecto remoto no equivale a autorización global para transferir archivos privados, credenciales, material de terceros restringido o datos personales. La elegibilidad del dato y la habilitación del ejecutor se verifican antes del envío; los datos no elegibles permanecen locales o el trabajo se bloquea.
+- Pendiente: etiquetado, política de clasificación de artefactos derivados, forma de registrar consentimiento/alcance, borrado/retención en runners y control de accesos por proyecto.
+- Motivo: permitir continuidad gratuita sin divulgar inadvertidamente datos privados.
+
+## DEC-0027 — Reintento y entrega tardía sin duplicados del informe diario
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: si falla el envío del informe consolidado previsto para las **20:00 America/Argentina/Buenos_Aires**, el sistema debe **reintentar y entregar en cuanto sea posible**, evitando duplicaciones. No descartar automáticamente el informe ni esperar obligatoriamente a que vuelva el OpenClaw local.
+- El informe representa un **día de reporte identificable** y debe conservar estado de envío para evitar duplicación por reintentos o ejecución concurrente. Toda confirmación de entrega se basa en evidencia del servicio, no en la intención de enviar.
+- Pendiente: política de reintentos/intervalos, reconciliación si Telegram aceptó el mensaje pero se perdió el acuse, tratamiento de informes atrasados cuando ya corresponde el siguiente y tiempo máximo de conservación.
+- Motivo: preservar continuidad informativa pese a interrupciones temporales de red, scheduler o ejecutores.

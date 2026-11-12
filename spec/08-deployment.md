@@ -56,7 +56,7 @@ https://docs.openclaw.ai/tools/subagents
 
 ## 5. Permisos operativos y gastos aprobados conceptualmente (DEC-0010, DEC-0011)
 
-La futura configuración de herramientas y repositorios **debe permitir** investigación, edición de archivos de proyecto, desarrollo, pruebas aisladas y escritura en ramas experimentales dentro de límites autorizados; **debe exigir aprobación** para elevar permisos, exceder presupuestos, cambiar configuración central de OpenClaw o publicar versiones estables.
+La futura configuración de herramientas y repositorios **debe permitir** investigación, edición de archivos de proyecto, desarrollo, pruebas aisladas y escritura en ramas experimentales dentro de límites autorizados; **debe exigir aprobación** para elevar permisos, exceder presupuestos, cambiar configuración central de OpenClaw o publicar versiones estables. **DEC-0024:** el control de publicación estable también debe impedir publicar cuando haya un bloqueo crítico de auditoría pendiente de resolución.
 
 **Cuotas y gastos (acordado, DEC-0011):** uso autónomo de niveles gratuitos autorizados dentro de sus condiciones; todo servicio facturable tiene presupuesto monetario predeterminado cero para cada proyecto y requiere un importe explícitamente aprobado. Agotamiento gratuito no permite cobro ni upgrade automático. Los límites de recursos de la PC se definirán independientemente.
 
@@ -66,7 +66,7 @@ Estas restricciones deberán probarse en la capa de ejecución/autorización, no
 
 **Acordado (DEC-0016):** cargas intensivas de CPU/GPU tras 15 minutos de inactividad de usuario y pausa controlada al detectar su regreso. La implementación deberá probar suspensión y reanudación sin capturar teclas o contenidos del usuario; queda abierta la definición técnica exacta.
 
-**Acordado (DEC-0023):** debe admitirse delegación de tareas compatibles a ejecutores remotos gratuitos autorizados cuando la PC esté apagada; esto exige definir cómo se disparan tareas, dónde residen estado/secretos y qué datos están habilitados para el entorno. El Gateway local detenido no puede coordinar por sí solo. Ver `docs/REMOTE_EXECUTION_ANALYSIS.md` (análisis, NO diseño aprobado).
+**Acordado (DEC-0023):** debe admitirse delegación de tareas compatibles a ejecutores remotos gratuitos autorizados cuando la PC esté apagada; esto exige definir cómo se disparan tareas, dónde residen estado/secretos y qué datos están habilitados para el entorno. El Gateway local detenido no puede coordinar por sí solo. **DEC-0026:** restringir entrada a runners a datos públicos o autorizados expresamente; incluir verificación de elegibilidad y de derivados. Ver `docs/REMOTE_EXECUTION_ANALYSIS.md` (análisis, NO diseño aprobado).
 
 ## 6. Aislamiento propuesto
 

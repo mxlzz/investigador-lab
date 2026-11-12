@@ -54,7 +54,7 @@ El agente podrá investigar, escribir, desarrollar, experimentar de modo aislado
 - Separar lo **observado**, lo **inferido**, lo **propuesto** y lo **aprobado**.
 - Notificar que una meta fue cumplida o que una investigación se cerró, junto a resultados y pendientes.
 
-**Acordado (DEC-0015, DEC-0018, DEC-0020, DEC-0021):** informe único consolidado de todos los proyectos a las **20:00 America/Argentina/Buenos_Aires**, entregado por Telegram y consultable desde OpenClaw. Alertas inmediatas exclusivamente por aprobaciones, fallos graves y descubrimientos excepcionalmente relevantes. **Pendientes:** umbrales objetivos de alerta, tolerancia y reintentos.
+**Acordado (DEC-0015, DEC-0018, DEC-0020, DEC-0021):** informe único consolidado de todos los proyectos a las **20:00 America/Argentina/Buenos_Aires**, entregado por Telegram y consultable desde OpenClaw. Alertas inmediatas exclusivamente por aprobaciones, fallos graves y descubrimientos excepcionalmente relevantes. **Acordado adicional (DEC-0027):** reintentar un informe de las 20:00 fallido hasta entregarlo tan pronto como sea posible sin duplicación. **Pendientes:** umbrales de alerta, intervalos y reconciliación de entrega incierta.
 
 ## 7. Gestión de prioridades (ACORDADO EN PRINCIPIO, DEC-0017)
 
@@ -68,7 +68,7 @@ Cambios en una meta → versionar el encargo y revisar criterios de éxito, ante
 
 ## 8. Declaración de cumplimiento (ACORDADO, DEC-0019)
 
-El agente declara `meta_cumplida` con evidencia y criterios de aceptación verificablemente superados, informa y registra el dictamen. El usuario debe autorizar **por separado** cualquier publicación estable, merge o release. Faltan detalles sobre auditoría previa obligatoria.
+El agente declara `meta_cumplida` con evidencia y criterios de aceptación verificablemente superados, informa y registra el dictamen. El usuario debe autorizar **por separado** cualquier publicación estable, merge o release. **Acordado (DEC-0024/25):** la auditoría profunda se activa ante cierres de meta y candidatos a publicación estable, y un hallazgo crítico fundamentado bloquea la **publicación estable**; la declaración de cumplimiento y la aprobación humana de release siguen siendo estados distintos. Faltan criterios operativos de bloqueo y desbloqueo.
 
 ## 9. Casos para la batería de aceptación (BORRADOR)
 

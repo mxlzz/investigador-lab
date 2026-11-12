@@ -21,7 +21,7 @@ Separar producción de afirmaciones y verificación de evidencia. El auditor pue
 
 **Profunda:** seleccionar muestras de fuentes/experimentos, abrir evidencia, repetir cálculos o comparar artefactos cuando el entorno lo permita, buscar precedentes omitidos, revisar contradicciones y detectar desviaciones del contrato aprobado.
 
-**Acordado (DEC-0022):** la **auditoría independiente de ChatGPT** tiene dos intensidades: revisión breve **diaria** y revisión **profunda al alcanzar hitos importantes**. Es distinta del informe consolidado a las 20:00 (DEC-0020). Falta definir hora/disparador, qué cuenta como hito, acceso verificable a evidencias y autoridad ante un bloqueo crítico. El agente puede declarar meta cumplida con pruebas válidas (DEC-0019); está abierto si clases de meta requerirán auditoría previa. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
+**Acordado (DEC-0022):** la **auditoría independiente de ChatGPT** tiene dos intensidades: revisión breve **diaria** y revisión **profunda al alcanzar hitos importantes**. Es distinta del informe consolidado a las 20:00 (DEC-0020). **DEC-0025** precisa hitos profundos: mejoras importantes, cierres de metas/investigaciones y candidatos a publicación estable. **DEC-0024** autoriza bloquear publicaciones estables ante hallazgos críticos fundamentados. Faltan criterios operativos de importancia, disparador técnico, acceso verificable a evidencias y procedimiento de desbloqueo. El agente puede declarar meta cumplida con pruebas válidas (DEC-0019); está abierto si clases de meta requerirán auditoría previa. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
 
 ## 4. Informe de auditoría (PROPUESTA)
 
@@ -46,7 +46,7 @@ Un informe sin inspección de código/datos no puede afirmar que se ejecutaron p
 
 ## 6. Autoridad
 
-El auditor no cambia prompts definitivos, objetivos ni criterios de éxito. La posibilidad de bloquear releases por errores críticos sería una política a acordar, separada de la facultad de comentar y proponer.
+El auditor no cambia prompts definitivos, objetivos ni criterios de éxito. **Está acordado (DEC-0024) que puede bloquear una publicación estable ante un error crítico fundamentado**. Debe implementarse posteriormente como restricción verificable de publicación, no solo como comentario de texto. No se ha decidido quién cierra hallazgos críticos disputados, ni la política ante auditor indisponible.
 
 La auditoría automática no equivale a una revisión científica independiente o peer review humano.
 
@@ -60,6 +60,6 @@ La auditoría automática no equivale a una revisión científica independiente 
 
 ## Pendientes
 - Cómo integrar ChatGPT con el historial y disparar auditorías; cadencia ya acordada (breve diaria y profunda en hitos), pero horario y criterios de hito pendientes.
-- Niveles de severidad con consecuencias exactas.
+- Definición operacional de crítico y proceso de bloqueo/desbloqueo, incluyendo discrepancias y auditor indisponible (DEC-0024).
 - Canal de entrega, avisos, cuándo escalar y quién cierra un hallazgo.
 - Cómo reproducir experimentos bajo presupuesto y permisos del auditor.

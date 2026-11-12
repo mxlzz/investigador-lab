@@ -12,13 +12,13 @@
 | E5 Conocimiento | `spec/05-knowledge.md`, `spec/schemas/` | Esquema de fases discriminado en borrador; subesquemas, referencias e IDs por resolver |
 | E6 Autonomía | `spec/06-autonomy.md` | Inactividad local de 15 min, pausa al regreso y prioridades humanas acordadas; límites y recuperación por concretar |
 | E7 Prompts | `spec/07-prompts/`, `spec/07-prompt-contracts.md` | Doce prompts v0.1 y once variantes de salida; faltan aprobación, subtipos y validación con modelo |
-| E8 Infraestructura | `spec/08-deployment.md`, `docs/REMOTE_EXECUTION_ANALYSIS.md` | Continuidad remota gratuita acordada; alternativas de coordinación documentadas, sin elección técnica todavía |
-| E9 Auditoría | `spec/09-auditing.md`, `docs/AUDIT_TRIGGER_DESIGN.md` | Cadencia acordada; catálogo de hitos y autoridad de bloqueo propuestos, aún por aprobar |
+| E8 Infraestructura | `spec/08-deployment.md`, `docs/REMOTE_EXECUTION_ANALYSIS.md` | Ejecución gratuita remota restringida a datos públicos/autorizados (DEC-0026); mecanismo de coordinación aún abierto |
+| E9 Auditoría | `spec/09-auditing.md`, `docs/AUDIT_TRIGGER_DESIGN.md` | Hitos principales y bloqueo crítico de release acordados (DEC-0024/25); resolución y contingencia pendientes |
 | E10 Entrega | `handoff/` | Manifiesto/matriz preliminares; no aptos para implementar |
 
 ## Qué sí se consiguió
 
-Se tradujeron las decisiones acordadas DEC-0001…DEC-0023 en una primera capa de documentación por capacidad. Se redactaron **borradores literales** para 12 funciones de prompts, y se dispuso una matriz inicial de pruebas. El repositorio contiene evidencia/obligaciones de trazabilidad y una base Obsidian.
+Se tradujeron las decisiones acordadas DEC-0001…DEC-0027 en una primera capa de documentación por capacidad. Se redactaron **borradores literales** para 12 funciones de prompts, y se dispuso una matriz inicial de pruebas. El repositorio contiene evidencia/obligaciones de trazabilidad y una base Obsidian.
 
 ## Qué NO se consiguió
 

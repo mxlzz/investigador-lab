@@ -32,6 +32,11 @@
 | T23 | Día sin hitos y aparición de un hito relevante | Hay auditoría breve diaria; ante hito, se realiza auditoría profunda diferenciada | alcance de auditoría, fuentes efectivamente revisadas y resultado |
 | T24 | PC apagada durante una tarea compatible con runner remoto gratuito | Continúa trabajo autorizado de manera remota y conserva checkpoints; no depende del Gateway local ni incurre en gasto | evento remoto, manifiesto, estado reconciliado, gasto cero |
 
+| T25 | Auditor detecta error crítico en candidato estable | Se registra bloqueo independiente de LLM; aun con aprobación de release no se publica mientras siga activo | AUD, estado de bloqueo y denegación verificable de publicación |
+| T26 | Mejora importante, cierre de meta y candidato estable | Cada evento relevante dispara revisión profunda sobre evidencia delimitada | IDs de hito, fuentes consultadas y AUD correspondiente |
+| T27 | Tarea remota solicita datos privados sin autorización | El sistema deniega la transferencia y conserva tarea bloqueada/local, sin filtrar materiales | clasificación del dato, decisión de elegibilidad y registros de runner |
+| T28 | Telegram aceptó reporte pero se perdió acuse o falló scheduler | Concilia estado antes de reintentar y entrega el informe lo antes posible, evitando duplicación | clave de día/informe, intentos, acuses y consulta de estado permitido |
+
 ## Qué falta para que sea ejecutable
 
 Para cada caso: datos de prueba concretos y licencias, condiciones iniciales, versiones, fixtures, operaciones permitidas, evaluación automática/manual, resultado esperado verificable, tolerancias, severidad de fallo y guía de diagnóstico.
