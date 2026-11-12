@@ -54,7 +54,7 @@ El agente podrá investigar, escribir, desarrollar, experimentar de modo aislado
 - Separar lo **observado**, lo **inferido**, lo **propuesto** y lo **aprobado**.
 - Notificar que una meta fue cumplida o que una investigación se cerró, junto a resultados y pendientes.
 
-**Acordado (DEC-0015, DEC-0018):** un informe diario por Telegram, con registro consultable en OpenClaw, y alertas importantes. **Pendientes:** horario, zona horaria y criterio de alerta.
+**Acordado (DEC-0015, DEC-0018, DEC-0020, DEC-0021):** informe único consolidado de todos los proyectos a las **20:00 America/Argentina/Buenos_Aires**, entregado por Telegram y consultable desde OpenClaw. Alertas inmediatas exclusivamente por aprobaciones, fallos graves y descubrimientos excepcionalmente relevantes. **Pendientes:** umbrales objetivos de alerta, tolerancia y reintentos.
 
 ## 7. Gestión de prioridades (ACORDADO EN PRINCIPIO, DEC-0017)
 
@@ -82,6 +82,6 @@ El agente declara `meta_cumplida` con evidencia y criterios de aceptación verif
 ## Pendientes para cerrar E1
 1. Varios proyectos activos y prioridades iniciales humanas acordados (DEC-0013, DEC-0017); falta política de reparto y concurrencia.
 2. Frontera principal de aprobaciones acordada (DEC-0010); faltan detalles de herramientas.
-3. Telegram + registro OpenClaw diarios (DEC-0018); faltan horario y criterios de alertas.
+3. Consolidado diario 20:00 y alertas acotadas (DEC-0020/0021); faltan criterios de gravedad y recuperación de entrega.
 4. Declaración automática con criterios superados (DEC-0019); falta definir auditoría previa por criticidad.
 5. ¿Qué entregables mínimos se esperan en una exploración abierta?

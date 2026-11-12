@@ -27,6 +27,11 @@
 | T19 | Se genera informe del día | Envía por Telegram y conserva registro consultable en OpenClaw vinculado a fuentes | mensaje, referencia de registro y entrega |
 | T20 | Pruebas de meta superadas | Declara `meta_cumplida` y comunica, pero no hace merge/release estable sin aprobación | criterios de aceptación, decisión, ausencia de publicación |
 
+| T21 | Llega hora de informe, con varios proyectos activos | Genera un único informe consolidado a las 20:00 de Buenos Aires; Telegram y OpenClaw guardan referencias de la misma versión | timestamp, entrega, registro y expediente persistente |
+| T22 | Ocurre avance ordinario o hallazgo extraordinario | Avance ordinario espera informe diario; hallazgo excepcional dispara alerta y se evita duplicación | reglas de severidad y registro de notificación |
+| T23 | Día sin hitos y aparición de un hito relevante | Hay auditoría breve diaria; ante hito, se realiza auditoría profunda diferenciada | alcance de auditoría, fuentes efectivamente revisadas y resultado |
+| T24 | PC apagada durante una tarea compatible con runner remoto gratuito | Continúa trabajo autorizado de manera remota y conserva checkpoints; no depende del Gateway local ni incurre en gasto | evento remoto, manifiesto, estado reconciliado, gasto cero |
+
 ## Qué falta para que sea ejecutable
 
 Para cada caso: datos de prueba concretos y licencias, condiciones iniciales, versiones, fixtures, operaciones permitidas, evaluación automática/manual, resultado esperado verificable, tolerancias, severidad de fallo y guía de diagnóstico.

@@ -162,3 +162,36 @@
 - Si la evidencia es incompleta, la evaluación queda pendiente o inconclusa; no declarar éxito por el relato de un LLM. No confundir meta cumplida con investigación cerrada o con resultados negativos (DEC-0007).
 - Pendiente: nivel de auditoría independiente exigible antes de declarar cumplimiento y protocolos específicos por tipo de meta.
 - Motivo: permitir resultados autónomos verificables sin delegar la decisión de publicación estable.
+
+
+## DEC-0020 — Informe diario consolidado a las 20:00 (Buenos Aires)
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador prepara **un único informe consolidado de todos los proyectos activos cada día a las 20:00**, según la zona `America/Argentina/Buenos_Aires`. Se entrega por Telegram y queda consultable desde OpenClaw (DEC-0018).
+- Contenido: distinguir avances realmente verificados, resultados negativos, bloqueos, decisiones pendientes y descubrimientos laterales relevantes, con referencias al expediente persistente. Evitar notificaciones independientes por proyecto como alternativa al informe consolidado.
+- Pendiente técnico: tolerancias de entrega, reintentos, recuperación ante caída del gateway o red y generación cuando el ejecutor local no está disponible. El horario es objetivo de entrega, no garantía técnica de puntualidad de servicios externos.
+- Motivo: seguimiento diario unificado y comparable entre proyectos.
+
+## DEC-0021 — Alertas inmediatas acotadas a eventos relevantes
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: Investigador envía alertas fuera del informe diario solo por **aprobaciones requeridas**, **fallos graves** y **descubrimientos excepcionalmente relevantes**. Otros avances se agrupan en el informe consolidado.
+- Pendiente: criterios operativos verificables de gravedad y relevancia, limitación de alertas repetidas y procedimiento cuando el canal está caído.
+- Motivo: reducir ruido sin demorar decisiones o eventos que realmente requieran atención.
+
+## DEC-0022 — Auditoría breve diaria y profunda en hitos importantes
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: el proceso de **auditoría independiente de ChatGPT**, distinto del informe de Investigador, incluye una **revisión breve diaria** y una **revisión profunda ante hitos importantes** de investigación o desarrollo.
+- Alcance: las revisiones contrastan el trabajo registrado con evidencia accesible e informan límites de verificación; no reescriben prompts, objetivos ni autorizaciones.
+- Pendiente: hora y mecanismo concreto de disparo, definición verificable de hito, alcance de la auditoría profunda, formato de observaciones, autoridad ante hallazgos críticos y viabilidad de la conexión/orquestación con ChatGPT.
+- Motivo: supervisión continua de bajo costo y revisión rigurosa en puntos de decisión.
+
+## DEC-0023 — Continuidad de tareas compatibles en ejecución remota gratuita
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: con la PC local **apagada o no disponible**, Investigador debe poder **continuar las tareas compatibles** utilizando GitHub Actions u otro entorno remoto gratuito previamente autorizado, sin exceder permisos, políticas de cuotas ni presupuestos (DEC-0010, DEC-0011).
+- Condiciones: ejecutar únicamente tareas y datos aptos para dicho entorno; los procesos dependientes de recursos o archivos locales quedan suspendidos hasta disponer del entorno. Persistir checkpoints y evidencia fuera del almacenamiento efímero de los runners y reconciliar resultados para evitar duplicados.
+- Restricción: la elección de un runner gratuito no autoriza uso de runners grandes/GPU pagos, acceso a secretos locales, publicación estable ni ejecución remota de toda la instalación de OpenClaw. No se presume que GitHub Actions sea un proceso persistente o un scheduler infalible.
+- Pendiente: origen fiable de disparos, continuidad del coordinador, datos accesibles, credenciales, recuperación, límites de concurrencia y qué categorías de trabajo se delegan a remoto.
+- Motivo: mantener progreso útil fuera del horario de encendido de la PC, aprovechando infraestructura gratuita autorizada.

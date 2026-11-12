@@ -52,7 +52,7 @@ Se deben medir consumos; si se alcanzan límites, suspender de manera segura, pe
 
 Una sola acción que modifique un mismo recurso a la vez salvo mecanismo de concurrencia explícito. Subagentes pueden investigar en paralelo pero sus informes no se integran como evidencia validada sin revisión de fuentes y deduplicación.
 
-El programador de OpenClaw se ejecuta en su Gateway: con equipo apagado o en suspensión local, los ciclos no pueden ejecutarse allí. Un servidor remoto o GitHub Actions son posibles motores alternativos para tareas definidas, sujetos a límites y permisos.
+El programador de OpenClaw se ejecuta en su Gateway: con equipo apagado o en suspensión local, los ciclos no pueden ejecutarse allí. **Acordado (DEC-0023):** cuando la PC está apagada, tareas compatibles continúan en GitHub Actions u otros ejecutores remotos gratuitos autorizados. **No** implica que OpenClaw Gateway continúe funcionando localmente. Los procesos necesitan un disparador remoto y estado/checkpoints durables; runners efímeros no son memoria persistente. Las tareas que requieran acceso o GPU locales se suspenden hasta recuperación del recurso. Ver `spec/08-deployment.md` y el análisis técnico en `docs/REMOTE_EXECUTION_ANALYSIS.md`.
 
 ## 6. Frontera de autonomía operativa (ACORDADA, DEC-0010)
 
@@ -75,7 +75,7 @@ La matriz exacta de permisos debe fijarse en E8; aquí es diseño, no política 
 
 ## 8. Cierre de ciclo y comunicación
 
-**Acordado (DEC-0015, DEC-0018):** un informe diario por Telegram y registro consultable en OpenClaw, además de alertas importantes. Horario y umbrales siguen pendientes.
+**Acordado (DEC-0020/0021):** informe consolidado de todos los proyectos a las 20:00 (zona `America/Argentina/Buenos_Aires`) por Telegram y registro OpenClaw. Alertas fuera del informe solo por permisos/aprobaciones, fallos graves y hallazgos excepcionalmente relevantes. Umbrales, deduplicación y reintentos pendientes.
 
 Propuesto: reporte corto basado en cambios verificables (`state_before`, `action`, `evidence`, `state_after`, `next`, `blocked_on`). Cada notificación incluye vínculos/IDs; si no hay nueva evidencia, no declarar progreso.
 
@@ -92,5 +92,5 @@ Propuesto: reporte corto basado en cambios verificables (`state_before`, `action
 - Cadencia de ciclos y ventanas de recursos; detector de inactividad de 15 minutos y pausa segura al regreso (DEC-0016).
 - Límites de recursos locales, concurrencia real y reparto entre prioridades iniciales humanas (DEC-0017; política monetaria DEC-0011).
 - Aprobaciones exactas, canales y reglas de escalamiento.
-- Motor de ejecución y nivel de disponibilidad (PC local vs remoto).
+- Delimitación entre coordinación permanente y trabajos remotos discretos; disparadores, datos autorizados y tolerancia a fallos de GitHub Actions (DEC-0023).
 - Política de seguimiento y de errores repetidos.

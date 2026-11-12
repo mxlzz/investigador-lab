@@ -21,7 +21,7 @@ Separar producción de afirmaciones y verificación de evidencia. El auditor pue
 
 **Profunda:** seleccionar muestras de fuentes/experimentos, abrir evidencia, repetir cálculos o comparar artefactos cuando el entorno lo permita, buscar precedentes omitidos, revisar contradicciones y detectar desviaciones del contrato aprobado.
 
-El **informe de progreso de Investigador** es diario por Telegram con registro en OpenClaw (DEC-0015, DEC-0018); esto no determina la frecuencia ni la autoridad de las **auditorías independientes de ChatGPT**. El agente puede declarar meta cumplida con pruebas válidas (DEC-0019); está abierto si ciertas clases de meta requerirán auditoría previa. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
+**Acordado (DEC-0022):** la **auditoría independiente de ChatGPT** tiene dos intensidades: revisión breve **diaria** y revisión **profunda al alcanzar hitos importantes**. Es distinta del informe consolidado a las 20:00 (DEC-0020). Falta definir hora/disparador, qué cuenta como hito, acceso verificable a evidencias y autoridad ante un bloqueo crítico. El agente puede declarar meta cumplida con pruebas válidas (DEC-0019); está abierto si clases de meta requerirán auditoría previa. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
 
 ## 4. Informe de auditoría (PROPUESTA)
 
@@ -59,7 +59,7 @@ La auditoría automática no equivale a una revisión científica independiente 
 - U05: auditor recibe repositorio público y no necesita credenciales del agente para leer las fuentes públicas.
 
 ## Pendientes
-- Si ChatGPT puede escribir issues/comentarios por política de acceso, frecuencia y disparadores.
+- Cómo integrar ChatGPT con el historial y disparar auditorías; cadencia ya acordada (breve diaria y profunda en hitos), pero horario y criterios de hito pendientes.
 - Niveles de severidad con consecuencias exactas.
 - Canal de entrega, avisos, cuándo escalar y quién cierra un hallazgo.
 - Cómo reproducir experimentos bajo presupuesto y permisos del auditor.

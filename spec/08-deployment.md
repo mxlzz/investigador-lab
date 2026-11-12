@@ -66,6 +66,8 @@ Estas restricciones deberán probarse en la capa de ejecución/autorización, no
 
 **Acordado (DEC-0016):** cargas intensivas de CPU/GPU tras 15 minutos de inactividad de usuario y pausa controlada al detectar su regreso. La implementación deberá probar suspensión y reanudación sin capturar teclas o contenidos del usuario; queda abierta la definición técnica exacta.
 
+**Acordado (DEC-0023):** debe admitirse delegación de tareas compatibles a ejecutores remotos gratuitos autorizados cuando la PC esté apagada; esto exige definir cómo se disparan tareas, dónde residen estado/secretos y qué datos están habilitados para el entorno. El Gateway local detenido no puede coordinar por sí solo. Ver `docs/REMOTE_EXECUTION_ANALYSIS.md` (análisis, NO diseño aprobado).
+
 ## 6. Aislamiento propuesto
 
 - Agente `investigador` separado del agente personal principal.
@@ -99,7 +101,7 @@ Cada modo termina con la **misma** batería de tests y un reporte de conformidad
 
 ## 9. Cuestiones ABIERTAS
 
-- Versión concreta de OpenClaw, sistema de instalación, forma de ejecutar en Windows, y eventual recurso remoto.
+- Versión concreta de OpenClaw, instalación en Windows y reparto entre ejecutor local/ejecutores remotos gratuitos (DEC-0023); solución de coordinación cuando el Gateway local está apagado.
 - Modelo(s) y ruta de fallback; disponibilidad y cuotas gratuitas reales, con garantía de no incurrir en gastos sin presupuesto aprobado (DEC-0011).
 - Dónde persistir la base de datos estructurada y artefactos pesados.
 - Qué herramientas/skills deben existir obligatoriamente frente a opcionales.
