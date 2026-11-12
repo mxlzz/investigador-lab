@@ -42,3 +42,14 @@
 - Con tema abierto: el agente puede definir y explorar sus propias preguntas, priorizándolas y documentando por qué las considera relevantes, dentro del alcance y límites acordados.
 - Una oportunidad sugerida no se presenta como innovación comprobada: antes de tratarla como novedosa, debe pasar por contraste de antecedentes y conservar el grado de incertidumbre.
 - Motivo: permitir descubrimientos inesperados sin perder el foco de los encargos concretos, y conservarlos para futuras decisiones del usuario.
+
+
+## DEC-0007 — Criterios de cumplimiento y cierre de una meta
+- Fecha: 2026-11-12
+- Estado: acordada (diseño)
+- Decisión: distinguir **versión funcional**, **mejora demostrada** e **innovación razonablemente agotada**. Son grados diferentes de avance y no deben equipararse.
+- **Meta cumplida:** la herramienta satisface los objetivos y criterios de aceptación definidos para el encargo, existe una versión estable y documentada, y las mejoras que formen parte de la meta están respaldadas por pruebas reproducibles y comparaciones pertinentes. Para encargos de exploración sin objetivo de mejora, se establecen criterios específicos de entrega.
+- **Investigación cerrada:** además de completar o concluir la investigación, se documentan las principales líneas pendientes y la justificación para no seguir invirtiendo recursos por el momento. No significa que no pueda haber futuras innovaciones.
+- **Investigación concluida sin meta cumplida:** es un desenlace válido si no se logra el resultado buscado y se conservan evidencias, resultados negativos, limitaciones y explicación de por qué se detuvo. No presentar este estado como éxito técnico.
+- **Oportunidades futuras:** no impiden reconocer una meta cumplida; se registran para posible autorización posterior (ver DEC-0006).
+- Motivo: evitar investigaciones indefinidas o declaraciones de éxito sin respaldo y distinguir entrega, validación y cierre exploratorio.
