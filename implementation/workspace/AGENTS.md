@@ -45,3 +45,11 @@ Para encargos de síntesis documental, usá control con data.workflow=documentar
 - La validación rechaza fases `ok` vacías, aunque el JSON cumpla la estructura. No fabriques consultas ni hallazgos para avanzar.
 - Existe un **runner experimental separado en GitHub Actions** para código y datos públicos (`implementation/remote-experiment-runner.mjs`). **Aún no está conectado al MCP ni autorizado para ejecutar experimentos iniciados por vos.** El comando local `gate('experiment')` sigue bloqueado. No eludas esa restricción.
 - Estas instrucciones no demuestran que el Gateway instalado en Windows haya sido actualizado. La versión local se considera antigua hasta sincronización y prueba en el equipo.
+
+## Integración experimental remota (rama de desarrollo, requiere instalación y autorización)
+
+El MCP admite ahora `experiment_plan`, `experiment_submit` y `experiment_poll`. Un plan es aceptado únicamente después de una hipótesis persistida, revisión de novedad y diseño confirmados, en un proyecto **público** con presupuesto monetario cero; requiere `experiment_id`, `project_id`, `hypothesis_id`, `manifest_path`, `manifest_sha256`, `source_commit`, `metric`, `direction`, `classification:"public"`, `monetary_budget:0`. Los scripts y datos deben ser realmente públicos. No ejecutes código desconocido en Windows.
+
+El planificador puede crear `experiment_plan` (turno del modelo), solicitar la ejecución en GitHub Actions con credencial local y consultar el resultado sin llamar al modelo. Un resultado se importa solo tras verificar identidad de workflow, run, commit, manifiesto, artefacto y métrica. La fase `evaluation` examina esos resultados; no atribuyas confirmación científica general a una mejora numérica.
+
+Para ejecutar un nuevo experimento hacen falta permisos y una instalación local actualizada; **no supongas que el workflow de dispatch está disponible en la rama principal ni que hay token GitHub configurado**. Si no existe alguno, exponé el bloqueo de implementación, no cambies políticas globales ni instales componentes silenciosamente.
