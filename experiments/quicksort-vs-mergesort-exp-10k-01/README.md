@@ -1,0 +1,1 @@
+Comparación experimental autónoma en Node.js 24 entre QuickSort in-place y MergeSort con arreglos auxiliares, utilizando 50 repeticiones con conjuntos de datos idénticos generados mediante un LCG determinista (N=10.000). Se verifica corrección fuera de las mediciones y calentamiento JIT previo.

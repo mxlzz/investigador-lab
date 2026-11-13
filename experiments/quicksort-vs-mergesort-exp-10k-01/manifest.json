@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "project_id": "quicksort-vs-mergesort-10k",
+  "experiment_id": "quicksort-vs-mergesort-exp-10k-01",
+  "metric": "execution_time_ms",
+  "direction": "minimize",
+  "timeout_seconds": 300,
+  "trials": [
+    {
+      "id": "baseline",
+      "script": "experiments/quicksort-vs-mergesort-exp-10k-01/benchmark.mjs",
+      "args": [
+        "baseline"
+      ]
+    },
+    {
+      "id": "candidate",
+      "script": "experiments/quicksort-vs-mergesort-exp-10k-01/benchmark.mjs",
+      "args": [
+        "candidate"
+      ]
+    }
+  ]
+}
