@@ -11,9 +11,11 @@ import {MAX_TRIAL_TIMEOUT_SECONDS,runRemoteExperiment} from '../implementation/r
 import {setupFiles} from '../tools/openclaw-setup-files.mjs';
 
 test('agent, worker, native job and lease budgets cannot cut each other short',()=>{
- const t=researchTiming({});assert.deepEqual(t,{agentSeconds:1800,workerSeconds:1860,jobSeconds:2400,noOutputSeconds:2370,leaseSeconds:2700});
+ const t=researchTiming({});assert.deepEqual(t,{agentSeconds:1800,modelAttempts:1,workerSeconds:1860,jobSeconds:2400,noOutputSeconds:2370,leaseSeconds:2700});
  assert.ok(t.agentSeconds<t.workerSeconds&&t.workerSeconds<t.noOutputSeconds&&t.noOutputSeconds<t.jobSeconds&&t.jobSeconds<t.leaseSeconds);
  assert.equal(researchTiming({INVESTIGADOR_AGENT_TIMEOUT_SECONDS:'3600'}).leaseSeconds,4500);
+ assert.deepEqual(researchTiming({INVESTIGADOR_MODEL_ATTEMPTS:'3'}),{agentSeconds:1800,modelAttempts:3,workerSeconds:5460,jobSeconds:6000,noOutputSeconds:5970,leaseSeconds:6300});
+ for(const v of ['0','4','bad','1.5'])assert.throws(()=>researchTiming({INVESTIGADOR_MODEL_ATTEMPTS:v}),/entre 1 y 3/);
  for(const v of ['0','bad','7201','1.5'])assert.throws(()=>researchTiming({INVESTIGADOR_AGENT_TIMEOUT_SECONDS:v}),/entre 60 y 7200/);
  const {job,fragment}=setupFiles({node:'C:\\Node\\node.exe',openclawRoot:'C:\\App',configPath:'C:\\State\\openclaw.json',stateRoot:'C:\\State',workspace:'C:\\Workspace',githubProfile:'C:\\Profile',githubRuntime:'C:\\Runtime',githubOwner:'alice',agentTimeoutSeconds:3600});
  assert.equal(job.payload.timeoutSeconds,4200);assert.equal(job.payload.env.INVESTIGADOR_AGENT_TIMEOUT_SECONDS,'3600');assert.equal(fragment.mcp.servers.investigador.env.INVESTIGADOR_AGENT_TIMEOUT_SECONDS,'3600');
@@ -34,6 +36,7 @@ test('worker passes its actual deadline to the CLI and still terminates a hung c
  fs.writeFileSync(cli,'setInterval(()=>{},1000);');
  await assert.rejects(runAgent(cli,'unused.txt',{project:'hung',agentTimeoutSeconds:1,timeoutMs:1100}),/Timeout del ciclo/);
  await assert.rejects(runAgent(cli,'unused.txt',{project:'invalid',agentTimeoutSeconds:2,timeoutMs:1000}),/superar/);
+ await assert.rejects(runAgent(cli,'unused.txt',{project:'invalid-chain',agentTimeoutSeconds:1,modelAttempts:3,timeoutMs:2500}),/todos los modelos/);
 });
 
 test('public experiment manifest can allow one hour per trial within the workflow budget',async()=>{

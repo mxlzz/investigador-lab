@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {researchTiming} from '../implementation/timing.mjs';
 const required=['node','openclawRoot','configPath','stateRoot','workspace','githubProfile','githubRuntime','githubOwner'];
 export function setupFiles(input){
- const allowed=[...required,'githubRepo','model','codeModeEnabled','agentTimeoutSeconds'];
+ const allowed=[...required,'githubRepo','model','modelFallbacks','codeModeEnabled','agentTimeoutSeconds'];
  if(!input||typeof input!=='object'||Object.keys(input).some(k=>!allowed.includes(k)))throw Error('Campos desconocidos; nunca pasar tokens, claves ni configuraciones privadas completas');
  for(const k of required)if(typeof input[k]!=='string'||!input[k])throw Error('Falta '+k);
  const windows=path.win32.isAbsolute(input.node),p=windows?path.win32:path;
@@ -16,6 +16,7 @@ export function setupFiles(input){
  if(!/^[A-Za-z0-9][A-Za-z0-9-]{0,38}\/[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}$/.test(repo))throw Error('Repositorio de infraestructura inválido');
  if(input.codeModeEnabled!==undefined&&typeof input.codeModeEnabled!=='boolean')throw Error('codeModeEnabled debe ser boolean');
  if(input.model!==undefined&&(typeof input.model!=='string'||!input.model.trim()))throw Error('Modelo inválido');
+ if(input.modelFallbacks!==undefined&&(!Array.isArray(input.modelFallbacks)||input.modelFallbacks.length>2||input.modelFallbacks.some(m=>typeof m!=='string'||!/^[-\w]+\/[-\w.]+$/.test(m)||/(?:github_pat_|ghp_)/.test(m))))throw Error('Respaldos inválidos: máximo dos referencias provider/model');
  for(const [key,value]of Object.entries(input))if(typeof value==='string'){
   // OpenClaw names managed profile directories ghp_<32 hex>. That basename is
   // a non-secret profile ID, not the actual GitHub token stored inside it.
@@ -23,9 +24,10 @@ export function setupFiles(input){
   if(/(?:github_pat_[A-Za-z0-9_]{15,}|gh[pousr]_[A-Za-z0-9]{20,}|-----BEGIN .*PRIVATE KEY-----)/.test(checked))throw Error('Posible credencial en la entrada; usar solo rutas y nombres');
  }
  const entry=p.join(input.openclawRoot,'openclaw.mjs');
- const timing=researchTiming({INVESTIGADOR_AGENT_TIMEOUT_SECONDS:input.agentTimeoutSeconds??1800});
+ const timing=researchTiming({INVESTIGADOR_AGENT_TIMEOUT_SECONDS:input.agentTimeoutSeconds??1800,INVESTIGADOR_MODEL_ATTEMPTS:1+(input.modelFallbacks?.length??0)});
  const env={INVESTIGADOR_ROOT:input.workspace,INVESTIGADOR_GITHUB_OWNER:input.githubOwner,INVESTIGADOR_GITHUB_REPO:repo,INVESTIGADOR_GITHUB_PROFILE:input.githubProfile,INVESTIGADOR_GITHUB_CREDENTIAL_LAUNCHER:p.join(input.githubRuntime,'github-exec-launcher.mjs'),INVESTIGADOR_AGENT_TIMEOUT_SECONDS:String(timing.agentSeconds)};
- const agent={workspace:input.workspace,...input.model?{model:input.model}:{}};
+ env.INVESTIGADOR_MODEL_ATTEMPTS=String(timing.modelAttempts);
+ const agent={workspace:input.workspace,...input.modelFallbacks?{model:{...(input.model?{primary:input.model}:{}),fallbacks:input.modelFallbacks}}:input.model?{model:input.model}:{}};
  const fragment={agents:{entries:{investigador:agent}},mcp:{servers:{investigador:{transport:'stdio',command:input.node,cwd:input.workspace,args:[p.join(input.workspace,'implementation','mcp-server.mjs')],env}}},...(input.codeModeEnabled!==undefined?{tools:{codeMode:{enabled:input.codeModeEnabled}}}:{})};
  const job={name:'investigador-documental-local',agentId:'investigador',enabled:false,schedule:{kind:'every',everyMs:900000},sessionTarget:'isolated',wakeMode:'now',payload:{kind:'command',argv:[input.node,p.join(input.workspace,'implementation','scheduler-tick.mjs')],cwd:input.workspace,env:{...env,INVESTIGADOR_OPENCLAW_ENTRY:entry},timeoutSeconds:timing.jobSeconds,noOutputTimeoutSeconds:timing.noOutputSeconds,outputMaxBytes:65536},delivery:{mode:'none'}};
  return {fragment,job};

@@ -17,6 +17,12 @@ test('portable setup keeps MCP and worker identity consistent and creates a paus
  assert.equal(job.payload.env.INVESTIGADOR_OPENCLAW_ENTRY,'C:\\Apps\\OpenClaw\\openclaw.mjs');
  assert.equal(mcp.env.INVESTIGADOR_GITHUB_REPO,'another-owner/investigador-lab');
  assert.equal(fragment.agents.entries.investigador.model,'provider/model');
+ const redundant=setupFiles({...setup,modelFallbacks:['google/gemini-3.6-flash','google/gemini-3.1-flash-lite']});
+ assert.deepEqual(redundant.fragment.agents.entries.investigador.model,{primary:'provider/model',fallbacks:['google/gemini-3.6-flash','google/gemini-3.1-flash-lite']});
+ assert.equal(redundant.job.payload.timeoutSeconds,6000);assert.equal(redundant.job.payload.noOutputTimeoutSeconds,5970);
+ assert.equal(redundant.fragment.mcp.servers.investigador.env.INVESTIGADOR_MODEL_ATTEMPTS,'3');
+ assert.equal(redundant.job.payload.env.INVESTIGADOR_MODEL_ATTEMPTS,'3');
+ assert.throws(()=>setupFiles({...setup,modelFallbacks:['bad']}),/Respaldos inválidos/);
  assert.equal(fragment.tools,undefined);assert.ok(!JSON.stringify(fragment).includes('mxlzz'));
  assert.throws(()=>setupFiles({...setup,token:'never-accepted'}),/nunca pasar tokens/);
  assert.throws(()=>setupFiles({...setup,workspace:'relative'}),/absoluta/);
