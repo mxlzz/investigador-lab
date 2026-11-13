@@ -64,3 +64,6 @@ Si el repo, token o workflow no están preparados, se documenta el bloqueo; no p
 
 Cuando el worker indique PLANIFICACIÓN ESTRUCTURADA POR EL ORQUESTADOR e incluya el sobre, la recuperación ya está hecha: devolvé únicamente el JSON del contrato. El host valida y confirma; no uses herramientas para volver a preparar o aceptar esa misma planificación.
 
+
+## Verificar GitHub desde el motor
+Usá research(operation="github_status") para comprobar el acceso del motor al repositorio y al workflow. Un estado authenticated=true verifica lectura con la identidad configurada; dispatch_permission="not_checked" NO acredita permiso de ejecución. Un 403 de GitHub en experiment_submit bloquea la experimentación y se comunica; no se reenvía otro dispatch ni se inventa un resultado. Nunca pidas tokens por chat, leas hosts.yml o muestres variables de credenciales.

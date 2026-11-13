@@ -50,3 +50,7 @@ Se instaló la versión de la rama fijada en a5babf4, conservando expedientes y 
 
 La aceptación local de next_cycle quedó confirmada mediante salida JSON del modelo, validada y persistida por el host. Los intentos fallidos previos se conservaron. No se declara completada la prueba experimental Windows hasta disponer de autorización de Actions.
 
+
+### GitHub administrado desde Windows
+
+Se instaló gh portable oficial y se corrigió el ACL del perfil privado. Se integró la identidad administrada al MCP y al worker mediante captura en memoria del launcher validado, y se preparó su runtime portable para evitar el fallo nativo de WindowsApps. El agente real verificó lectura autenticada y workflow activo mediante github_status. 51 pruebas pasan. El dispatch de aceptación fue rechazado con 403; GitHub identifica el permiso faltante actions=write. No hay aceptación experimental Windows completa ni resultado científico. La shell general de MSIX conserva un fallo de launcher; el MCP específico está operativo. Detalles y pasos pendientes: docs/WINDOWS_GITHUB_SETUP.md. Sin secretos ni expedientes privados en el commit.
