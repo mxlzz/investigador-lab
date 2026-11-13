@@ -18,4 +18,12 @@ jobs:
       - name: Show runtime
         run: node --version
       - name: Run documentary engine and MCP regression tests
-        run: node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs
+        run: node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs tests/remote-experiment-runner.test.mjs
+      - name: Remote runner smoke experiment (public, no secrets)
+        run: node implementation/remote-experiment-runner.mjs experiments/runner-smoke/manifest.json
+      - name: Preserve experiment receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-experiment-receipt
+          path: artifacts/runner-smoke.json
+          retention-days: 7

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "experiment_id": "runner-smoke",
+  "project_id": "infrastructure",
+  "metric": "mse",
+  "direction": "minimize",
+  "timeout_seconds": 15,
+  "trials": [
+    {
+      "id": "baseline",
+      "script": "experiments/runner-smoke/baseline.mjs",
+      "args": []
+    },
+    {
+      "id": "candidate",
+      "script": "experiments/runner-smoke/candidate.mjs",
+      "args": []
+    }
+  ]
+}

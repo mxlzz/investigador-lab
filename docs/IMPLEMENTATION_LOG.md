@@ -31,3 +31,7 @@ El estado de instalación local de Codex previo a estas correcciones no garantiz
 ## Ciclo de investigación posterior al informe (experimental)
 
 Se añadió la fase `next_cycle` al planificador del flujo `research` (sin afectar el modo documental): selecciona una nueva fase conocida desde un dictamen con snapshot de estado, justificación y artefactos esperados. Las acciones arbitrarias no son ejecutables. Se agregaron pruebas de que no fabrica ciclos en modo documental y de que rechaza comandos no admitidos. La ejecución experimental continúa bloqueada hasta disponer de un runner aislado.
+
+## Ejecutor de experimentos públicos en CI (experimental)
+
+Se agregó un runner de comparación baseline/candidato para código de `experiments/` con límites temporales, recibos con hashes y ejecución en GitHub Actions sin secretos. Se incluyó un smoke test deliberadamente sintético para demostrar que corre en runner hospedado. Esto NO demuestra mejora científica real ni habilita ejecución experimental desde el agente local: faltan importación verificable del resultado al expediente y controles por disciplina.

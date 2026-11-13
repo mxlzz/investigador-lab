@@ -55,3 +55,8 @@ No publicar research-state/, credenciales, tokens ni configuración privada de O
 Para encargos en modo `research`, después del informe documental el planificador ahora ejecuta `next_cycle`: el modelo debe proponer una fase de investigación concreta, justificar su valor informativo y referenciar el estado exacto del expediente. El motor acepta solamente fases conocidas; el planificador crea una cola con esas fases y conserva el historial. Si no hay trabajo útil, el agente devuelve `selected_action:null` y el proyecto queda en reposo, sin ciclos artificiales. En modo `documentary` se cierra la síntesis sin forzar ciclos posteriores.
 
 **Límite:** este ciclo permite nueva investigación documental y diseño, pero NO habilita ejecución experimental no aislada. La prueba de mejora técnica sigue bloqueada mientras no haya runner seguro.
+
+
+## Ejecutor experimental en GitHub Actions (primera capacidad)
+
+Se agregó un runner controlado de experimentos públicos de dos implementaciones y métricas numéricas, ejecutado solo en infraestructura GitHub Actions. El smoke test compara código real con baseline, conserva recibo descargable y verifica límites de ruta y ejecución. Consultar [docs/EXPERIMENT_RUNNER_STATUS.md](../docs/EXPERIMENT_RUNNER_STATUS.md) antes de interpretar el alcance: **aún no está conectado al ciclo autónomo del agente** y no debe utilizar datos privados.
