@@ -45,3 +45,7 @@ No publicar research-state/, credenciales, tokens ni configuración privada de O
 - Selección por prioridad humana antes que antigüedad de último intento; turnos justos entre proyectos de igual prioridad. Un proyecto de mayor prioridad puede acaparar ejecución mientras tenga trabajo elegible: una política de equidad global requiere diseño específico.
 - Ante envío Telegram de resultado incierto, conservar informe y reintentar automáticamente tras una espera; puede existir un duplicado excepcional si Telegram había recibido la solicitud pero se perdió la confirmación. Se privilegia cumplir el envío sin intervención del usuario.
 - CI en GitHub comprueba Node 24 y la batería de tests en pushes y PRs. Una ejecución de CI no reemplaza pruebas sobre el Gateway, Telegram ni sandbox reales.
+
+## Ampliación de antecedentes (experimental)
+
+`openalex_bibliography` permite una segunda búsqueda bibliográfica (OpenAlex), con hasta quince resultados por consulta, caché de 24 h, control de procedencia, niveles reales de acceso y deduplicación de DOI. Acepta `OPENALEX_API_KEY` **opcional** para ampliar cuota gratuita; sin clave puede restringirse el uso habitual. No activa servicios pagos ni expone claves en registros de búsqueda. Es un complemento documental, no sustituye búsqueda de código, patentes ni lectura completa.

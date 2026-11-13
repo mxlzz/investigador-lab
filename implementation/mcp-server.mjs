@@ -3,9 +3,9 @@ import path from 'node:path';
 import fs from 'node:fs';
 import {Engine,VERSION} from './engine.mjs';
 import {Scheduler} from './scheduler.mjs';
-import {searchBibliography,retrieveArxivAbstract} from './bibliography.mjs';
+import {searchBibliography,searchOpenAlex,retrieveArxivAbstract} from './bibliography.mjs';
 const engine=new Engine(process.env.INVESTIGADOR_ROOT||path.resolve(import.meta.dirname,'..'));
-const definition={name:'research',description:'Motor documental Investigador: proyectos, fases, evidencia, informes y planificación. bibliography busca Crossref sin API key y persiste resultados reales; arxiv_abstract recupera resúmenes. No ejecuta experimentos ni publica.',inputSchema:{type:'object',additionalProperties:false,required:['operation'],properties:{operation:{type:'string',enum:['health','projects','init','state','prepare','record','accept','gate','report','bibliography','arxiv_abstract','scheduler','control']},project:{type:'string'},key:{type:'string'},phase:{type:'string'},kind:{type:'string'},request:{type:'string'},visibility:{type:'string',enum:['private','public']},data:{type:'object'},envelope:{type:'object'},output:{type:'object'},day:{type:'string'},action:{type:'string'},query:{type:'string'},url:{type:'string'},enabled:{type:'boolean'},reason:{type:'string'}}}};
+const definition={name:'research',description:'Motor documental Investigador: proyectos, fases, evidencia, informes y planificación. bibliography busca Crossref sin API key y persiste resultados reales; arxiv_abstract recupera resúmenes. No ejecuta experimentos ni publica.',inputSchema:{type:'object',additionalProperties:false,required:['operation'],properties:{operation:{type:'string',enum:['health','projects','init','state','prepare','record','accept','gate','report','bibliography','openalex_bibliography','arxiv_abstract','scheduler','control']},project:{type:'string'},key:{type:'string'},phase:{type:'string'},kind:{type:'string'},request:{type:'string'},visibility:{type:'string',enum:['private','public']},data:{type:'object'},envelope:{type:'object'},output:{type:'object'},day:{type:'string'},action:{type:'string'},query:{type:'string'},url:{type:'string'},enabled:{type:'boolean'},reason:{type:'string'}}}};
 async function call(a){if(!a||typeof a!=='object')throw new Error('Argumentos inválidos');for(const k of Object.keys(a))if(!(k in definition.inputSchema.properties))throw new Error('Campo desconocido '+k);switch(a.operation){
  case 'health':return engine.health();
  case 'projects':{const dir=path.join(engine.base,'projects');return fs.existsSync(dir)?fs.readdirSync(dir,{withFileTypes:true}).filter(d=>d.isDirectory()).map(d=>engine.state(d.name)):[];}
@@ -17,6 +17,7 @@ async function call(a){if(!a||typeof a!=='object')throw new Error('Argumentos in
  case 'gate':return engine.gate(a.project,a.action,a.data);
  case 'report':return engine.report(a.day||new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Argentina/Buenos_Aires'}).format(new Date()));
  case 'bibliography':return searchBibliography(engine,a.project,a.query);
+ case 'openalex_bibliography':return searchOpenAlex(engine,a.project,a.query);
  case 'arxiv_abstract':return retrieveArxivAbstract(engine,a.project,a.url);
  case 'scheduler':return new Scheduler(engine).status();
  case 'control':return new Scheduler(engine).control(a.project,a.enabled,a.reason,a.data);

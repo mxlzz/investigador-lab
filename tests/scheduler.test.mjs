@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
-import {Engine} from '../implementation/engine.mjs';import {Scheduler,documentaryTask} from '../implementation/scheduler.mjs';import {searchBibliography,retrieveArxivAbstract} from '../implementation/bibliography.mjs';
+import {Engine} from '../implementation/engine.mjs';import {Scheduler,documentaryTask} from '../implementation/scheduler.mjs';import {searchBibliography,searchOpenAlex,retrieveArxivAbstract} from '../implementation/bibliography.mjs';
 function fixture(t){const root=fs.mkdtempSync(path.join(os.tmpdir(),'inv-schedule-'));fs.cpSync(path.resolve(import.meta.dirname,'../spec'),path.join(root,'spec'),{recursive:true});t.after(()=>fs.rmSync(root,{recursive:true,force:true}));const e=new Engine(root);e.init('demo','Revisar literatura de ReAct');return {e,s:new Scheduler(e)};}
 function accept(e,phase,key=phase){const schema=e.schema.oneOf.find(s=>s.properties.phase.const===phase);const out={};for(const k of schema.required){const p=schema.properties[k];out[k]=p.const??p.enum?.[0]??(p.type==='array'?[]:p.type==='object'?{}:Array.isArray(p.type)&&p.type.includes('null')?null:'');}out.status='ok';e.accept('demo',key,e.envelope('demo',phase),out);}
 test('no projects means idle and no model dispatch',t=>{const {e,s}=fixture(t);s.control('demo',false,'Pausa');assert.equal(s.claim().status,'idle');});
@@ -18,3 +18,14 @@ test('arxiv abs cannot be promoted to full text or experimental proof',async t=>
 test('extraction cannot claim full paper access for an existing abstract',async t=>{const {e}=fixture(t);accept(e,'intake');accept(e,'search_plan');const a=await retrieveArxivAbstract(e,'demo','https://arxiv.org/abs/2210.03629',{fetcher:async()=>new Response('<blockquote class="abstract">Resumen</blockquote>')});const s=e.schema.oneOf.find(s=>s.properties.phase.const==='extract_evidence');const out={};for(const k of s.required){const p=s.properties[k];out[k]=p.const??p.enum?.[0]??(p.type==='array'?[]:p.type==='object'?{}:'');}out.status='ok';out.source_identifier=a.data.url;out.access_level='full_text';assert.throws(()=>e.accept('demo','wrong',e.envelope('demo','extract_evidence'),out),/Nivel de lectura/);out.access_level='abstract';e.accept('demo','correct',e.envelope('demo','extract_evidence'),out);});
 
 test('human priority wins across eligible projects; equal priorities rotate fairly',t=>{const {e,s}=fixture(t);e.init('urgent','Proyecto prioritario',{priority:0});e.init('another','Otro proyecto',{priority:1});let a=s.claim(1000);assert.equal(a.project,'urgent');accept(e,'intake','main-intake');s.finish(a.token,{},2000);a=s.claim(3000);assert.equal(a.project,'urgent');s.finish(a.token,{error:'incomplete'},4000);a=s.claim(5000);assert.equal(a.project,'demo');});
+
+test('second source OpenAlex records provenance and deduplicates DOI across indexes',async t=>{
+ const {e}=fixture(t);accept(e,'intake');accept(e,'search_plan');
+ const doi='10.1234/test';const cross=async()=>new Response(JSON.stringify({message:{items:[{DOI:doi,title:['First source']}]}}),{status:200});
+ const first=await searchBibliography(e,'demo','residual networks',{fetcher:cross,now:1000});assert.equal(first.sources.length,1);
+ const fetcher=async(url)=>{assert.ok(url.includes('api.openalex.org/works'));return new Response(JSON.stringify({results:[{id:'https://openalex.org/W123',doi:'https://doi.org/'+doi,title:'Same paper',publication_year:2020,abstract_inverted_index:{Network:[0],architecture:[1]}},{id:'https://openalex.org/W234',title:'Another paper',publication_year:2021}]}),{status:200})};
+ const result=await searchOpenAlex(e,'demo','residual networks',{fetcher,now:2000,apiKey:null});
+ assert.equal(result.sources.length,2);assert.equal(result.sources[0].key,first.sources[0].key);
+ assert.equal(result.sources[1].data.access_level,'metadata');assert.equal(result.search_id.startsWith('search-'),true);
+ const again=await searchOpenAlex(e,'demo','residual networks',{fetcher:()=>{throw Error('unexpected duplicate request')},now:3000,apiKey:null});assert.equal(again.cached,true);
+});

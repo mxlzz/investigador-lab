@@ -28,3 +28,38 @@ export async function retrieveArxivAbstract(engine,project,url,{fetcher=fetch,no
  const key='src-'+digest(u.href);const old=engine.state(project).events.find(e=>e.key===key);if(old)return old;
  return engine.record(project,key,'source',{url:u.href,access_level:'abstract',retrieved_at:new Date(now).toISOString(),content:abstract,retrieval:{provider:'arxiv',http_status:200,sha256:crypto.createHash('sha256').update(html).digest('hex')},limitations:'Solo resumen y página de metadatos. No acredita lectura del paper completo.'});
 }
+
+/**
+ * Second, independent bibliographic index. OpenAlex is free for basic queries
+ * but may enforce low anonymous budgets; never falls back to paid usage.
+ * As with Crossref, only metadata/abstract is considered read.
+ */
+export async function searchOpenAlex(engine,project,query,{fetcher=fetch,now=Date.now(),apiKey=process.env.OPENALEX_API_KEY}={}){
+ if(typeof query!=='string'||!query.trim()||query.length>400)throw new Error('Consulta OpenAlex inválida');
+ const state=engine.state(project);if(!state.completed.includes('search_plan'))throw new Error('Aceptar search_plan antes de buscar');
+ const existing=state.events.findLast(e=>e.kind==='search'&&e.data.provider==='openalex'&&e.data.query===query&&now-Date.parse(e.data.executed_at)<86400000);
+ if(existing)return {cached:true,search_id:existing.key,sources:state.events.filter(e=>existing.data.source_ids.includes(e.key))};
+ const u=new URL('https://api.openalex.org/works');u.searchParams.set('search',query);u.searchParams.set('per_page','15');
+ if(apiKey)u.searchParams.set('api_key',apiKey);
+ const raw=JSON.parse(await request(u.href,fetcher));if(!Array.isArray(raw.results))throw new Error('Respuesta OpenAlex inválida');
+ const timestamp=new Date(now).toISOString(),sources=[];
+ for(const item of raw.results){
+  if(typeof item.id!=='string'||!item.title)continue;
+  const doi=typeof item.doi==='string'&&/^https:\/\/doi\.org\//i.test(item.doi)?item.doi.replace(/^https:\/\/doi\.org\//i,''):null;
+  const key='src-'+digest(doi?doi.toLowerCase():item.id.toLowerCase());
+  let event=engine.state(project).events.find(e=>e.key===key);
+  if(!event){
+   let abstract='';
+   if(item.abstract_inverted_index&&typeof item.abstract_inverted_index==='object'){
+    const words=[];for(const [word,positions] of Object.entries(item.abstract_inverted_index)){if(!Array.isArray(positions))continue;for(const p of positions){if(Number.isInteger(p)&&p>=0&&p<10000)words[p]=word;}}
+    abstract=words.map(w=>w||'').join(' ').trim().slice(0,10000);
+   }
+   const url=doi?'https://doi.org/'+doi:item.id;
+   event=engine.record(project,key,'source',{url,title:clean(item.title),doi,year:item.publication_year||null,access_level:abstract?'abstract':'metadata',retrieved_at:timestamp,content:abstract||clean(item.title),retrieval:{provider:'openalex',http_status:200,sha256:crypto.createHash('sha256').update(JSON.stringify(item)).digest('hex')},limitations:'Metadatos y eventualmente resumen indexado por OpenAlex; no se leyó el texto completo.'});
+  }
+  sources.push(event);
+ }
+ const key='search-'+digest('openalex|'+query+'|'+timestamp);
+ const event=engine.record(project,key,'search',{query,provider:'openalex',executed_at:timestamp,source_ids:sources.map(s=>s.key),request_url:'https://api.openalex.org/works',coverage:'Hasta quince resultados OpenAlex de la primera página; no exhaustivo. Puede requerir clave gratuita para uso regular.'});
+ return {cached:false,search_id:event.key,sources};
+}
