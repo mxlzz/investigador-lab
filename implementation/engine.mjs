@@ -15,12 +15,12 @@ function atomic(p,v){fs.mkdirSync(path.dirname(p),{recursive:true}); const t=p+'
 export function validate(s,v,p='$'){
  const known=['$schema','$id','title','description','oneOf','type','const','enum','required','properties','additionalProperties','items','uniqueItems'];
  for(const k of Object.keys(s))if(!known.includes(k))fail('Unsupported schema keyword: '+k);
- if(s.oneOf){if(s.oneOf.filter(x=>{try{validate(x,v,p);return true}catch{return false}}).length!==1)fail(p+': oneOf');return;}
+ if(s.oneOf){const selected=s.oneOf.filter(x=>x.properties?.phase?.const===v?.phase&&v?.phase!==undefined);if(selected.length===1){validate(selected[0],v,p);return;}if(s.oneOf.filter(x=>{try{validate(x,v,p);return true}catch{return false}}).length!==1)fail(p+': oneOf');return;}
  if(s.type){const types=Array.isArray(s.type)?s.type:[s.type];const t=v===null?'null':Array.isArray(v)?'array':typeof v;if(!types.includes(t))fail(p+': type '+types);}
  if('const'in s&&JSON.stringify(v)!==JSON.stringify(s.const))fail(p+': const');
  if(s.enum&&!s.enum.some(x=>JSON.stringify(x)===JSON.stringify(v)))fail(p+': enum');
  if(v&&typeof v==='object'&&!Array.isArray(v)){
-  for(const k of s.required||[])if(!(k in v))fail(p+': missing '+k);
+  const missing=(s.required||[]).filter(k=>!(k in v));if(missing.length)fail(p+': missing '+missing.join(', '));
   for(const [k,x]of Object.entries(v)){if(s.properties?.[k])validate(s.properties[k],x,p+'.'+k);else if(s.additionalProperties===false)fail(p+': unknown '+k);}
  }
  if(Array.isArray(v)){if(s.uniqueItems&&new Set(v.map(x=>JSON.stringify(x))).size!==v.length)fail(p+': duplicates');if(s.items)v.forEach((x,i)=>validate(s.items,x,p+'['+i+']'));}

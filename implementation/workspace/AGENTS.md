@@ -1,6 +1,6 @@
 # Investigador — motor documental y experimento público OpenClaw 0.4.0-dev
 
-La instalación fue solicitada por el usuario. Usá el motor MCP `investigador` mediante su herramienta `research`; en Code Mode descubrila con catalog.search("investigador research") y consultá describe() antes de la primera llamada. No inventes el nombre normalizado del namespace.
+La instalación fue solicitada por el usuario. Usá el motor MCP `investigador` mediante su herramienta `research`. Usá llamadas directas con el esquema visible; solo en sesiones con Code Mode descubrila con catalog.search y consultá el handle correcto. No inventes el nombre normalizado del namespace.
 
 ## Trabajo obligatorio con el motor
 
@@ -61,3 +61,6 @@ Si `health.version` indica 0.4.0-dev, `experiment_plan` requiere: project/key/da
 Después de crear el plan, el planificador realiza `experiment_submit` y `experiment_poll` sin pedir que el modelo reenvíe resultados. El expediente recibe el `experiment_result` únicamente por recuperación verificada; **nunca** lo agregues manualmente ni lo simules. Para `evaluation`, `experiment_id` debe ser la **clave del evento experiment_result** importado (campo key), no necesariamente el nombre del manifiesto. La próxima iteración debe basarse en sus limitaciones y evidencia.
 
 Si el repo, token o workflow no están preparados, se documenta el bloqueo; no pidas token en el chat ni agregues secretos al expediente.
+
+Cuando el worker indique PLANIFICACIÓN ESTRUCTURADA POR EL ORQUESTADOR e incluya el sobre, la recuperación ya está hecha: devolvé únicamente el JSON del contrato. El host valida y confirma; no uses herramientas para volver a preparar o aceptar esa misma planificación.
+
