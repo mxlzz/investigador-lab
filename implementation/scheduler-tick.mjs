@@ -6,6 +6,8 @@ import {Scheduler} from './scheduler.mjs';
 import {GitHubExperiments} from './github-experiments.mjs';
 import {syncIfConfigured} from './github-projects.mjs';
 import {researchTiming} from './timing.mjs';
+import crypto from 'node:crypto';
+import {ExperimentPublication,publicationContract} from './experiment-publication.mjs';
 export function cycleMessage(task){return `Continuación documental autorizada. Proyecto: ${task.project}. Paso asignado: ${task.phase}. ID: ${task.token}.
 En TODAS las llamadas de este proyecto incluí project="${task.project}", también en accept. Para accept usá key="${task.phase}-${task.token}" y copiá todos los campos required del output_contract; no omitas los arrays vacíos ni budget_check. state_snapshot_id de next_cycle debe ser el project_state.lastDigest del sobre recién preparado, no un hash antiguo dentro del historial.
 La salida narrativa no confirma el paso: debés llamar prepare y accept con todos los campos obligatorios del contrato. En next_cycle, si no hay trabajo útil, igual registrá una decisión estructurada con selected_action=null y el state_snapshot_id exacto. No sustituyas esa confirmación por control/pausa. Si accept rechaza un campo, corregí ese campo siguiendo el mensaje y reintentá hasta dos veces; no anuncies éxito sin evento aceptado.
@@ -46,11 +48,30 @@ async function main(){const root=process.env.INVESTIGADOR_ROOT||path.resolve(imp
  try{
  if(!entry||!fs.existsSync(entry))throw Error('Falta ruta del CLI OpenClaw en INVESTIGADOR_OPENCLAW_ENTRY');
  if(task.phase==='novelty_review')engine.materializeHypotheses(task.project);
- const envelope=['next_cycle','novelty_review'].includes(task.phase)?engine.envelope(task.project,task.phase):null;
- const phaseInstructions=task.phase==='novelty_review'?'La fase es novelty_review. Elegí hypothesis_id de los eventos kind=hypothesis del expediente; el host registró literalmente las propuestas confirmadas, sin inventar soporte. searches_reviewed debe contener objetos con search_id de eventos kind=search existentes. expected_new_information es string. Respetá los enum del contrato; no uses campos extra. Evaluá los antecedentes reales y sus límites; si no alcanzan, devolvé needs_evidence con búsquedas faltantes. No afirmes novedad ni experimentos ejecutados por razonamiento.':'Usá state_snapshot_id='+envelope?.project_state.lastDigest+'. Si no hay trabajo útil autorizado, selected_action=null.';
- const message=envelope?'PLANIFICACIÓN ESTRUCTURADA POR EL ORQUESTADOR. El motor ya recuperó y preparó este sobre. Respondé únicamente con el objeto JSON exigido por output_contract, sin markdown ni llamadas a herramientas. El motor validará y persistirá la salida; no llames prepare, accept ni control. Incluí todos los campos required. '+phaseInstructions+' No inventes metas, evidencia ni ejecución.\n'+JSON.stringify(envelope):cycleMessage(task);
+ const envelope=['next_cycle','novelty_review','experiment_design'].includes(task.phase)?engine.envelope(task.project,task.phase):null;
+ if(task.phase==='experiment_plan'){
+  const state=engine.state(task.project),design=state.events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='experiment_design'&&e.data.output.status==='ok');
+  if(!design)throw Error('Falta diseño experimental confirmado');
+  const key='experiment-plan-'+crypto.createHash('sha256').update(design.key).digest('hex').slice(0,32);
+  const intentKey='publication-'+crypto.createHash('sha256').update(key).digest('hex').slice(0,32);
+  let proposal=state.events.find(e=>e.key===intentKey)?.data.proposal;
+  if(!proposal){
+   const context={project:task.project,request:state.created.request,hypothesis:state.events.find(e=>e.kind==='hypothesis'&&e.key===design.data.output.hypothesis_id),design:design.data.output,output_contract:publicationContract};
+   fs.writeFileSync(prompt,'PLANIFICACIÓN ESTRUCTURADA POR EL ORQUESTADOR. Respondé solo JSON según output_contract, sin herramientas. Generá scripts Node 24 autónomos para el experimento autorizado. NO calcules hashes ni commits: el host publica y verifica. Solo datos sintéticos públicos, sin dependencias, red ni acceso a secretos. Cada trial imprime exclusivamente JSON {metrics:{[metric]:number},...metadata}. Misma entrada y semilla para ambos algoritmos; verificá corrección fuera de las mediciones, repetí muestras tras calentamiento y documentá límites. Usá la métrica y direction exactas del diseño. No confundas una propuesta con ejecución. Si no se puede implementar fielmente, status=blocked y blockers concretos.\n'+JSON.stringify(context));
+   const result=await runAgent(entry,prompt,{project:task.project,sessionTag:task.token});
+   fs.writeFileSync(path.join(dir,task.token+'.json'),JSON.stringify(result,null,2));
+   proposal=JSON.parse((result.result?.payloads||[]).map(p=>p.text||'').join('\n').trim().replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,''));
+  }
+  if(proposal.status==='blocked'){scheduler.control(task.project,false,'Publicación bloqueada: '+(proposal.blockers||[]).join('; '));throw Error('Publicación bloqueada: '+(proposal.blockers||[]).join('; '));}
+  await new ExperimentPublication(engine).publish(task.project,key,proposal);
+ }else{
+ const phaseInstructions=task.phase==='novelty_review'?'La fase es novelty_review. Elegí hypothesis_id de los eventos kind=hypothesis del expediente; el host registró literalmente las propuestas confirmadas, sin inventar soporte. searches_reviewed debe contener objetos con search_id de eventos kind=search existentes. expected_new_information es string. Respetá los enum del contrato; no uses campos extra. Evaluá los antecedentes reales y sus límites; si no alcanzan, devolvé needs_evidence con búsquedas faltantes. No afirmes novedad ni experimentos ejecutados por razonamiento.':task.phase==='next_cycle'?'Usá state_snapshot_id='+envelope?.project_state.lastDigest+'. Si no hay trabajo útil autorizado, selected_action=null.':'';
+ const designInstructions=task.phase==='experiment_design'?' Usá hypothesis_id de un evento kind=hypothesis real con revisión de novedad aceptada compatible; no inventes IDs. Diseñá un protocolo ejecutable en Node 24 con datos sintéticos públicos, controles, semillas y repeticiones, métricas y direction explícitas.':'';
+ const message=envelope?'PLANIFICACIÓN ESTRUCTURADA POR EL ORQUESTADOR. El motor ya recuperó y preparó este sobre. Respondé únicamente con el objeto JSON exigido por output_contract, sin markdown ni llamadas a herramientas. El motor validará y persistirá la salida; no llames prepare, accept ni control. Incluí todos los campos required. '+phaseInstructions+designInstructions+' No inventes metas, evidencia ni ejecución.\n'+JSON.stringify(envelope):cycleMessage(task);
  fs.writeFileSync(prompt,message);
- const result=await runAgent(entry,prompt,{project:task.project,sessionTag:task.token});fs.writeFileSync(path.join(dir,task.token+'.json'),JSON.stringify(result,null,2));if(envelope){let text=(result.result?.payloads||[]).map(p=>p.text||'').join('\n').trim();text=text.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'');engine.accept(task.project,task.phase+'-'+task.token,{task_id:envelope.task_id},JSON.parse(text));}}catch(e){error=e.message;}
+ const result=await runAgent(entry,prompt,{project:task.project,sessionTag:task.token});fs.writeFileSync(path.join(dir,task.token+'.json'),JSON.stringify(result,null,2));if(envelope){let text=(result.result?.payloads||[]).map(p=>p.text||'').join('\n').trim();text=text.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'');engine.accept(task.project,task.phase+'-'+task.token,{task_id:envelope.task_id},JSON.parse(text));}
+ }
+ }catch(e){error=e.message;}
  const finished=scheduler.finish(task.token,{error});const github=await syncIfConfigured(engine,task.project);console.log(JSON.stringify({project:task.project,phase:task.phase,outcome:finished.outcome,error,github}));if(error||finished.outcome==='failed')process.exitCode=1;
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===path.resolve(import.meta.filename))main().catch(e=>{console.error(e.message);process.exitCode=1;});

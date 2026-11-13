@@ -1,8 +1,8 @@
-> **Instalación y réplica en Windows:** [guía completa](docs/REPLICAR_EN_WINDOWS.md), [entorno de referencia](replication/environment.json), [repositorios por investigación](docs/PROJECT_REPOSITORIES.md) y [evidencia de aceptación](docs/PROJECT_REPOSITORIES_ACCEPTANCE.json). Usar el snapshot `replica/windows-2026-11-13-timeouts`, que reúne la implementación y las herramientas; no asumir que `main` contiene estos cambios.
+> **Instalación y réplica en Windows:** [guía completa](docs/REPLICAR_EN_WINDOWS.md), [respaldos Gemini y presupuestos](docs/GEMINI_FALLBACKS.md) y [publicación experimental y recuperación](docs/EXPERIMENT_PUBLICATION_RECOVERY.md). La rama `fix/experiment-publication` reúne la instalación actual. Los snapshots anteriores conservan sus versiones históricas; no asumir que `main` contiene la implementación.
 
 # Investigador Lab
 
-**Estado:** implementación local de investigación documental, continuidad y repositorios privados por proyecto, con aceptación real en Windows. El runner experimental público tiene pruebas separadas; no se declara completo todo el alcance de investigación autónoma.
+**Estado:** investigación documental, continuidad y repositorios por proyecto instalados en Windows. Circuito experimental real de publicación, dispatch en GitHub Actions e importación verificada confirmado; ver [evidencia y límites](docs/EXPERIMENT_PUBLICATION_RECOVERY.md). No se declara completo todo el alcance de investigación autónoma.
 **Fecha inicial:** 2026-11-12.
 
 Infraestructura universal de investigación y desarrollo autónomo, coordinable desde OpenClaw. Recibe **una meta o un tema**, investiga el conocimiento previo, detecta vacíos, propone hipótesis, verifica antecedentes antes de experimentar, implementa, evalúa y conserva trazabilidad.

@@ -67,7 +67,7 @@ export class Engine{
  });}
 
  // The model may submit a public experiment plan but cannot invent execution.
- planExperiment(project,key,data){return this.locked(project,()=>{
+ experimentPlanData(project,key,data){
   const s=this.state(project);
   if(s.created.visibility!=='public')fail('Experimento remoto requiere proyecto expresamente público');
   if(!s.completed.includes('novelty_review')||!s.completed.includes('experiment_design'))fail('Faltan novedad comprobada o diseño experimental');
@@ -82,13 +82,14 @@ export class Engine{
   const design=s.events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='experiment_design'&&e.data.output.status==='ok'&&e.data.output.hypothesis_id===data.hypothesis_id)?.data.output;
   if(!novelty||!design||!['experiment','replicate_for_validation','differentiate'].includes(novelty.recommendation))fail('Antecedentes y diseño no autorizan prueba');
   if(s.events.some(e=>e.kind==='experiment_plan'&&e.data.experiment_id===data.experiment_id&&e.key!==key))fail('ID experimental ya usado');
-  return this.append(project,key,'experiment_plan',{
+  return {
    project_id:project,experiment_id:data.experiment_id,hypothesis_id:data.hypothesis_id,
    manifest_path:data.manifest_path,manifest_sha256:data.manifest_sha256,
    source_commit:data.source_commit,metric:data.metric,direction:data.direction,
    classification:'public',monetary_budget:0,design_event_key:s.events.findLast(e=>e.kind==='phase'&&e.data.output===design)?.key||null
-  });
- });}
+  };
+ }
+ planExperiment(project,key,data){return this.locked(project,()=>this.append(project,key,'experiment_plan',this.experimentPlanData(project,key,data)));}
  experimentDispatch(project,key,data){return this.locked(project,()=>{
   const s=this.state(project),plan=s.events.find(e=>e.key===data?.plan_key&&e.kind==='experiment_plan');
   if(!plan)fail('Plan experimental inexistente');
@@ -140,7 +141,11 @@ export class Engine{
     if(!output.supported_findings.length&&!output.open_questions.length&&!output.coverage_gaps.length)fail('Mapa sin hallazgos, preguntas ni brechas');
    }
    if(output.phase==='hypotheses'&&!output.candidates.length&&!output.reasons_not_to_test_yet.length)fail('No hay hipótesis ni razón para aplazarlas');
-   if(output.phase==='experiment_design'&&(!output.baselines.length||!output.metrics_and_criteria.length))fail('Experimento sin baseline ni métricas');
+   if(output.phase==='experiment_design'){
+    if(!output.baselines.length||!output.metrics_and_criteria.length)fail('Experimento sin baseline ni métricas');
+    if(!s.events.some(e=>e.kind==='hypothesis'&&e.key===output.hypothesis_id))fail('Diseño requiere hipótesis registrada');
+    if(!s.events.some(e=>e.kind==='phase'&&e.data.output.phase==='novelty_review'&&e.data.output.status==='ok'&&e.data.output.hypothesis_id===output.hypothesis_id&&['experiment','replicate_for_validation','differentiate'].includes(e.data.output.recommendation)))fail('Diseño sin revisión de novedad compatible');
+   }
    if(output.phase==='report'&&!nonempty(output.summary))fail('Informe sin contenido');
   }
   const keys=new Set(s.events.map(e=>e.key));for(const c of output.claims){for(const r of c.support_ids)if(!keys.has(r))fail('Evidencia inexistente '+r);if(['observed','source_claim'].includes(c.certainty)&&!c.support_ids.length)fail('Afirmación factual sin evidencia');for(const r of c.support_ids){const e=s.events.find(e=>e.key===r);if(c.certainty==='observed'&&e.kind==='source'&&e.data.access_level!=='experimentally_verified')fail('Una fuente no prueba observación propia');}}

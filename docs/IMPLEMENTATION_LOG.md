@@ -1,5 +1,11 @@
 # Registro de implementación
 
+## 2026-11-13 — recuperación de publicación experimental
+
+Tres intentos de experiment_plan terminaron sin plan confirmado: faltaba la capacidad de publicar scripts/manifiesto y se había aceptado un diseño con hipótesis inexistente. Se implementó ExperimentPublication y experiment_publish, diseño/plan estructurados gestionados por el host, validación científica antes de escribir, intención durable, rama determinista sin force y lectura independiente del commit antes de registrar el plan. La cola de evaluación ahora resuelve sus dependencias experimentales y no reutiliza planes de un diseño anterior.
+
+84 pruebas locales aprobadas. Despliegue con backup, expediente conservado, diseño real corregido y circuito Windows → GitHub → Windows completado: publicación a16996100a4af642a9de1fcd284a135f19631d9d, Actions 43519292261 success, artefacto verificado e importado. El proyecto continúa habilitado. Reproducción, diagnóstico, aceptación y límites científicos en docs/EXPERIMENT_PUBLICATION_RECOVERY.md. Los respaldos Gemini y los presupuestos anteriores se conservan; no se publican credenciales ni sesiones.
+
 ## 2026-11-12 — base 0.2.0 y alcance de la siguiente etapa
 
 El usuario autorizó crear el agente en OpenClaw, completar su funcionamiento y dejar el trabajo registrado en GitHub.
