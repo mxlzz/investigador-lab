@@ -1,3 +1,5 @@
+> Implementación local 0.2.0 agregada: ver implementation/README.md. El texto siguiente describe la línea base de diseño; no se declara implementado todo su alcance.
+
 # Investigador Lab
 
 **Estado:** diseño preliminar — no hay implementación funcional ni experimentos ejecutados.

@@ -13,3 +13,7 @@ vault/.obsidian/workspace.json
 vault/.obsidian/cache
 results/
 artifacts/
+
+# Runtime local: no publicar expedientes ni secretos
+research-state/
+*.dpapi
