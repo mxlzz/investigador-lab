@@ -1,0 +1,66 @@
+name: Investigador public experiment
+run-name: Investigador experiment ${{ inputs.request_id }}
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: Unique request ID persisted by the local engine
+        type: string
+        required: true
+      source_commit:
+        description: Immutable commit of public experiment scripts
+        type: string
+        required: true
+      manifest_path:
+        description: Public manifest path
+        type: string
+        required: true
+      manifest_sha256:
+        description: SHA256 of canonical JSON manifest
+        type: string
+        required: true
+permissions:
+  contents: read
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Validate dispatch inputs
+        shell: bash
+        env:
+          REQUEST_ID: ${{ inputs.request_id }}
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+          MANIFEST_PATH: ${{ inputs.manifest_path }}
+          MANIFEST_SHA256: ${{ inputs.manifest_sha256 }}
+        run: |
+          [[ "$REQUEST_ID" =~ ^[0-9a-f-]{36}$ ]] || exit 1
+          [[ "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || exit 1
+          [[ "$MANIFEST_PATH" =~ ^experiments/[A-Za-z0-9_-]+/manifest\.json$ ]] || exit 1
+          [[ "$MANIFEST_SHA256" =~ ^[0-9a-f]{64}$ ]] || exit 1
+      - name: Checkout pinned commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_commit }}
+          persist-credentials: false
+      - name: Verify code provenance
+        shell: bash
+        env:
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_COMMIT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Run public baseline and candidate
+        env:
+          INVESTIGADOR_EXPERIMENT_COMMIT: ${{ inputs.source_commit }}
+          INVESTIGADOR_REQUEST_ID: ${{ inputs.request_id }}
+          INVESTIGADOR_MANIFEST_SHA256: ${{ inputs.manifest_sha256 }}
+        run: node implementation/remote-experiment-runner.mjs "${{ inputs.manifest_path }}"
+      - name: Save provenance and metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: investigador-${{ inputs.request_id }}
+          path: artifacts/*.json
+          if-no-files-found: error
+          retention-days: 30

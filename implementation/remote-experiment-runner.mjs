@@ -37,6 +37,10 @@ export async function runRemoteExperiment(root,manifest,{allowLocalForTest=false
  ensure(Array.isArray(manifest.trials)&&manifest.trials.length===2,'Se requieren baseline y candidato');
  ensure(typeof manifest.metric==='string'&&/^[a-z][a-z0-9_]{0,79}$/.test(manifest.metric),'Métrica inválida');
  ensure(['maximize','minimize'].includes(manifest.direction),'Dirección de métrica inválida');
+ const requestedHash=process.env.INVESTIGADOR_MANIFEST_SHA256;
+ if(requestedHash)ensure(digest(JSON.stringify(manifest))===requestedHash,'El manifiesto difiere de la solicitud autorizada');
+ const requestedId=process.env.INVESTIGADOR_REQUEST_ID;
+ if(requestedId)ensure(/^[0-9a-f-]{36}$/.test(requestedId),'ID de solicitud inválido');
  const timeoutMs=Number(manifest.timeout_seconds||30)*1000;
  ensure(timeoutMs>=1000&&timeoutMs<=180000,'Tiempo excede máximo del runner gratuito');
  const results=[];
@@ -53,7 +57,7 @@ export async function runRemoteExperiment(root,manifest,{allowLocalForTest=false
  }
  const baseline=results[0].metric_value,candidate=results[1].metric_value;
  const improvement=manifest.direction==='minimize'?baseline-candidate:candidate-baseline;
- return {schema_version:1,experiment_id:manifest.experiment_id,project_id:manifest.project_id,source_commit:process.env.GITHUB_SHA||null,metric:manifest.metric,direction:manifest.direction,baseline,candidate,improvement,provisional:improvement>0,results,manifest_sha256:digest(JSON.stringify(manifest)),executed_at:new Date().toISOString(),limitations:'Infraestructura y evaluación numérica básica; no verifica equivalencia estadística, validez científica ni condiciones generales de superioridad.'};
+ return {schema_version:1,experiment_id:manifest.experiment_id,project_id:manifest.project_id,source_commit:process.env.INVESTIGADOR_EXPERIMENT_COMMIT||process.env.GITHUB_SHA||null,github_run_id:process.env.GITHUB_RUN_ID||null,github_repository:process.env.GITHUB_REPOSITORY||null,request_id:process.env.INVESTIGADOR_REQUEST_ID||null,metric:manifest.metric,direction:manifest.direction,baseline,candidate,improvement,provisional:improvement>0,results,manifest_sha256:digest(JSON.stringify(manifest)),executed_at:new Date().toISOString(),limitations:'Infraestructura y evaluación numérica básica; no verifica equivalencia estadística, validez científica ni condiciones generales de superioridad.'};
 }
 async function cli(){
  const root=path.resolve(import.meta.dirname,'..');
