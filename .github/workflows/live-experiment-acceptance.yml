@@ -1,0 +1,25 @@
+name: Live GitHub experiment integration acceptance
+on:
+  push:
+    branches: [implementacion/investigador-local]
+    paths:
+      - tests/live-github-experiments.mjs
+permissions:
+  contents: read
+  actions: write
+jobs:
+  live-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Dispatch the production workflow, verify provenance, import, evaluate
+        env:
+          INVESTIGADOR_GITHUB_REPO: mxlzz/investigador-lab
+          INVESTIGADOR_GITHUB_TOKEN: ${{ github.token }}
+        run: node tests/live-github-experiments.mjs
