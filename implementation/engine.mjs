@@ -56,6 +56,19 @@ export class Engine{
   const current=this.envelope(project,output.phase,false);if(hash(envelope.prompts)!==hash(current.prompts)||hash(envelope.prompt_hashes)!==hash(current.prompt_hashes)||hash(envelope.output_contract)!==hash(current.output_contract))fail('Prompt/contrato alterado');
   if(envelope.approved_scope!==s.created.request||hash(envelope.approved_permissions)!==hash(current.approved_permissions)||hash(envelope.resource_budget)!==hash(current.resource_budget))fail('Permisos o alcance alterados');
   validate(this.schema,output);
+  // A syntactically valid empty JSON must not advance a real investigation.
+  if(output.status==='ok'){
+   const nonempty=v=>typeof v==='string'&&v.trim().length>0;
+   if(output.phase==='intake'&&!nonempty(output.request_summary))fail('Interpretación del encargo vacía');
+   if(output.phase==='search_plan'&&(!output.planned_queries.some(q=>q&&nonempty(q.query))))fail('Plan sin ninguna consulta concreta');
+   if(output.phase==='map_knowledge'){
+    if(!s.events.some(e=>e.kind==='source'))fail('Mapa sin evidencia documental recuperada');
+    if(!output.supported_findings.length&&!output.open_questions.length&&!output.coverage_gaps.length)fail('Mapa sin hallazgos, preguntas ni brechas');
+   }
+   if(output.phase==='hypotheses'&&!output.candidates.length&&!output.reasons_not_to_test_yet.length)fail('No hay hipótesis ni razón para aplazarlas');
+   if(output.phase==='experiment_design'&&(!output.baselines.length||!output.metrics_and_criteria.length))fail('Experimento sin baseline ni métricas');
+   if(output.phase==='report'&&!nonempty(output.summary))fail('Informe sin contenido');
+  }
   const keys=new Set(s.events.map(e=>e.key));for(const c of output.claims){for(const r of c.support_ids)if(!keys.has(r))fail('Evidencia inexistente '+r);if(['observed','source_claim'].includes(c.certainty)&&!c.support_ids.length)fail('Afirmación factual sin evidencia');for(const r of c.support_ids){const e=s.events.find(e=>e.key===r);if(c.certainty==='observed'&&e.kind==='source'&&e.data.access_level!=='experimentally_verified')fail('Una fuente no prueba observación propia');}}
   if(output.phase==='extract_evidence'&&output.status==='ok'){const source=s.events.find(e=>e.kind==='source'&&(e.key===output.source_identifier||e.data.url===output.source_identifier));if(!source||source.data.access_level!==output.access_level)fail('Nivel de lectura o fuente incompatible con el registro recuperado');}
   if(output.phase==='novelty_review'&&output.status==='ok'){if(!s.events.some(e=>e.key===output.hypothesis_id&&e.kind==='hypothesis'))fail('Hipótesis inexistente');if(!output.searches_reviewed.length||output.searches_reviewed.some(k=>!s.events.some(e=>e.key===k&&e.kind==='search')))fail('Revisión requiere búsquedas registradas');}

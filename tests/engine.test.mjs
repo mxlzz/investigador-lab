@@ -7,7 +7,7 @@ import {Engine,validate} from '../implementation/engine.mjs';
 import {deliver} from '../implementation/reporter.mjs';
 const source=path.resolve(import.meta.dirname,'..');
 function fixture(t){const root=fs.mkdtempSync(path.join(os.tmpdir(),'investigador-'));fs.cpSync(path.join(source,'spec'),path.join(root,'spec'),{recursive:true});const e=new Engine(root);t.after(()=>fs.rmSync(root,{recursive:true,force:true}));e.init('demo','Investigar método existente');return e;}
-function output(e,phase='intake'){const s=e.schema.oneOf.find(s=>s.properties.phase.const===phase);const v={};for(const k of s.required){const p=s.properties[k];v[k]=p.const??p.enum?.[0]??(p.type==='array'?[]:p.type==='object'?{}:Array.isArray(p.type)&&p.type.includes('null')?null:'');}v.status='ok';return v;}
+function output(e,phase='intake'){const s=e.schema.oneOf.find(s=>s.properties.phase.const===phase);const v={};for(const k of s.required){const p=s.properties[k];v[k]=p.const??p.enum?.[0]??(p.type==='array'?[]:p.type==='object'?{}:Array.isArray(p.type)&&p.type.includes('null')?null:'');}v.status='ok';if(phase==='intake')v.request_summary='Investigar método existente';if(phase==='search_plan')v.planned_queries=[{query:'método existente'}];if(phase==='report')v.summary='Progreso documentado';return v;}
 test('schema accepts source fixture and rejects invalid source fixture',()=>{const s=JSON.parse(fs.readFileSync(path.join(source,'spec/schemas/phase-result.schema.json')));validate(s,JSON.parse(fs.readFileSync(path.join(source,'spec/schemas/examples/intake.valid.json'))));assert.throws(()=>validate(s,JSON.parse(fs.readFileSync(path.join(source,'spec/schemas/examples/intake.invalid-phase-and-field.json')))));});
 test('journal persists and detects tampering',t=>{const e=fixture(t);assert.equal(new Engine(e.root).state('demo').created.request,'Investigar método existente');const p=path.join(e.dir('demo'),'events.jsonl');fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('Investigar','Modificar'));assert.throws(()=>e.state('demo'),/corrupto/);});
 test('idempotent creation and conflicting retry',t=>{const e=fixture(t);e.init('demo','Investigar método existente');assert.equal(e.events('demo').length,1);assert.throws(()=>e.init('demo','Otro objetivo'),/idempotencia/);});
@@ -23,3 +23,13 @@ test('result import cannot forge experimental execution',t=>{const e=fixture(t);
 test('daily report is immutable and consolidates projects',t=>{const e=fixture(t);e.init('other','Otro tema',{visibility:'public'});const a=e.report('2026-11-12');e.record('demo','opp','opportunity',{});assert.deepEqual(e.report('2026-11-12'),a);assert.equal(a.projects.length,2);});
 test('telegram retry, deduplication, and private redaction',async t=>{const e=fixture(t);const r=e.report('2026-11-12');let calls=0;await deliver(e.root,r,async()=>{calls++;throw Object.assign(new Error('rejected'),{certain:true})},1000);await deliver(e.root,r,async text=>{calls++;assert.ok(!text.includes('Investigar método'));return {message_id:123}},1000000);await deliver(e.root,r,async()=>{calls++;},2000000);assert.equal(calls,2);});
 test('uncertain Telegram result is retried automatically after backoff, preserving the report',async t=>{const e=fixture(t);const r=e.report('2026-11-12');let calls=0;const first=await deliver(e.root,r,async()=>{calls++;throw new Error('lost ack')},1000);assert.equal(first.status,'uncertain');const early=await deliver(e.root,r,async()=>{calls++;return {message_id:44}},1000+30000);assert.equal(early.status,'uncertain');assert.equal(calls,1);const later=await deliver(e.root,r,async()=>{calls++;return {message_id:44}},1000+130000);assert.equal(later.status,'sent');assert.equal(calls,2);await deliver(e.root,r,async()=>{calls++},1000+150000);assert.equal(calls,2);});
+
+test('an empty ok phase cannot manufacture documentary progress',t=>{
+ const e=fixture(t);
+ let env=e.envelope('demo','intake'),v=output(e);v.request_summary='';
+ assert.throws(()=>e.accept('demo','empty-intake',env,v),/vacía/);
+ v=output(e);e.accept('demo','good-intake',env,v);
+ env=e.envelope('demo','search_plan');v=output(e,'search_plan');v.planned_queries=[];
+ assert.throws(()=>e.accept('demo','empty-plan',env,v),/consulta concreta/);
+ v=output(e,'search_plan');e.accept('demo','good-plan',env,v);
+});

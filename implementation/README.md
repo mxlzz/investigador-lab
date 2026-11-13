@@ -60,3 +60,7 @@ Para encargos en modo `research`, después del informe documental el planificado
 ## Ejecutor experimental en GitHub Actions (primera capacidad)
 
 Se agregó un runner controlado de experimentos públicos de dos implementaciones y métricas numéricas, ejecutado solo en infraestructura GitHub Actions. El smoke test compara código real con baseline, conserva recibo descargable y verifica límites de ruta y ejecución. Consultar [docs/EXPERIMENT_RUNNER_STATUS.md](../docs/EXPERIMENT_RUNNER_STATUS.md) antes de interpretar el alcance: **aún no está conectado al ciclo autónomo del agente** y no debe utilizar datos privados.
+
+## Puerta de calidad del expediente
+
+Se impide aceptar `status:ok` con un intake vacío, un plan sin consultas, un mapa sin fuentes ni contenido, una fase de hipótesis sin propuesta o descarte justificado, un experimento sin baseline/métrica o un informe sin contenido. Son mínimos estructurales; la validación científica de pertinencia y evidencia no queda resuelta con estas reglas.
