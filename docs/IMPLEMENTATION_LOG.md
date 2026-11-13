@@ -35,3 +35,7 @@ Se añadió la fase `next_cycle` al planificador del flujo `research` (sin afect
 ## Ejecutor de experimentos públicos en CI (experimental)
 
 Se agregó un runner de comparación baseline/candidato para código de `experiments/` con límites temporales, recibos con hashes y ejecución en GitHub Actions sin secretos. Se incluyó un smoke test deliberadamente sintético para demostrar que corre en runner hospedado. Esto NO demuestra mejora científica real ni habilita ejecución experimental desde el agente local: faltan importación verificable del resultado al expediente y controles por disciplina.
+
+## 2026-11-12 — Integración experimental pública 0.4.0-dev
+
+Se creó `implementation/github-experiments.mjs` y `.github/workflows/investigador-experiment.yml`. El planificador y el MCP ya pueden preparar un experimento público, solicitar ejecución, recuperar y validar el recibo GitHub y registrar el resultado de forma trazable antes de permitir `evaluation`. Se agregaron pruebas con API GitHub simulada, chequeos de proyectos privados y falsificación de recibos, y continúa el smoke real del runner en CI. El workflow de dispatch requiere presencia en la rama predeterminada y autorización GitHub desde el Gateway para poder correr. El estado instalado en Windows permanece por verificar.

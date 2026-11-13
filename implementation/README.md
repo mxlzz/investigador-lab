@@ -64,3 +64,13 @@ Se agregó un runner controlado de experimentos públicos de dos implementacione
 ## Puerta de calidad del expediente
 
 Se impide aceptar `status:ok` con un intake vacío, un plan sin consultas, un mapa sin fuentes ni contenido, una fase de hipótesis sin propuesta o descarte justificado, un experimento sin baseline/métrica o un informe sin contenido. Son mínimos estructurales; la validación científica de pertinencia y evidencia no queda resuelta con estas reglas.
+
+## Integración experimental 0.4.0-dev
+
+El motor y el MCP ahora enlazan un experimento público autorizado con un workflow `workflow_dispatch` de GitHub Actions, y recuperan el resultado desde el artefacto de **esa ejecución**. `experiment_plan` exige hipótesis, revisión de antecedentes, diseño confirmado, repo público, presupuesto cero, commit de 40 caracteres y SHA256 del manifiesto. `experiment_submit` registra el intento antes de enviarlo para evitar duplicados ambiguos. `experiment_poll` comprueba workflow, repositorio, ID de solicitud, run, artifact, hashes, commit, métrica y comparación antes de importar `experiment_result` al journal.
+
+El planificador alterna `experiment_plan` (trabajo del modelo), `experiment_submit` y `experiment_poll` (sin turnos del modelo), `evaluation` y `next_cycle`. Si el experimento sigue ejecutándose, lo consulta más tarde en lugar de fallar o crear otro. El resultado es evidencia de una ejecución concreta, no aprobación científica automática.
+
+**Operación real:** se necesita un workflow habilitado en la rama predeterminada, un token local de GitHub Actions con permisos mínimos y la versión 0.4-dev instalada en OpenClaw. La CI automatizada solo prueba el circuito con respuestas de API simuladas y un smoke real del runner; **no equivale a una ejecución dispatch real desde Windows**. Consultar `docs/WINDOWS_DEPLOYMENT_RUNBOOK.md`.
+
+**Restricciones:** no admite proyectos privados, ejecución de scripts en Windows, gastos, publicación estable, ni experimentos fuera de `experiments/`. El runner alojado por GitHub no impide todo acceso de red: no se deben incluir secretos ni datos privados.

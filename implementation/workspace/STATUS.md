@@ -16,3 +16,7 @@
 - GitHub Actions validó **38 pruebas automatizadas** y un smoke test de comparación baseline/candidato en runner estándar sin secretos.
 - El runner remoto experimental todavía no se integra al Gateway ni al registro de resultados; no se puede declarar que Investigador autónomo ya ejecuta y aprende de experimentos.
 - Para la entrega operativa hace falta sincronizar el workspace instalado y hacer una prueba end-to-end con un encargo nuevo; preservar datos/secretos del usuario.
+
+## Estado de la rama 0.4.0-dev
+
+Se implementó el enlace MCP → plan aprobado → GitHub Actions → recibo recuperado → journal → evaluación y plan siguiente. Validación de identidad y hashes, prohibición de proyectos privados y registro persistente. Esta actualización está en GitHub, **no está confirmada su instalación en el Gateway**. La aprobación de pruebas automatizadas no sustituye una prueba de dispatch real ni evidencia científica general.

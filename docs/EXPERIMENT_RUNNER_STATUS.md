@@ -11,3 +11,9 @@
 - El recibo no es prueba de que una hipótesis general haya sido confirmada. Falta integrarlo de manera autenticada al expediente del proyecto, ejecutar benchmarks relevantes, medir incertidumbre, auditar el runner y habilitar selección autónoma de experimentos.
 
 Este componente sí permite ejecutar y comparar dos implementaciones **públicas y reproducibles**, con límites, usando una capacidad ya gratuita en el repositorio público. Ejecutar automáticamente experimentos arbitrarios propuestos por LLM sigue prohibido.
+
+## Actualización 0.4.0-dev
+
+Ya existe integración entre expediente/MCP/planificador y la API de GitHub Actions: `experiment_plan` → `experiment_submit` → `experiment_poll` → importación verificable de `experiment_result` → `evaluation` → `next_cycle`. El origen, run y artefacto se validan antes de aceptar las métricas. Los tests de API simulada y el smoke del runner son distintos de una aceptación end-to-end contra el Gateway real.
+
+La capacidad sigue **pendiente de despliegue local y de un workflow_dispatch real**. Las advertencias anteriores sobre ausencia total de integración describen la versión previa a este cambio.

@@ -53,3 +53,11 @@ El MCP admite ahora `experiment_plan`, `experiment_submit` y `experiment_poll`. 
 El planificador puede crear `experiment_plan` (turno del modelo), solicitar la ejecución en GitHub Actions con credencial local y consultar el resultado sin llamar al modelo. Un resultado se importa solo tras verificar identidad de workflow, run, commit, manifiesto, artefacto y métrica. La fase `evaluation` examina esos resultados; no atribuyas confirmación científica general a una mejora numérica.
 
 Para ejecutar un nuevo experimento hacen falta permisos y una instalación local actualizada; **no supongas que el workflow de dispatch está disponible en la rama principal ni que hay token GitHub configurado**. Si no existe alguno, exponé el bloqueo de implementación, no cambies políticas globales ni instales componentes silenciosamente.
+
+## Circuito remoto 0.4.0-dev (si fue instalado)
+
+Si `health.version` indica 0.4.0-dev, `experiment_plan` requiere: project/key/data con `project_id, experiment_id, hypothesis_id, manifest_path, manifest_sha256, source_commit, metric, direction, classification:"public", monetary_budget:0`. Primero confirmá en el expediente una hipótesis, revisión de novedad y diseño experimental pertinentes. El manifiesto y los scripts deben estar publicados en un commit exacto de un repositorio público autorizado.
+
+Después de crear el plan, el planificador realiza `experiment_submit` y `experiment_poll` sin pedir que el modelo reenvíe resultados. El expediente recibe el `experiment_result` únicamente por recuperación verificada; **nunca** lo agregues manualmente ni lo simules. Para `evaluation`, `experiment_id` debe ser la **clave del evento experiment_result** importado (campo key), no necesariamente el nombre del manifiesto. La próxima iteración debe basarse en sus limitaciones y evidencia.
+
+Si el repo, token o workflow no están preparados, se documenta el bloqueo; no pidas token en el chat ni agregues secretos al expediente.
