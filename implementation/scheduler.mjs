@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-const stages=['intake','search_plan','extract_evidence','map_knowledge','hypotheses','novelty_review','experiment_design','report'];
+const stages=['intake','search_plan','extract_evidence','map_knowledge','hypotheses','novelty_review','experiment_design','report','next_cycle'];
 const day=ms=>new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Argentina/Buenos_Aires'}).format(new Date(ms));
 export function documentaryTask(state,workflow='research'){
- const chosen=workflow==='documentary'?stages.filter(s=>!['hypotheses','novelty_review','experiment_design'].includes(s)):stages;
+ const chosen=workflow==='documentary'?stages.filter(s=>!['hypotheses','novelty_review','experiment_design','next_cycle'].includes(s)):stages;
  for(const phase of chosen){if(state.completed.includes(phase))continue;
   if(phase==='extract_evidence'&&!state.events.some(e=>e.kind==='search'))return 'gather_evidence';
   if(phase==='experiment_design'){
@@ -39,7 +39,22 @@ export class Scheduler{
   const last=state.events.findLast(e=>e.kind==='phase')?.data.output;
   const blocked=last?.phase===lease.phase&&last.status==='blocked';const p=s.projects[lease.project]||{};const failures=ok?0:(p.failures||0)+1;
   s.projects[lease.project]={...p,failures,nextAt:ok?now:now+Math.min(3600000,900000*2**(failures-1)),enabled:blocked||failures>=3?false:p.enabled!==false,reason:blocked?last.blockers.join('; '):error||(!progressed?'Sin fase confirmada':p.reason||'Trabajo documental activo')};
+  // Finish the claimed step before applying any next-cycle plan.
   if(ok&&p.pending?.[0]===lease.phase)s.projects[lease.project].pending=p.pending.slice(1);
+  // A next-cycle proposal cannot execute a command. It can only queue a
+  // documented research phase that the engine has explicitly admitted.
+  if(ok&&lease.phase==='next_cycle'){
+   const decision=fresh.findLast(e=>e.kind==='phase'&&e.data.output.phase==='next_cycle'&&e.data.output.status==='ok')?.data.output;
+   const selected=decision?.selected_action?.phase??null;
+   if(selected){
+    const start=stages.indexOf(selected);
+    if(start<1||start>=stages.length-1)throw new Error('Plan de siguiente ciclo inválido');
+    const next=stages.slice(start);
+    if(selected==='search_plan')next.splice(1,0,'gather_evidence');
+    s.projects[lease.project].pending=next;
+    s.projects[lease.project].reason='Nuevo ciclo de investigación basado en evidencia: '+String(decision.selection_rationale).slice(0,240);
+   }
+  }
   const result={...lease,outcome:ok?'progress':blocked?'blocked':'failed',error:error||null,afterDigest:state.lastDigest,finishedAt:now};s.history.push(result);s.history=s.history.slice(-200);s.lease=null;return result;
  });}
 }

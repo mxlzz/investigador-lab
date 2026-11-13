@@ -27,3 +27,7 @@ Los puntos prioritarios 1 (investigación documental probada) y 2 (continuidad l
 Revisión externa al PR #2 identificó: integración limitada a fuentes Crossref/arXiv, motor de experimentos bloqueado por ausencia de sandbox, auditoría independiente no conectada, continuidad con PC apagada no implementada y reporte Telegram sin activar. Se corrigió en código el orden de prioridad de proyectos y el reintento de entregas inciertas. Se incorporaron pruebas de regresión y workflow de CI; los resultados de las pruebas **no se declaran aprobados** hasta observar su ejecución en GitHub.
 
 El estado de instalación local de Codex previo a estas correcciones no garantiza que el código nuevo esté desplegado en la PC; requiere sincronización y pruebas reales de OpenClaw. Ningún release estable ni merge a main fue realizado.
+
+## Ciclo de investigación posterior al informe (experimental)
+
+Se añadió la fase `next_cycle` al planificador del flujo `research` (sin afectar el modo documental): selecciona una nueva fase conocida desde un dictamen con snapshot de estado, justificación y artefactos esperados. Las acciones arbitrarias no son ejecutables. Se agregaron pruebas de que no fabrica ciclos en modo documental y de que rechaza comandos no admitidos. La ejecución experimental continúa bloqueada hasta disponer de un runner aislado.

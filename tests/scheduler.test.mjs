@@ -29,3 +29,28 @@ test('second source OpenAlex records provenance and deduplicates DOI across inde
  assert.equal(result.sources[1].data.access_level,'metadata');assert.equal(result.search_id.startsWith('search-'),true);
  const again=await searchOpenAlex(e,'demo','residual networks',{fetcher:()=>{throw Error('unexpected duplicate request')},now:3000,apiKey:null});assert.equal(again.cached,true);
 });
+
+test('research workflow asks for a reasoned next cycle after report',()=>{
+ const completed=['intake','search_plan','extract_evidence','map_knowledge','hypotheses','novelty_review','experiment_design','report'];
+ const state={completed,events:[]};assert.equal(documentaryTask(state,'research'),'next_cycle');assert.equal(documentaryTask(state,'documentary'),null);
+});
+test('verified next-cycle decision queues a new research pass, never raw commands',t=>{
+ const {e,s}=fixture(t);accept(e,'intake');
+ s.control('demo',true,'Analizar siguiente ciclo',{workflow:'research',restart_from:'next_cycle'});
+ const a=s.claim(1000);assert.equal(a.phase,'next_cycle');
+ const env=e.envelope('demo','next_cycle'),schema=e.schema.oneOf.find(s=>s.properties.phase.const==='next_cycle'),out={};
+ for(const k of schema.required){const p=schema.properties[k];out[k]=p.const??p.enum?.[0]??(p.type==='array'?[]:p.type==='object'?{}:Array.isArray(p.type)&&p.type.includes('null')?null:'');}
+ out.status='ok';out.state_snapshot_id=e.state('demo').lastDigest;out.selected_action={phase:'search_plan'};out.selection_rationale='Analizar otras líneas bibliográficas';out.expected_artifacts=['Nuevo expediente de búsqueda'];
+ e.accept('demo','next-1',env,out);assert.equal(s.finish(a.token,{},2000).outcome,'progress');
+ assert.deepEqual(s.status(3000).projects.demo.pending.slice(0,2),['search_plan','gather_evidence']);
+ const next=s.claim(3000);assert.equal(next.phase,'search_plan');
+});
+test('next cycle rejects unauthorized operations and stale snapshots',t=>{
+ const {e}=fixture(t);accept(e,'intake');
+ const env=e.envelope('demo','next_cycle'),s=e.schema.oneOf.find(v=>v.properties.phase.const==='next_cycle'),out={};
+ for(const k of s.required){const p=s.properties[k];out[k]=p.const??p.enum?.[0]??(p.type==='array'?[]:p.type==='object'?{}:Array.isArray(p.type)&&p.type.includes('null')?null:'');}
+ out.status='ok';out.state_snapshot_id='wrong';out.selected_action={phase:'shell'};out.selection_rationale='execute';out.expected_artifacts=['results'];
+ assert.throws(()=>e.accept('demo','bad1',env,out),/Estado de siguiente ciclo/);
+ out.state_snapshot_id=e.state('demo').lastDigest;
+ assert.throws(()=>e.accept('demo','bad2',env,out),/no autorizada/);
+});

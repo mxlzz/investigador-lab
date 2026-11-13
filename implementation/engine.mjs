@@ -60,6 +60,14 @@ export class Engine{
   if(output.phase==='extract_evidence'&&output.status==='ok'){const source=s.events.find(e=>e.kind==='source'&&(e.key===output.source_identifier||e.data.url===output.source_identifier));if(!source||source.data.access_level!==output.access_level)fail('Nivel de lectura o fuente incompatible con el registro recuperado');}
   if(output.phase==='novelty_review'&&output.status==='ok'){if(!s.events.some(e=>e.key===output.hypothesis_id&&e.kind==='hypothesis'))fail('Hipótesis inexistente');if(!output.searches_reviewed.length||output.searches_reviewed.some(k=>!s.events.some(e=>e.key===k&&e.kind==='search')))fail('Revisión requiere búsquedas registradas');}
   if(output.phase==='evaluation'&&output.status==='ok'&&!s.events.some(e=>e.kind==='experiment_result'&&e.key===output.experiment_id))fail('No hay resultados ejecutados verificables');
+  if(output.phase==='next_cycle'&&output.status==='ok'){
+   if(output.state_snapshot_id!==s.lastDigest)fail('Estado de siguiente ciclo no coincide con expediente confirmado');
+   if(output.selected_action!==null){
+    const allowed=['search_plan','extract_evidence','map_knowledge','hypotheses','novelty_review','experiment_design','report'];
+    if(!output.selected_action||!allowed.includes(output.selected_action.phase))fail('Acción de siguiente ciclo no autorizada');
+    if(!output.selection_rationale?.trim()||!output.expected_artifacts?.length)fail('El nuevo ciclo requiere justificación y resultado esperado');
+   }
+  }
   return this.append(project,key,'phase',{envelope:{engine:envelope.engine,task_id:envelope.task_id,phase:envelope.phase,state_digest:s.lastDigest,approved_scope:envelope.approved_scope,prompt_hashes:envelope.prompt_hashes},envelope_digest:hash(envelope),output});
  });}
  gate(project,action,data={}){const s=this.state(project);if(action==='experiment'){

@@ -49,3 +49,9 @@ No publicar research-state/, credenciales, tokens ni configuración privada de O
 ## Ampliación de antecedentes (experimental)
 
 `openalex_bibliography` permite una segunda búsqueda bibliográfica (OpenAlex), con hasta quince resultados por consulta, caché de 24 h, control de procedencia, niveles reales de acceso y deduplicación de DOI. Acepta `OPENALEX_API_KEY` **opcional** para ampliar cuota gratuita; sin clave puede restringirse el uso habitual. No activa servicios pagos ni expone claves en registros de búsqueda. Es un complemento documental, no sustituye búsqueda de código, patentes ni lectura completa.
+
+## Ciclo científico continuo (versión experimental)
+
+Para encargos en modo `research`, después del informe documental el planificador ahora ejecuta `next_cycle`: el modelo debe proponer una fase de investigación concreta, justificar su valor informativo y referenciar el estado exacto del expediente. El motor acepta solamente fases conocidas; el planificador crea una cola con esas fases y conserva el historial. Si no hay trabajo útil, el agente devuelve `selected_action:null` y el proyecto queda en reposo, sin ciclos artificiales. En modo `documentary` se cierra la síntesis sin forzar ciclos posteriores.
+
+**Límite:** este ciclo permite nueva investigación documental y diseño, pero NO habilita ejecución experimental no aislada. La prueba de mejora técnica sigue bloqueada mientras no haya runner seguro.
