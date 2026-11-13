@@ -1,0 +1,21 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {spawn} from 'node:child_process';
+import {Engine} from './engine.mjs';
+import {Scheduler} from './scheduler.mjs';
+export function cycleMessage(task){return `Continuación documental autorizada. Proyecto: ${task.project}. Paso asignado: ${task.phase}. ID: ${task.token}.
+Usá el MCP investigador research; descubrilo con catalog.search y describe. Primero state, luego prepare para la fase asignada; si el paso es gather_evidence, leé el search_plan persistido y usá operation=bibliography con una consulta pertinente (Crossref, sin clave) y operation=arxiv_abstract si encontrás un artículo pertinente. No hace falta una web_search general para usar bibliography. Esas operaciones guardan fuentes y búsquedas reales automáticamente. No registres fuentes Crossref ni arxiv/abs como full_text.
+Para las otras fases, prepare devuelve el prompt, estado y contrato: respetalos y guardá la salida con accept. Podés pasar envelope={task_id:el_id_devuelto_por_prepare}; el motor recupera el sobre exacto y no tenés que volver a copiar todo el expediente. Usá como key un ID nuevo derivado de la fase y el ID de esta ejecución. No fabriques datos ni uses contenido vacío para pasar validación. Si necesitas registrar una hipótesis o evidencia antes de accept, hacelo y pedí un sobre nuevo después para que el estado no quede desactualizado.
+Completá solamente este paso acotado; guardá el progreso. Si no hay evidencia suficiente, registrá needs_evidence o blocked según el contrato. No declares que ejecutaste una acción propuesta. No crees nuevas metas. No ejecutes shell, experimentos, auditoría, cambios de configuración, Telegram ni publicación. Para pausar el proyecto por una dependencia humana real, operation=control, enabled=false y reason concreto. Respondé brevemente qué quedó confirmado y qué falta.`;}
+export function runAgent(entry,prompt,{node=process.execPath,project,timeoutMs=210000}={}){return new Promise((resolve,reject)=>{
+ const child=spawn(node,[entry,'agent','--agent','investigador','--session-key','agent:investigador:research-'+project,'--message-file',prompt,'--timeout','180','--json'],{stdio:['ignore','pipe','pipe'],windowsHide:true});let out='',err='';let expired=false;
+ const timer=setTimeout(()=>{expired=true;child.kill('SIGTERM');},timeoutMs);const hard=setTimeout(()=>child.kill('SIGKILL'),timeoutMs+10000);
+ child.stdout.on('data',b=>{out+=b;if(out.length>2000000)child.kill('SIGTERM')});child.stderr.on('data',b=>{if(err.length<16000)err+=b});
+ child.on('error',e=>{clearTimeout(timer);clearTimeout(hard);reject(e)});child.on('close',code=>{clearTimeout(timer);clearTimeout(hard);if(expired||code!==0)reject(new Error(expired?'Timeout del ciclo':'CLI falló; consultar log privado de ciclo'));else{try{const result=JSON.parse(out);if(result.status!=='ok'||result.result?.meta?.aborted)throw Error('Turno no completado');resolve(result);}catch(e){reject(e)}}});
+ });}
+async function main(){const root=process.env.INVESTIGADOR_ROOT||path.resolve(import.meta.dirname,'..');const engine=new Engine(root);const scheduler=new Scheduler(engine);const task=scheduler.claim();if(task.status!=='claimed'){console.log('NO_REPLY');return;}
+ const entry=process.env.INVESTIGADOR_OPENCLAW_ENTRY;const dir=path.join(engine.base,'runs');fs.mkdirSync(dir,{recursive:true});const prompt=path.join(dir,task.token+'.txt');fs.writeFileSync(prompt,cycleMessage(task));let error=null;
+ try{if(!entry||!fs.existsSync(entry))throw Error('Falta ruta del CLI OpenClaw en INVESTIGADOR_OPENCLAW_ENTRY');const result=await runAgent(entry,prompt,{project:task.project});fs.writeFileSync(path.join(dir,task.token+'.json'),JSON.stringify(result,null,2));}catch(e){error=e.message;}
+ const finished=scheduler.finish(task.token,{error});console.log(JSON.stringify({project:task.project,phase:task.phase,outcome:finished.outcome,error}));if(error)process.exitCode=1;
+}
+if(process.argv[1]&&path.resolve(process.argv[1])===path.resolve(import.meta.filename))main().catch(e=>{console.error(e.message);process.exitCode=1;});

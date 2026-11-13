@@ -1,29 +1,41 @@
-# Implementación 0.2.0
+# Motor documental local 0.3.0
 
-Motor documental ejecutable y servidor MCP, sin paquetes externos. Requiere Node.js 24. No constituye todavía el sistema autónomo completo de los borradores de spec/.
+Implementación Node.js 24 sin dependencias npm. El modelo y sus credenciales los proporciona el Gateway existente de OpenClaw. No es todavía el sistema completo propuesto en spec/.
 
-## Ejecución
+## Uso y pruebas
 
-`node implementation/engine.mjs health`
+```text
+node implementation/engine.mjs health
+node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs
+node implementation/mcp-server.mjs
+```
 
-`node --test tests/engine.test.mjs tests/mcp.test.mjs`
+El servidor MCP expone research: init/projects/state, prepare/accept, record, bibliography, arxiv_abstract, scheduler/control, report y gate. prepare conserva el sobre exacto y devuelve sus prompts y contrato. accept permite enviar envelope={task_id:ID} sin reconstruir el expediente. La versión y hashes de prompts se registran sin copiar recursivamente todo el historial.
 
-El MCP se inicia con `node implementation/mcp-server.mjs`. Conserva estado en research-state/ bajo el workspace. Su herramienta research ofrece init, projects, state, prepare, record, accept, gate y report. prepare devuelve los prompts exactos y su contrato; accept valida y confirma. El modelo lo proporciona OpenClaw, sin otra clave API ni otro SDK.
+bibliography consulta Crossref (hasta cinco resultados, reutilización de una consulta durante 24 h), guarda sus metadatos/resúmenes y una búsqueda ejecutada con procedencia HTTP. arxiv_abstract recupera únicamente resúmenes de URLs canónicas arxiv.org/abs. No requiere claves. Crossref no cubre toda la literatura ni reemplaza una búsqueda web general. Los contenidos externos son datos no confiables; no se ejecutan.
 
-## Telegram
+## Planificador local
 
-Ejecutar interactivamente setup-telegram.ps1 en Windows. El script verifica el bot, identifica un chat privado, pide confirmar el destino, envía una prueba y guarda el token cifrado con DPAPI para ese usuario fuera del repo. No cambiar webhooks existentes. Luego crea una tarea de Windows que revisa la cola cada cinco minutos durante un año y genera el informe desde las 20:00 de Buenos Aires. Requiere PC encendida y sesión de ese usuario disponible. La prueba real y la programación no se consideran hechas hasta ejecutar ese asistente.
+Install-scheduler.ps1 recibe las rutas del workspace, Node y CLI existente de OpenClaw. Registra una automatización nativa con declaración estable para evitar duplicados. Cadencia normal: 15 minutos. No hay llamadas al modelo cuando no hay trabajo elegible. La PC y el Gateway deben estar encendidos.
 
-Los proyectos privados no se describen por Telegram: se indica su existencia. La elegibilidad para divulgar detalles privados requiere un contrato adicional. En rechazo confirmado se reintenta; con acuse perdido se conserva uncertain y no se reenvía a ciegas. Telegram Bot API no permite consultar un historial de envíos arbitrario: no se promete entrega exactamente una vez. Los informes pendientes quedan en research-state/reports y los acuses en outbox/.
+Cada ejecución toma un lease persistente y solicita un paso al agente investigador mediante el Gateway. El agente recupera el expediente y confirma sus salidas con el MCP. Límites: un proyecto por tick, hasta 24 intentos por día de Buenos Aires, 180 s por turno solicitado, corte del proceso cliente a 210 s y watchdog del job a 240 s. Son límites técnicos; no garantizan cuotas ni costo del proveedor.
 
-## Límites
+La cola mantiene exclusión, backoff y pausa tras tres fallos; una fase blocked pausa el proyecto. Tras una interrupción se reconcilian los registros aceptados antes de elegir el próximo paso. Un bloqueo de proceso se recupera solo si el PID ya no existe; con PID vivo o ambiguo se falla de forma visible. Un journal corrupto no se repara inventando eventos.
 
-El esquema fuente es un borrador y sus subcampos abiertos no se convierten en un contrato científico completo por validarlo. El motor comprueba estructura y referencias, no verdad semántica ni calidad de la literatura. Las búsquedas se realizan con las herramientas efectivamente conectadas a OpenClaw.
+control con enabled=false pausa los próximos ciclos; no interrumpe una operación ya en curso. enabled=true reanuda con motivo. data.workflow=documentary selecciona encargo → búsqueda → evidencia → síntesis → informe sin forzar hipótesis ni experimentos. research conserva hipótesis y revisión de antecedentes. Para volver sobre la misma meta ante evidencia nueva, data.restart_from=search_plan programa una revisión; se exigen nuevos registros, no basta un éxito anterior. No se reabre un proyecto solo para consumir ciclos.
 
-No hay ejecutor aislado ni auditor independiente automático. Tampoco un runner remoto, scheduler de ciclos científicos o publicación automática. Las operaciones experiment, remote y release se rechazan. No se considera pasada la matriz T01–T28. No hay garantías de aislamiento frente a las herramientas nativas de OpenClaw ni de presupuesto del proveedor del modelo. Cualquier ampliación deberá probarse con un proyecto y límites explícitos.
+La automatización no entrega mensajes externos. El progreso se consulta al agente y en research-state/. La prueba técnica completa está documentada en docs/LOCAL_ACCEPTANCE.md.
 
-## Recuperación
+## Telegram y auditoría: aplazados
 
-La cola y el journal se conservan entre sesiones. Un journal modificado o parcialmente escrito falla de forma visible. Si existe LOCK tras una caída, comprobar primero que no siga vivo el PID guardado; conservar copia del expediente antes de recuperar. No eliminar bloqueos automáticamente. El encadenado de hashes detecta modificaciones accidentales; no es una firma contra un atacante con escritura total del workspace.
+Los scripts de Telegram de 0.2 siguen disponibles, sin activar. No se pidieron ni publicaron tokens. La auditoría independiente se prevé con ChatGPT a través de GitHub, por indicación del usuario; no se conecta en esta etapa. No son requisitos para investigar documentos.
 
-Los registros y el token no deben entrar a Git. Los cambios de implementación permanecen locales hasta decidir su publicación.
+## Límites y mantenimiento
+
+Los esquemas fuente siguen siendo borradores con campos abiertos. Se comprueban estructura, dependencias, versiones y referencias, no verdad científica ni respaldo semántico. Una afirmación de un paper no es una reproducción propia.
+
+El motor rechaza experimentos, transferencias remotas y publicaciones estables. No hay Docker ni WSL instalados en la PC comprobada. No se ejecuta código externo sin un runner aislado. El motor MCP no es un sandbox de todas las herramientas nativas de OpenClaw. No hay continuidad con la PC apagada ni sincronización de expedientes con GitHub.
+
+La programación se conserva en el almacén nativo del Gateway. Una actualización de la app que cambie las rutas de Node/CLI requiere comprobar y ajustar la definición del job. No se reinició el Gateway del usuario para probar persistencia; se verificaron procesos nuevos de worker, estado guardado y definición nativa.
+
+No publicar research-state/, credenciales, tokens ni configuración privada de OpenClaw. El journal detecta cambios accidentales; su hash no es una firma contra un atacante con escritura total del workspace.
