@@ -7,7 +7,12 @@ import {spawnSync} from 'node:child_process';
 const [source,destination]=process.argv.slice(2);
 if(process.platform!=='win32'||!source||!destination||!path.isAbsolute(source)||!path.isAbsolute(destination))throw Error('Indicar rutas absolutas de instalación y destino en Windows');
 const src=fs.realpathSync(source),dst=path.resolve(destination);
-if(dst===src||dst.startsWith(src+path.sep)||src.startsWith(dst+path.sep))throw Error('El destino debe estar separado de la instalación');
+const lowerSrc=src.toLowerCase(),lowerDst=dst.toLowerCase();
+if(lowerDst===lowerSrc||lowerDst.startsWith(lowerSrc+path.sep)||lowerSrc.startsWith(lowerDst+path.sep))throw Error('El destino debe estar separado de la instalación');
+const version=JSON.parse(fs.readFileSync(path.join(src,'package.json'),'utf8')).version;
+if(version!=='2026.11.1')throw Error('Runtime verificado solo para OpenClaw 2026.11.1; revisar dependencias y launcher antes de usar otra versión');
+for(const relative of ['dist/agents/github-exec-launcher.js','dist/record-coerce-TIsquoVR.mjs','dist/fs-safe-6Z4UiMS4.mjs','node_modules/@esbuild/win32-x64/esbuild.exe','node_modules/@openclaw/fs-safe/package.json','node_modules/@openclaw/fs-safe-win32-x64-msvc/package.json','node_modules/yaml/package.json'])if(!fs.existsSync(path.join(src,relative)))throw Error('Falta componente oficial requerido: '+relative);
+if(fs.existsSync(dst)&&fs.readdirSync(dst).length)throw Error('Elegir un destino nuevo y vacío; no sobrescribir un runtime que podría estar cargado');
 const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
 const records=[];
 function copyFile(from,to){fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(from,to);const digest=hash(from);if(hash(to)!==digest)throw Error('Hash de copia incorrecto');records.push({path:path.relative(dst,to).replaceAll('\\','/'),sha256:digest});}

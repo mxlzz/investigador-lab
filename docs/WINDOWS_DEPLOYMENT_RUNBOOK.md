@@ -1,3 +1,5 @@
+> Para reconstruir la instalación completa actual, usar [REPLICAR_EN_WINDOWS.md](REPLICAR_EN_WINDOWS.md). Este runbook conserva el procedimiento de actualización/aceptación experimental; no reemplaza la guía de réplica documental y de repositorios.
+
 # Investigador 0.4.0-dev — procedimiento de actualización en Windows (Codex)
 
 **Objetivo:** instalar y comprobar el punto 2 sin borrar el agente existente, sin alterar otros agentes de OpenClaw y sin publicar secretos. Este procedimiento es para el implementador en la PC; no afirma haber ejecutado esos pasos.

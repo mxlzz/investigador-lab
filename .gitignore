@@ -17,3 +17,6 @@ artifacts/
 # Runtime local: no publicar expedientes ni secretos
 research-state/
 *.dpapi
+
+.acceptance/
+
