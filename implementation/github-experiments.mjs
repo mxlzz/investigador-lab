@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import zlib from 'node:zlib';
+import {managedGitHubToken} from './github-credential.mjs';
 const hash=v=>crypto.createHash('sha256').update(v).digest('hex');
 const guard=(v,m)=>{if(!v)throw Error(m)};
 const W='investigador-experiment.yml';
@@ -21,14 +22,16 @@ export function unzipReceipt(buf,name){
  return JSON.parse(raw.toString('utf8'));
 }
 export class GitHubExperiments{
- constructor(engine,{repo=process.env.INVESTIGADOR_GITHUB_REPO||'mxlzz/investigador-lab',token=process.env.INVESTIGADOR_GITHUB_TOKEN,fetcher=fetch,api='https://api.github.com'}={}){
+ constructor(engine,{repo=process.env.INVESTIGADOR_GITHUB_REPO||'mxlzz/investigador-lab',token=process.env.INVESTIGADOR_GITHUB_TOKEN,credentialProvider=managedGitHubToken,fetcher=fetch,api='https://api.github.com'}={}){
   guard(/^[\w.-]+\/[\w.-]+$/.test(repo),'Repositorio inválido');
-  Object.assign(this,{engine,repo,token,fetcher,api});
+  Object.assign(this,{engine,repo,token,credentialProvider,fetcher,api});
  }
  async get(route,{method='GET',body,binary=false}={}){
   guard(route==='/repos/'+this.repo||route.startsWith('/repos/'+this.repo+'/'),'Ruta GitHub fuera de repositorio');
   const headers={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
-  if(this.token)headers.Authorization='Bearer '+this.token;
+  const token=this.token||await this.credentialProvider();
+  if(token)guard(this.api==='https://api.github.com','La identidad GitHub solo puede enviarse a api.github.com');
+  if(token)headers.Authorization='Bearer '+token;
   if(body!==undefined)headers['Content-Type']='application/json';
   const r=await this.fetcher(this.api+route,{method,headers,body:body===undefined?undefined:JSON.stringify(body),redirect:'manual',signal:AbortSignal.timeout(30000)});
   if([301,302,307].includes(r.status)&&binary){
@@ -42,6 +45,13 @@ export class GitHubExperiments{
   if(r.status===204)return null;
   if(binary){const b=Buffer.from(await r.arrayBuffer());guard(b.length<3000000,'Artefacto demasiado grande');return b}
   return r.json();
+ }
+ async status(){
+  const authenticated=Boolean(this.token||await this.credentialProvider());
+  const repository=await this.get('/repos/'+this.repo);
+  const workflows=await this.get('/repos/'+this.repo+'/actions/workflows');
+  const workflow=(workflows.workflows||[]).find(w=>w.path==='.github/workflows/'+W);
+  return {repository:repository.full_name,authenticated,workflow:workflow?.state||'missing',dispatch_permission:'not_checked'};
  }
  async manifest(plan){
   guard(validPath(plan.manifest_path)&&/^[0-9a-f]{40}$/.test(plan.source_commit),'Referencia de código inválida');
@@ -58,7 +68,7 @@ export class GitHubExperiments{
   return {defaultBranch:repo.default_branch,value};
  }
  async submit(project,planKey){
-  guard(this.token,'Falta autorización GitHub Actions del equipo');
+  guard(this.token||await this.credentialProvider(),'Falta autorización GitHub Actions del equipo');
   const state=this.engine.state(project),plan=state.events.find(e=>e.key===planKey&&e.kind==='experiment_plan')?.data;
   guard(plan,'Plan inexistente');
   const existing=state.events.find(e=>e.kind==='experiment_dispatch'&&e.data.plan_key===planKey);

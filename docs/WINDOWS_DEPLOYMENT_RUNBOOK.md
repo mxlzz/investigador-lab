@@ -62,3 +62,11 @@ En caso de fallo, conservar evidencia privada, revertir los binarios/instruccion
 ## Estado actual de la dependencia remota
 
 El workflow de dispatch está habilitado en `main` y la prueba real de GitHub Actions pasó. Ver `docs/EXPERIMENT_LIVE_ACCEPTANCE.md`. El paso pendiente para Codex es instalar y probar el mismo circuito desde Windows; no volver a plantear la conexión remota como inexistente.
+
+### Identidad administrada y empaquetado MSIX
+
+El motor admite `INVESTIGADOR_GITHUB_CREDENTIAL_LAUNCHER` y `INVESTIGADOR_GITHUB_PROFILE`: son rutas locales sin secretos, no el token. Configurarlas tanto en el MCP stdio como en el payload del job existente. El cliente captura en memoria la salida del launcher validado; no reenvía stdout/stderr del hijo, no escribe el secreto en el expediente y no lo envía al host de descarga de artefactos. La identidad se valida de nuevo por operación. `research(operation="github_status")` permite verificar el acceso sin shell; lectura correcta no demuestra permiso de dispatch.
+
+En la instalación MSIX observada, los hijos del agente no pudieron cargar el complemento nativo ni ejecutar el helper de seguridad dentro de WindowsApps. El planificador sí pudo. Se preparó una copia portable de las mismas dependencias oficiales y del launcher original, conservando la validación ACL, propietario, enlaces, identidad del archivo y YAML. Ver `tools/prepare-openclaw-github-runtime.mjs`. No desactivar validaciones ni abrir el perfil a otros usuarios para sortear el error.
+
+La credencial fine-grained requiere **Actions: Read and write**, limitada al repositorio autorizado. Si GitHub devuelve `403 / Resource not accessible by personal access token` y `X-Accepted-GitHub-Permissions: actions=write`, el operador debe modificar ese permiso en GitHub. No repetir un dispatch incierto ni registrar resultados manualmente. La prueba Windows sintética aislada está en `tests/windows-github-acceptance.mjs` y requiere habilitación explícita; su estado permanece bajo `.acceptance/`, separado de investigaciones reales.
