@@ -76,6 +76,13 @@ test('dispatch -> GitHub verification -> ZIP -> journal import is idempotent',as
  const repeated=await service.submit(project,'plan-1');assert.equal(repeated.status,'already_requested');
  const got=await service.poll(project,'plan-1');assert.equal(got.status,'imported');assert.equal(got.improvement,0.25);
  const again=await service.poll(project,'plan-1');assert.equal(again.result_key,got.result_key);
+ const schema=e.schema.oneOf.find(s=>s.properties.phase.const==='evaluation'),out={};
+ for(const field of schema.required){const rule=schema.properties[field];out[field]=rule.const??rule.enum?.[0]??(rule.type==='array'?[]:rule.type==='object'?{}:'');}
+ out.status='ok';out.experiment_id='non-existent-experiment';
+ assert.throws(()=>e.accept(project,'fake-evaluation',e.envelope(project,'evaluation'),out),/resultados ejecutados/);
+ out.experiment_id=got.result_key;
+ e.accept(project,'validated-evaluation',e.envelope(project,'evaluation'),out);
+ assert.ok(e.state(project).completed.includes('evaluation'));
  assert.equal(e.state(project).events.filter(e=>e.kind==='experiment_result').length,1);
  assert.ok(called>=5);
 });
