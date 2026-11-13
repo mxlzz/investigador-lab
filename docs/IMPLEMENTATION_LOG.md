@@ -43,3 +43,10 @@ Se creó `implementation/github-experiments.mjs` y `.github/workflows/investigad
 ## Aceptación real del punto 1
 
 GitHub Actions ejecutó el workflow manual (run 43350903439); el controlador (run 43350881884) descargó y verificó el artefacto, escribió un experiment_result y aceptó evaluation. 43 pruebas pasaron en run 43350881800. Se habilitó **solo** el workflow de dispatch en main, sin merge del PR #2. Punto 2: Windows/Gateway pendiente. Referencias completas en docs/EXPERIMENT_LIVE_ACCEPTANCE.md.
+
+## Despliegue Windows 0.4.0-dev
+
+Se instaló la versión de la rama fijada en a5babf4, conservando expedientes y agente principal. Se agregaron correcciones de herramientas directas, sesiones nuevas por ciclo, errores de esquema reparables y detección de ciclos sin progreso confirmado. 47 pruebas locales pasaron. El MCP real informa 0.4.0-dev. La aceptación experimental completa sigue bloqueada por autorización local de GitHub Actions; no se sustituye por los recibos de CI. Ver WINDOWS_LOCAL_ACCEPTANCE.md.
+
+La aceptación local de next_cycle quedó confirmada mediante salida JSON del modelo, validada y persistida por el host. Los intentos fallidos previos se conservaron. No se declara completada la prueba experimental Windows hasta disponer de autorización de Actions.
+

@@ -1,0 +1,16 @@
+{
+  "source_commit": "a5babf46a353d72c81c4da21e5ab9384e7267ada",
+  "installed_version": "0.4.0-dev",
+  "tests_passed": 47,
+  "next_cycle": {
+    "status": "ok",
+    "selected_action": null,
+    "confirmed_at": "2026-11-13T02:47:50.337Z",
+    "event_digest": "68f902ff1cb9ac52375d34a88b27f1891e3aa4cbb940233e90e798f1784d1a2b"
+  },
+  "native_job_outcome": "progress",
+  "github_identity": "unavailable",
+  "actions_from_windows": "blocked_missing_credential",
+  "old_journal_preserved": true,
+  "experimental_scripts_run_on_windows": false
+}

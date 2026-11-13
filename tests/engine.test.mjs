@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import {Engine,validate} from '../implementation/engine.mjs';
+test('phase schema gives a repairable field error instead of opaque oneOf',()=>{assert.throws(()=>validate({oneOf:[{properties:{phase:{const:'next_cycle'}},required:['phase','state_snapshot_id']}]},{phase:'next_cycle'}),/missing state_snapshot_id/);});
 import {deliver} from '../implementation/reporter.mjs';
 const source=path.resolve(import.meta.dirname,'..');
 function fixture(t){const root=fs.mkdtempSync(path.join(os.tmpdir(),'investigador-'));fs.cpSync(path.join(source,'spec'),path.join(root,'spec'),{recursive:true});const e=new Engine(root);t.after(()=>fs.rmSync(root,{recursive:true,force:true}));e.init('demo','Investigar método existente');return e;}
