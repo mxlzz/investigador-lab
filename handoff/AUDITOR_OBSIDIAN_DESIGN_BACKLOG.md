@@ -48,3 +48,16 @@ No crear automatizaciones, agentes, tokens, permisos, PR de implementación, cam
 **E3b — Desacuerdo.** Intentar nuevas verificaciones y revisar evidencia aportada. Si no se resuelve dentro de las rondas propuestas y no hay prueba discriminante autorizada, elevar un único paquete al usuario. No pedir una decisión humana por cada hallazgo ni crear una conversación infinita sin información.
 
 Las opciones definitivas sobre actor separado de GitHub, umbral de dos rondas y reglas de cierre sin éxito se cierran en diseño antes de que Codex pueda introducir semántica propia.
+
+
+## Arquitectura ChatGPT Proyectos / agenda global (propuesta posterior)
+
+**E0-a:** verificar que un usuario conectado a GitHub en ChatGPT puede leer repo privado y publicar un comentario desde una **tarea programada real**, sin quedar esperando aprobación. Diferenciar escritura y lectura. Los triggers nativos de GitHub documentados para Work son actividades compatibles de **PR**, no asumir issue_comment.
+
+**E0-b:** determinar si ChatGPT puede elegir una segunda cuenta GitHub dedicada para Auditor o una identidad GitHub App mediante integración aceptada. No generar nueva cuenta aún. Dos PAT de `mxlzz` no dan actores independientes y `mxlzz` usado por Investigador tampoco prueba aprobación humana de releases.
+
+**E0-c:** verificar creación/registro en un índice de auditorías **privado**, con altas de proyecto automáticas. No escribir nombres de investigaciones privadas en `investigador-lab` público.
+
+**E3–E4:** una **tarea central** dos veces al día que escanea todos los proyectos registrados, con cursor por proyecto y auditoría incremental; opcionalmente un proyecto ChatGPT llamado `Auditores` y un chat por proyecto para revisión interactiva. No programar un GPT personalizado ni una tarea por proyecto.
+
+Documento de operación: `spec/12-auditores-chatgpt-operacion.md`. Identidad: `spec/contracts/auditor-github-identity-v1.md`. Ambas son propuestas; no autorizan implementación.

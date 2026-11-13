@@ -258,3 +258,20 @@
 - Para `goal_met` o `research_concluded`, Investigador debe corroborar evidencias y realizar cierre auditable, preservando historial y deteniendo solo ese proyecto. Una pausa por falta de progreso no se confunde con meta cumplida ni cierre definitivo.
 - Riesgo pendiente: ChatGPT y OpenClaw pueden publicar bajo la misma identidad GitHub; se requiere separar y verificar la autoría para atribuir autoridad de auditoría. Sin eso, los comentarios se tratan como sugerencias no autenticadas.
 - Pendientes: capacidad real de comentarios desde tareas ChatGPT, identidad/credenciales, formato final, límites y reanudación, cierre de investigaciones exploratorias abiertas.
+
+
+## DEC-0032 — Propuesta de auditoría global y proyecto ChatGPT «Auditores»
+- Fecha: 2026-11-13
+- Estado: **propuesta pendiente de aprobación**, elaborada a partir de la alternativa sugerida por el usuario.
+- Diseño preferido: un proyecto ChatGPT `Auditores` para revisión humana, con un chat opcional por investigación; una sola tarea programada central de ChatGPT que recorra el índice privado de proyectos y realice las dos revisiones breves diarias. Los chats no son procesos autónomos ni fuente canónica de progreso.
+- Los proyectos nuevos se registrarían desde OpenClaw en un índice de auditoría privado; la tarea central los detectaría sin necesidad de crear automáticamente un chat.
+- Debe verificarse que la tarea programada pueda leer y escribir en GitHub con permisos de usuario apropiados; que un conector permita elegir una segunda identidad es una hipótesis a comprobar. Los GPT personalizados no admiten actualmente tareas programadas, y las tareas creadas dentro de un proyecto no acceden a sus archivos adjuntos.
+- Sin cuenta técnica ni tarea activada por ahora. Documentación: `spec/12-auditores-chatgpt-operacion.md`.
+
+## DEC-0033 — Propuesta de separación de identidad de GitHub por actor
+- Fecha: 2026-11-13
+- Estado: **propuesta pendiente de aprobación**.
+- Una cuenta de máquina dedicada para Auditor podría distinguir sus comentarios de los del Investigador si ChatGPT la utiliza en el conector, o una GitHub App de Auditor podría hacerlo mediante un puente realmente autenticado. No crear cuentas por investigación.
+- La distinción entre identidad humana e Investigador también requiere atención porque OpenClaw actualmente opera con identidad `mxlzz`; un comentario de esa cuenta no acredita autorización humana de release.
+- Un PAT diferente del mismo usuario no demuestra autoría independiente. Permisos mínimos y prueba E0 antes de confiar en señales de cierre/bloqueo.
+- Documentación: `spec/contracts/auditor-github-identity-v1.md`.

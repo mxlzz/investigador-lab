@@ -105,3 +105,10 @@ I11 — Un hilo crítico sin evidencias nuevas en dos intercambios se escala con
 - API de GitHub Notifications, restricciones de autenticación: https://docs.github.com/en/rest/activity/notifications
 
 Estos endpoints hacen factible **leer** comentarios y reaccionar con un receptor propio. No demuestran que una tarea programada de ChatGPT ya disponga de escritura sobre los Issues de los repositorios privados.
+
+
+## Compatibilidad con una cuenta GitHub separada y ChatGPT Programadas
+
+Una segunda cuenta técnica es suficiente para distinguir al Auditor de Investigador en comentarios, **si ChatGPT puede usarla como identidad de escritura** durante una tarea real. No crear esa cuenta sin esta comprobación. Para un control de release completamente separado del humano, la identidad de Investigador `mxlzz` también deberá separarse de la aprobación humana o usar un mecanismo de autorización que OpenClaw no pueda imitar. Ver `auditor-github-identity-v1.md`.
+
+La ejecución automática se concibe como una tarea central ChatGPT/Work que lee un índice privado de investigaciones activas. El proyecto ChatGPT `Auditores` y sus chats por investigación son una interfaz de usuario opcional, no el transporte/cursor de mensajes. Ver `../12-auditores-chatgpt-operacion.md`.

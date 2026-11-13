@@ -79,3 +79,12 @@ La opción recomendada para el envío desde ChatGPT y la recepción por Investig
 El Auditor puede publicar `closure_proposed` con resultado esperado, criterios, pruebas y commit. Investigador verifica autónomamente y responde; si hay desacuerdo, ambos buscan evidencia discriminante antes de elevar la decisión al usuario. Cerrar una investigación es distinto de cerrar el Issue, pausar por bloqueo y publicar una release. Contrato: `contracts/research-closure-v1.md`.
 
 Estas funciones están **solo diseñadas**: todavía no se ha verificado que la automatización programada de ChatGPT pueda escribir bajo identidad diferente en Issues privados.
+
+
+## Operación ChatGPT Proyectos y Programadas — propuesta nueva
+
+La interfaz para el usuario puede ser un **proyecto ChatGPT `Auditores` con un chat por investigación**. Sin embargo, **los chats son vistas de consulta**, no entidades de ejecución autónoma. El diseño preferido usa una sola tarea central de auditoría **dos veces por día** para todos los proyectos inscritos en un índice GitHub privado; cada ejecución lee y escribe conector GitHub, fija SHA y conserva cursor por proyecto.
+
+Una tarea creada en un proyecto ChatGPT no dispone automáticamente de acceso a sus archivos adjuntos; no diseñar dependencia del contexto almacenado solo en ese chat. La documentación actual tampoco permite Scheduled tasks con GPTs personalizados. Consultar `spec/12-auditores-chatgpt-operacion.md` y `spec/contracts/auditor-github-identity-v1.md`.
+
+Esta elección es propuesta, no está aprobada ni demostrada operativa. E0 debe probar lectura, escritura sin aprobaciones pendientes y autoría separada desde una tarea real antes de crear cuentas.
