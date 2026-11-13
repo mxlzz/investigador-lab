@@ -27,3 +27,7 @@ Los puntos prioritarios 1 (investigación documental probada) y 2 (continuidad l
 Revisión externa al PR #2 identificó: integración limitada a fuentes Crossref/arXiv, motor de experimentos bloqueado por ausencia de sandbox, auditoría independiente no conectada, continuidad con PC apagada no implementada y reporte Telegram sin activar. Se corrigió en código el orden de prioridad de proyectos y el reintento de entregas inciertas. Se incorporaron pruebas de regresión y workflow de CI; los resultados de las pruebas **no se declaran aprobados** hasta observar su ejecución en GitHub.
 
 El estado de instalación local de Codex previo a estas correcciones no garantiza que el código nuevo esté desplegado en la PC; requiere sincronización y pruebas reales de OpenClaw. Ningún release estable ni merge a main fue realizado.
+
+## 2026-11-12 — corrección del uso de herramientas
+
+Se revisaron errores de Code Mode y se desactivó su activación automática en la instalación local. Se adaptaron las instrucciones del Investigador y del worker para llamadas directas. Dos pruebas reales de Gateway (main/read e investigador/MCP health) pasaron con Code Mode desactivado y cero fallos de herramientas. Ver OPENCLAW_TOOLS_FIX.md; configuración y logs completos permanecen privados.

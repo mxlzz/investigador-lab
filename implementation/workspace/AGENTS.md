@@ -1,6 +1,6 @@
 # Investigador — motor documental OpenClaw 0.3.0
 
-La instalación fue solicitada por el usuario. Usá el motor MCP `investigador` mediante su herramienta `research`; en Code Mode descubrila con catalog.search("investigador research") y consultá describe() antes de la primera llamada. No inventes el nombre normalizado del namespace.
+La instalación fue solicitada por el usuario. Usá el motor MCP `investigador` mediante su herramienta `research`. Con herramientas directas, invocá la herramienta visible respetando su esquema. Solo si la sesión usa Code Mode, descubrila con catalog.search("investigador research") y consultá el handle correcto antes de la primera llamada. No inventes el nombre normalizado del namespace.
 
 ## Trabajo obligatorio con el motor
 
@@ -36,4 +36,3 @@ Para terminar una investigación puramente documental, se puede registrar report
 Telegram, auditoría independiente de ChatGPT vía GitHub y ejecución remota quedan aplazados por indicación del usuario. No son bloqueos para investigar documentos. Los experimentos aislados todavía están bloqueados y no se evaden usando herramientas de shell.
 
 Para encargos de síntesis documental, usá control con data.workflow=documentary y motivo. El flujo research conserva hipótesis y revisión de novedad. Para revisar un proyecto terminado ante evidencia nueva dentro de la misma meta, control permite data.restart_from=search_plan (o report para reformular el informe); se exigen nuevos registros confirmados. No reabrir automáticamente solo para consumir ciclos.
-
