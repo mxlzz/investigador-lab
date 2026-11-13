@@ -49,6 +49,23 @@ export class Engine{
   return this.append(project,key,kind,data);
  });}
 
+ // Materialize literal proposals from a confirmed phase, not new scientific
+ // claims. Keep empty support empty and preserve the proposal's provenance.
+ materializeHypotheses(project){return this.locked(project,()=>{
+  const events=this.state(project).events;
+  const phase=events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='hypotheses'&&e.data.output.status==='ok');
+  if(!phase)fail('Falta una fase de hipótesis confirmada');
+  const candidates=phase.data.output.candidates||[];
+  const proposals=candidates.map((candidate,index)=>{
+   const text=candidate.statement??candidate.text;
+   if(typeof text!=='string'||!text.trim())fail('La propuesta de hipótesis no contiene statement/text');
+   const support=candidate.support_ids??[];
+   if(!Array.isArray(support)||support.some(k=>!events.some(e=>e.key===k)))fail('La propuesta referencia evidencia inexistente');
+   return {key:'hypothesis-'+hash(phase.key+':'+index+':'+(candidate.id??'')).slice(0,32),data:{text,support_ids:support,origin:{phase_event:phase.key,candidate_id:candidate.id??null}}};
+  });
+  return proposals.map(p=>this.append(project,p.key,'hypothesis',p.data));
+ });}
+
  // The model may submit a public experiment plan but cannot invent execution.
  planExperiment(project,key,data){return this.locked(project,()=>{
   const s=this.state(project);
@@ -107,6 +124,7 @@ export class Engine{
  accept(project,key,envelope,output){return this.locked(project,()=>{
   if(envelope&&Object.keys(envelope).length===1&&envelope.task_id)envelope=read(path.join(this.dir(project),'envelopes',id(envelope.task_id)+'.json'));
   const s=this.state(project);const old=s.events.find(e=>e.key===key);if(old){if(old.kind!=='phase'||hash(old.data.output)!==hash(output)||(old.data.envelope_digest||hash(old.data.envelope))!==hash(envelope))fail('Conflicto de idempotencia');return old;}
+  if(!output||typeof output.phase!=='string')fail('Falta output.phase; fase esperada: '+envelope.phase);
   const scheduleFile=path.join(this.base,'scheduler.json');const lease=fs.existsSync(scheduleFile)?read(scheduleFile).lease:null;if(lease?.project===project&&lease.expiresAt>Date.now()&&lease.phase!==output.phase)fail('El ciclo solo autoriza la fase asignada: '+lease.phase);
   if(envelope.project_id!==project||envelope.phase!==output.phase||hash(envelope.project_state)!==hash(s))fail('Sobre desactualizado o incompatible');
   const current=this.envelope(project,output.phase,false);if(hash(envelope.prompts)!==hash(current.prompts)||hash(envelope.prompt_hashes)!==hash(current.prompt_hashes)||hash(envelope.output_contract)!==hash(current.output_contract))fail('Prompt/contrato alterado');
@@ -127,7 +145,7 @@ export class Engine{
   }
   const keys=new Set(s.events.map(e=>e.key));for(const c of output.claims){for(const r of c.support_ids)if(!keys.has(r))fail('Evidencia inexistente '+r);if(['observed','source_claim'].includes(c.certainty)&&!c.support_ids.length)fail('Afirmación factual sin evidencia');for(const r of c.support_ids){const e=s.events.find(e=>e.key===r);if(c.certainty==='observed'&&e.kind==='source'&&e.data.access_level!=='experimentally_verified')fail('Una fuente no prueba observación propia');}}
   if(output.phase==='extract_evidence'&&output.status==='ok'){const source=s.events.find(e=>e.kind==='source'&&(e.key===output.source_identifier||e.data.url===output.source_identifier));if(!source||source.data.access_level!==output.access_level)fail('Nivel de lectura o fuente incompatible con el registro recuperado');}
-  if(output.phase==='novelty_review'&&output.status==='ok'){if(!s.events.some(e=>e.key===output.hypothesis_id&&e.kind==='hypothesis'))fail('Hipótesis inexistente');if(!output.searches_reviewed.length||output.searches_reviewed.some(k=>!s.events.some(e=>e.key===k&&e.kind==='search')))fail('Revisión requiere búsquedas registradas');}
+  if(output.phase==='novelty_review'&&output.status==='ok'){if(!s.events.some(e=>e.key===output.hypothesis_id&&e.kind==='hypothesis'))fail('Hipótesis inexistente');if(output.searches_reviewed.some(r=>typeof r.search_id!=='string'))fail('Cada búsqueda revisada requiere search_id del expediente');if(!output.searches_reviewed.length||output.searches_reviewed.some(r=>!s.events.some(e=>e.key===r.search_id&&e.kind==='search')))fail('Revisión requiere búsquedas registradas');}
   if(output.phase==='evaluation'&&output.status==='ok'&&!s.events.some(e=>e.kind==='experiment_result'&&e.key===output.experiment_id))fail('No hay resultados ejecutados verificables');
   if(output.phase==='next_cycle'&&output.status==='ok'){
    if(output.state_snapshot_id!==s.lastDigest)fail('Estado de siguiente ciclo no coincide con expediente confirmado');
