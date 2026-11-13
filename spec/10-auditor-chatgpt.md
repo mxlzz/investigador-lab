@@ -88,3 +88,8 @@ La interfaz para el usuario puede ser un **proyecto ChatGPT `Auditores` con un c
 Una tarea creada en un proyecto ChatGPT no dispone automáticamente de acceso a sus archivos adjuntos; no diseñar dependencia del contexto almacenado solo en ese chat. La documentación actual tampoco permite Scheduled tasks con GPTs personalizados. Consultar `spec/12-auditores-chatgpt-operacion.md` y `spec/contracts/auditor-github-identity-v1.md`.
 
 Esta elección es propuesta, no está aprobada ni demostrada operativa. E0 debe probar lectura, escritura sin aprobaciones pendientes y autoría separada desde una tarea real antes de crear cuentas.
+
+
+## Observar desvíos de rumbo, no solo errores técnicos (propuesta)
+
+En cada revisión incremental, el auditor puede detectar que Investigador acumula cambios instrumentales o variantes de una misma línea sin mejora comprobable respecto de la meta. Debe contrastar la evidencia de resultados y las alternativas disponibles antes de emitir `additional_check_requested` solicitando una **revisión estratégica** de la línea (véase `spec/13-revision-estrategica.md`). El comentario no puede replanificar por su cuenta, suspender indiscriminadamente la investigación ni modificar criterios originales. Distinguir «hay pocos resultados verificables» de «el auditor no tuvo acceso a los resultados».

@@ -61,3 +61,8 @@ Las opciones definitivas sobre actor separado de GitHub, umbral de dos rondas y 
 **E3–E4:** una **tarea central** dos veces al día que escanea todos los proyectos registrados, con cursor por proyecto y auditoría incremental; opcionalmente un proyecto ChatGPT llamado `Auditores` y un chat por proyecto para revisión interactiva. No programar un GPT personalizado ni una tarea por proyecto.
 
 Documento de operación: `spec/12-auditores-chatgpt-operacion.md`. Identidad: `spec/contracts/auditor-github-identity-v1.md`. Ambas son propuestas; no autorizan implementación.
+
+
+## Extensión futura — revisión estratégica de rumbo (solo diseño)
+
+Antes de implementar, leer `spec/13-revision-estrategica.md`, `spec/07-prompts/12-strategic-review.md` y DEC-0034. Congelar un contrato tipado por línea (`research_line_id`), disparadores y prueba de valor informativo; integrar con `next_cycle` y evidencia del journal sin crear otra automatización cada 15 minutos. Implementar y probar S01–S10 antes de afirmar que el agente puede detectar por sí mismo una estrategia instrumentada pero improductiva. El Auditor independiente podría solicitar esa revisión por Issue, pero no suplantar al planificador.

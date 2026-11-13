@@ -141,3 +141,8 @@ Si un paper ya ofrece una respuesta suficiente, no hace falta replicarlo por rut
 Detallar los prompts literales y la selección de herramientas necesarias para este ciclo, especificar modelos/contratos estrictos y preparar pruebas de aceptación reproducibles. Las decisiones genuinamente fundamentales (definición de la meta, compromisos de calidad o recursos nuevos) se consultarán al usuario; la organización interna, archivos e incidencias triviales se resuelven técnicamente y se documentan.
 
 **Este documento es un diseño propuesto, no un resultado científico ni un sistema operativo.**
+
+
+## Adenda de diseño — control estratégico longitudinal (propuesta 2026-11-13)
+
+Los controles de antecedentes por hipótesis y de `next_cycle` no sustituyen una revisión de **línea completa frente a meta y alternativas**. Se propone `spec/13-revision-estrategica.md`: checkpoint disparado por cambios importantes, progreso insuficiente, repetición instrumental, nuevos antecedentes o costo de oportunidad, con intervalo de respaldo aún por aprobar. Puede recomendar reutilizar, pivotar o aparcar una línea y debe preservar el historial. Está en diseño: **no modifica la implementación actual**.

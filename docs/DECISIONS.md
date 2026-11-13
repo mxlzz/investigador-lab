@@ -275,3 +275,13 @@
 - La distinción entre identidad humana e Investigador también requiere atención porque OpenClaw actualmente opera con identidad `mxlzz`; un comentario de esa cuenta no acredita autorización humana de release.
 - Un PAT diferente del mismo usuario no demuestra autoría independiente. Permisos mínimos y prueba E0 antes de confiar en señales de cierre/bloqueo.
 - Documentación: `spec/contracts/auditor-github-identity-v1.md`.
+
+
+## DEC-0034 — Revisión periódica de rumbo por línea de investigación
+- Fecha: 2026-11-13
+- Estado: **propuesta de diseño**, motivada por la consulta del usuario; intervalo y contrato aún por aprobar.
+- Observación: `novelty_review` evalúa equivalencias por hipótesis y `next_cycle` justifica cada próximo paso, pero no obligan a comparar el rendimiento acumulado de una línea frente a otras alternativas y la meta original. Una secuencia de tareas localmente justificables puede consumir recursos en detalles auxiliares sin progreso suficiente.
+- Propuesta: checkpoint estratégico de alcance por `research_line_id`, activado al cambiar de línea, acumular experimentos/ingeniería sin resultados nuevos, encontrar antecedentes que vuelven redundante la estrategia o comprometer recursos importantes. Como respaldo, considerar **tres iteraciones sustantivas** consecutivas de la misma línea sin revisión; no contar turnos LLM.
+- El checkpoint contrasta encargo literal y aceptación, progreso confirmado, soluciones existentes/equivalentes, alternativas y costo de oportunidad, próximo experimento discriminante y criterio de parada. Puede `continue`, `reuse_existing`, `pivot_within_goal`, `park_line`, `need_evidence` o `propose_project_closure`; no cambia la meta ni permisos.
+- Integración sugerida: el planificador exige checkpoint ante un disparador pendiente **antes de otra inversión importante sobre esa línea**; `next_cycle` lo aprovecha, y Auditor ChatGPT puede solicitarlo ante evidencia de desvío. No añade auditoría pesada a cada acción ni reemplaza el control de novedad.
+- Diseño y casos de aceptación en `spec/13-revision-estrategica.md` y propuesta literal de prompt `spec/07-prompts/12-strategic-review.md`. **No implementado ni activado**.
