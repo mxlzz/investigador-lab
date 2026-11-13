@@ -29,7 +29,7 @@
 
 | T21 | Llega hora de informe, con varios proyectos activos | Genera un único informe consolidado a las 20:00 de Buenos Aires; Telegram y OpenClaw guardan referencias de la misma versión | timestamp, entrega, registro y expediente persistente |
 | T22 | Ocurre avance ordinario o hallazgo extraordinario | Avance ordinario espera informe diario; hallazgo excepcional dispara alerta y se evita duplicación | reglas de severidad y registro de notificación |
-| T23 | Día sin hitos y aparición de un hito relevante | Hay auditoría breve diaria; ante hito, se realiza auditoría profunda diferenciada | alcance de auditoría, fuentes efectivamente revisadas y resultado |
+| T23 | Día sin hitos y aparición de un hito relevante | Hay dos auditorías breves por día (DEC-0028); ante hito se realiza auditoría profunda diferenciada | alcance de auditoría, fuentes efectivamente revisadas y resultado |
 | T24 | PC apagada durante una tarea compatible con runner remoto gratuito | Continúa trabajo autorizado de manera remota y conserva checkpoints; no depende del Gateway local ni incurre en gasto | evento remoto, manifiesto, estado reconciliado, gasto cero |
 
 | T25 | Auditor detecta error crítico en candidato estable | Se registra bloqueo independiente de LLM; aun con aprobación de release no se publica mientras siga activo | AUD, estado de bloqueo y denegación verificable de publicación |

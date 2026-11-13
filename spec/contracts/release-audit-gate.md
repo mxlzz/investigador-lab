@@ -5,7 +5,7 @@
 ## Fronteras de responsabilidad
 
 - **Investigador:** reúne evidencia, compara con criterios y puede declarar `meta_cumplida` (DEC-0019).
-- **Auditor de ChatGPT:** examina evidencias, documenta hallazgos, ejecuta revisión breve diaria o profunda ante mejoras importantes/cierres/candidatos estables (DEC-0022/25). Puede emitir bloqueo por error crítico fundamentado (DEC-0024).
+- **Auditor de ChatGPT:** examina evidencias, documenta hallazgos, ejecuta dos revisiones breves por día (DEC-0028) o revisión profunda ante mejoras importantes/cierres/candidatos estables (DEC-0022/25). Puede emitir bloqueo por error crítico fundamentado (DEC-0024).
 - **Usuario:** conserva la autorización para publicar una versión estable (DEC-0019).
 - **Control de publicación:** mecanismo externo al prompt; comprueba condiciones y registros antes de un merge, tag estable o release.
 

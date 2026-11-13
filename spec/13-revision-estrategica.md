@@ -53,7 +53,13 @@ Preguntas sustantivas, sin una nueva ceremonia de auditoría:
 
 Cuando no se conoce tiempo o costo, registrar `unknown`; no inventar estadísticas ni puntajes de eficiencia. Reutilizar el contrato `selected_action` y `expected_artifacts`: la propuesta `line_assessment` no ejecuta comandos ni autoriza gastos o metas adicionales.
 
-## 5. Integración para el implementador
+## 5. Texto propuesto para añadir al prompt existente, SIN modificarlo durante el diseño
+
+> Si el orquestador incluye una señal fundamentada de reconsideración, antes de seleccionar otra inversión en la misma línea compará el progreso acumulado con la meta literal, los resultados comprobados desde la última decisión y la mejor alternativa disponible. Diferenciá mejora de la meta, capacidad instrumental que desbloquea una prueba y actividad sin resultado comprobado; referenciá evidencia real y proponé una condición observable para seguir, cambiar de método o aplazar. No repitas búsqueda de antecedentes si ya existe evidencia pertinente ni declares redundancia por coincidencia de términos.
+
+El futuro implementador puede incorporar esa ampliación a `spec/07-prompts/09-next-cycle.md` **junto con el esquema y el host**, en una revisión de código autorizada. La propuesta todavía no está instalada. El prompt operativo mantiene su hash original en esta rama de diseño.
+
+## 6. Integración para el implementador
 
 - **Motor:** identificar líneas en eventos existentes, detectar motivos para reconsiderar y deduplicarlos por IDs/snapshot. No crear un segundo journal. Si la misma línea se repite sin novedad, no aprobarla solo porque `selection_rationale` contiene palabras plausibles.
 - **Schema / prompt:** ampliar de manera compatible `next_cycle` con `line_assessment` **solo cuando sea necesario**; actualizar `spec/07-prompts/09-next-cycle.md`. No crear prompt `12-strategic-review` ni fase aparte.
@@ -64,7 +70,7 @@ Cuando no se conoce tiempo o costo, registrar `unknown`; no inventar estadístic
 
 El motor de hoy **no implementa** el identificador de línea, el disparador, la extensión de `next_cycle` ni esta validación. No afirmar que basta con reformular el prompt: la calidad del control depende de evidencia estructurada y una comprobación del host.
 
-## 6. Pruebas de aceptación focalizadas
+## 7. Pruebas de aceptación focalizadas
 
 R01 — Se repite una corrección instrumental sin desbloquear una prueba ni agregar evidencia; `next_cycle` exige demostrar su utilidad o elegir otra alternativa.  
 R02 — Hay progreso incremental confirmado durante varias pruebas; puede continuar sin pausa por un contador.  
@@ -75,7 +81,7 @@ R06 — Ante un mismo evento/snapshot reintentado, no duplica reconsideraciones.
 R07 — Un fallo de infraestructura no se considera resultado científico; el esfuerzo de infraestructura puede ser relevante si habilita una medición concreta.  
 R08 — La línea se aplaza con motivo y conserva resultados; otra línea del proyecto puede proseguir.
 
-## 7. Diferencias respecto de la versión v0.1
+## 8. Diferencias respecto de la versión v0.1
 
 Se descarta: **fase estratégica independiente, prompt 12 independiente, revisión cada tres iteraciones y registro completo redundante de evaluaciones ya hechas por `novelty_review`**.
 

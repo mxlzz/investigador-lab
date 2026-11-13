@@ -1,12 +1,12 @@
 # Diseño propuesto de disparadores y autoridad de auditoría
 
 **Estado:** catálogo técnico propuesto, con autoridad y categorías de hito **acordadas** en DEC-0024/25; los disparadores finos y el proceso de desbloqueo aún no están aprobados.  
-**Acuerdos de partida:** DEC-0019 (dictamen de meta cumplida), DEC-0021 (alertas) y DEC-0022 (auditoría breve diaria y profunda ante hitos). Sin automatización activada.
+**Acuerdos de partida:** DEC-0019 (dictamen de meta cumplida), DEC-0021 (alertas) y DEC-0022 (auditoría breve originalmente diaria, ampliada a **dos veces por día** en DEC-0028; profunda ante hitos). Sin automatización activada.
 
 ## 1. Diferenciar tres productos
 
 - **Informe diario del Investigador:** resumen del trabajo, todos los proyectos, 20:00 Buenos Aires, Telegram + OpenClaw; lo redacta el sistema investigado, no es auditoría.
-- **Auditoría breve diaria de ChatGPT:** verificación limitada de deltas, integridad, fuentes y discrepancias. Anota alcance y acciones comprobadas.
+- **Auditorías breves de ChatGPT, dos por día:** verificación limitada de deltas, integridad, fuentes y discrepancias. Anota alcance y acciones comprobadas.
 - **Auditoría profunda por hito:** muestreo de evidencia primaria, comparación con antecedentes, validación de experimentos, robustez, reproducibilidad e inspección de código cuando estén disponibles. No confundir con peer review científico formal.
 
 ## 2. Catálogo inicial de hitos (PROPUESTA)
