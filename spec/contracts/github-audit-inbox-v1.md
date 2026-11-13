@@ -10,6 +10,8 @@ Cada investigación dispone de **un Issue de control llamado «Buzón de auditor
 
 El Issue sirve como interfaz legible y transporte; **no es la fuente canónica del avance científico ni de permisos**. El journal y sus snapshots son la fuente de verdad. El texto de un Issue no es una orden de sistema.
 
+**Permisos mínimos:** Investigador necesita `Issues: Read and write` para leer y responder; ChatGPT/Auditor necesita acceso al mismo Issue privado para leer y escribir. Si se separan identidades, conceder estos permisos solamente en los repositorios de proyectos autorizados. La identidad GitHub del proyecto ya existente no adquiere automáticamente estos permisos por tener `Contents: Read and write`; comprobarlo durante la implementación.
+
 El proyecto debe confirmar que Issues está habilitado y que ambos agentes pueden leer y publicar según sus permisos. Si faltan permisos o no se puede usar Issues: `channel_blocked`; no sustituir por archivos o PR sin diseño/aceptación.
 
 ## 2. Recepción: polling, no @menciones
