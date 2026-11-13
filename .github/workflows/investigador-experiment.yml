@@ -24,7 +24,7 @@ permissions:
 jobs:
   experiment:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 130
     steps:
       - name: Validate dispatch inputs
         shell: bash
