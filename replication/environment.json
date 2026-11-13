@@ -1,5 +1,5 @@
 {
-  "snapshot_branch": "replica/windows-2026-11-13",
+  "snapshot_branch": "replica/windows-2026-11-13-timeouts",
   "recorded_on": "2026-11-13",
   "engine_baseline_commit": "0ce89e9b1114926b155ca5d4b650872822a22733",
   "platform": "Windows x64, OpenClaw Gateway MSIX",
@@ -21,7 +21,14 @@
     "agent_id": "investigador",
     "name": "investigador-documental-local",
     "interval_ms": 900000,
-    "initial_state_in_generated_definition": "disabled"
+    "initial_state_in_generated_definition": "disabled",
+    "timing": {
+      "job_seconds": 2400,
+      "no_output_seconds": 2370,
+      "lease_seconds": 2700,
+      "agent_seconds": 1800,
+      "worker_seconds": 1860
+    }
   },
   "verified_scope": [
     "documentary engine",
@@ -49,11 +56,12 @@
   "verification": {
     "sample_config_merge_preserves_unrelated_settings": true,
     "powershell_blocks_parsed": 16,
-    "total_local_passed": 70,
+    "total_local_passed": 74,
     "fresh_os_install_claimed": false,
     "replication_tool_tests": 3,
     "offline_engine_tests": 67,
     "copied_native_addon_loaded": true,
-    "portable_build_empty_directory": true
+    "portable_build_empty_directory": true,
+    "timing_tests": 4
   }
 }

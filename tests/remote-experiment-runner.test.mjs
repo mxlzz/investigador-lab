@@ -13,5 +13,5 @@ test('remote runner completes bounded baseline/candidate comparison',async()=>{
 });
 test('remote runner blocks script path escape and fake experimental metrics',async()=>{
  await assert.rejects(()=>runRemoteExperiment(root,{...manifest,trials:[{id:'baseline',script:'../implementation/engine.mjs',args:[]},manifest.trials[1]]},{allowLocalForTest:true}),/Script fuera/);
- await assert.rejects(()=>runRemoteExperiment(root,{...manifest,timeout_seconds:500},{allowLocalForTest:true}),/Tiempo excede/);
+ await assert.rejects(()=>runRemoteExperiment(root,{...manifest,timeout_seconds:3601},{allowLocalForTest:true}),/Tiempo excede/);
 });

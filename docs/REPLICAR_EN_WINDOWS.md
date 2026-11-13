@@ -1,6 +1,6 @@
 # Replicar la instalación del investigador en Windows
 
-Esta es la entrada única para reconstruir la instalación documentada. El snapshot `replica/windows-2026-11-13` contiene todo el código de las PR #4, #5 y #6 y estas herramientas de reproducción. **No alcanza con clonar `main`**, ni hace falta aplicar las PR una por una. El enlace por SHA del snapshot permite fijar una copia inmutable aunque cambien las ramas.
+Esta es la entrada única para reconstruir la instalación documentada. El snapshot `replica/windows-2026-11-13-timeouts` contiene todo el código de las PR #4, #5 y #6 y estas herramientas de reproducción. **No alcanza con clonar `main`**, ni hace falta aplicar las PR una por una. El enlace por SHA del snapshot permite fijar una copia inmutable aunque cambien las ramas.
 
 El procedimiento es parametrizado, no un instalador universal de un clic. La instalación de OpenClaw, la conexión del proveedor del modelo y el guardado del token son pasos personales. No se incluyen sus credenciales en GitHub.
 
@@ -27,7 +27,7 @@ Instalá Git para clonar, Node 24 y OpenClaw desde sus fuentes oficiales. Abrí 
 ## 2. Obtener una copia completa y registrar su versión
 
 ```powershell
-git clone --branch replica/windows-2026-11-13 https://github.com/mxlzz/investigador-lab.git investigador-replica
+git clone --branch replica/windows-2026-11-13-timeouts https://github.com/mxlzz/investigador-lab.git investigador-replica
 Set-Location investigador-replica
 $RepoRoot = (Get-Location).Path
 git rev-parse HEAD
@@ -38,10 +38,10 @@ Conservá ese SHA junto al respaldo local. Para volver exactamente a una versió
 Ejecutá la suite sin credenciales ni acceso a GitHub:
 
 ```powershell
-node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs tests/remote-experiment-runner.test.mjs tests/github-experiments.test.mjs tests/github-credential.test.mjs tests/github-projects.test.mjs tests/replication-tools.test.mjs
+node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs tests/remote-experiment-runner.test.mjs tests/github-experiments.test.mjs tests/github-credential.test.mjs tests/github-projects.test.mjs tests/replication-tools.test.mjs tests/timing.test.mjs
 ```
 
-Son 67 pruebas del motor e integración más 3 pruebas de las herramientas de reproducción. No ejecutar indiscriminadamente todos los `.mjs` de `tests/`: los scripts de aceptación live no son pruebas offline.
+Son 74 pruebas del motor, integración, tiempos y herramientas de reproducción. No ejecutar indiscriminadamente todos los `.mjs` de `tests/`: los scripts de aceptación live no son pruebas offline.
 
 ## 3. Identificar las rutas de esa PC
 
@@ -163,7 +163,7 @@ New-Item -ItemType Directory -Path $LocalSetupRoot -Force | Out-Null
     stateRoot = $StateRoot; workspace = $Workspace
     githubProfile = $GitHubProfile; githubRuntime = $GitHubRuntime
     githubOwner = $Owner; githubRepo = $RunnerRepo; model = $Model
-    codeModeEnabled = $false
+    codeModeEnabled = $false; agentTimeoutSeconds = 1800
 } | ConvertTo-Json | Set-Content -LiteralPath $SetupFile -Encoding utf8
 & $Node (Join-Path $RepoRoot 'tools\openclaw-setup-files.mjs') $SetupFile $Prepared
 ```
@@ -187,7 +187,7 @@ $Config | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $ConfigPath -Enco
 
 `tools.codeMode.enabled=false` es una configuración **global** observada en la referencia para evitar llamadas incompatibles con Gemini. Revisar su efecto si esa PC tiene otros agentes. No aplicar esa parte del fragmento si se decide conservar otro modo: omitir `codeModeEnabled` de la entrada y las líneas que modifican `$Config.tools`. El resto del generador no cambia defaults de modelo ni credenciales. El agente creado en el paso 4 ya conserva su workspace y modelo; no sustituir toda la lista de agentes con el fragmento.
 
-El MCP y el job deben recibir las mismas cinco variables de raíz/identidad GitHub. El job agrega `INVESTIGADOR_OPENCLAW_ENTRY`. No configurar `INVESTIGADOR_GITHUB_TOKEN`: esta réplica utiliza el perfil administrado.
+El MCP y el job deben recibir las mismas variables de raíz/identidad GitHub y de tiempo. El job agrega `INVESTIGADOR_OPENCLAW_ENTRY`. No configurar `INVESTIGADOR_GITHUB_TOKEN`: esta réplica utiliza el perfil administrado.
 
 ## 8. Registrar un solo job, inicialmente detenido
 
@@ -257,6 +257,8 @@ $EnableFile = Join-Path $Prepared 'job-enable.json'
 La prueba técnica sigue pausada; un encargo real nuevo se inicia con `research_start` y puede comenzar intake en el mismo chat. Consultar `scheduler` y `state` para comprobar continuidad. Con PC apagada, el Gateway local no ejecuta ciclos.
 
 ## 10. Diagnóstico y recuperación
+
+La política actual permite 30 minutos por turno programado; el worker espera 31, el job nativo 40 (39,5 sin salida) y la reserva del planificador 45. Se configuran juntos mediante `INVESTIGADOR_AGENT_TIMEOUT_SECONDS` (60–7200 segundos) y el generador. No ampliar solo el plazo interior. Ver [política de tiempos](TIEMPOS_DE_EJECUCION.md).
 
 | Síntoma | Comprobación |
 |---|---|
