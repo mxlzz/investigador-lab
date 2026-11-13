@@ -63,3 +63,6 @@ La auditoría automática no equivale a una revisión científica independiente 
 - Definición operacional de crítico y proceso de bloqueo/desbloqueo, incluyendo discrepancias y auditor indisponible (DEC-0024).
 - Canal de entrega, avisos, cuándo escalar y quién cierra un hallazgo.
 - Cómo reproducir experimentos bajo presupuesto y permisos del auditor.
+## Continuación de diseño (2026-11-13)
+
+La frecuencia breve acordada pasó a **dos veces por día** en DEC-0028. Los esquemas de orquestación y diálogo están propuestos en `spec/10-auditor-chatgpt.md` y `spec/contracts/audit-dialogue-v1.md`. Esta mención no indica que exista una automatización ChatGPT activa.

@@ -81,3 +81,6 @@ Markdown/YAML con propiedades atómicas (listas simples, IDs como texto) y enlac
 - Sincronización Obsidian, almacenaje externo, backups y retención.
 - Nivel de reproducción de textos externos (resúmenes vs copias) y política de licencias.
 - Estrategia de indexación y búsqueda semántica que complemente Markdown sin duplicar la fuente de verdad.
+## Continuación de diseño (2026-11-13)
+
+La consulta en Obsidian se detalla en `spec/11-obsidian-projection.md`: vault como proyección generada por proyecto, sin reemplazar el journal ni exportar automáticamente información privada a repositorios públicos. La proyección todavía no está implementada.

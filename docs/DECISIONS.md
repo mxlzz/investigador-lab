@@ -227,3 +227,18 @@
 - El informe representa un **día de reporte identificable** y debe conservar estado de envío para evitar duplicación por reintentos o ejecución concurrente. Toda confirmación de entrega se basa en evidencia del servicio, no en la intención de enviar.
 - Pendiente: política de reintentos/intervalos, reconciliación si Telegram aceptó el mensaje pero se perdió el acuse, tratamiento de informes atrasados cuando ya corresponde el siguiente y tiempo máximo de conservación.
 - Motivo: preservar continuidad informativa pese a interrupciones temporales de red, scheduler o ejecutores.
+
+
+## DEC-0028 — Dos verificaciones breves diarias del Auditor ChatGPT
+- Fecha: 2026-11-13
+- Estado: acordada como **requisito de diseño** por pedido explícito del usuario; realización técnica pendiente.
+- Decisión: ChatGPT, como auditor externo al agente Investigador, debe realizar **dos verificaciones breves del avance por día**, independientes del informe diario de Investigador de las 20:00. La revisión profunda por hitos DEC-0025 se conserva.
+- Reemplaza en DEC-0022 **solo la frecuencia** de «una breve diaria». No implica tener ya una automatización conectada o habilitada.
+- Propuesta no aprobada: 09:00 y 19:00, hora `America/Argentina/Buenos_Aires`; falta acordar los horarios, la cobertura de fines de semana y verificar acceso a los repos privados desde una ejecución programada.
+- Fundamento: detectar errores y desvíos antes de que se acumulen ciclos, sin confundir revisión independiente con el propio reporte del Investigador.
+
+## DEC-0029 — Separar diseño de implementación para el canal Auditor–Investigador y Obsidian
+- Fecha: 2026-11-13
+- Estado: acordada como **regla de trabajo de esta conversación**.
+- Decisión: en este chat se define, debate y versiona el comportamiento en GitHub. La implementación, instalación, configuración de tareas y aceptación operativa se realizan en otro chat tras la decisión pertinente.
+- Alcance de esta entrega: `spec/10-auditor-chatgpt.md`, `spec/contracts/audit-dialogue-v1.md`, `spec/11-obsidian-projection.md` y `handoff/AUDITOR_OBSIDIAN_DESIGN_BACKLOG.md`. Son propuestas de diseño donde no hay una decisión explícita; no confundirlas con funcionalidades instaladas.
