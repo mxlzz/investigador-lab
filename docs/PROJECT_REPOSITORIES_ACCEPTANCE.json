@@ -1,0 +1,38 @@
+{
+  "platform": "Windows",
+  "tests": {
+    "passed": 67,
+    "failed": 0
+  },
+  "limitations": [
+    "remote creation and synchronization acceptance pending token permissions",
+    "experimental runner remains separate and requires Actions write",
+    "no claim of scientific investigation from the infrastructure fixture"
+  ],
+  "live": {
+    "repository_creation": "blocked",
+    "source_read": "verified",
+    "repository_discovery": "verified",
+    "fixture_paused": true,
+    "github_status": 403,
+    "sync": "blocked",
+    "source_recorded_with_commit": true,
+    "required_creation_permission": [
+      "repository_creation=write",
+      "administration=write (alternative)"
+    ]
+  },
+  "installed": {
+    "identity": "managed_memory_only",
+    "agent": "investigador",
+    "new_operations": [
+      "research_start",
+      "project_repository",
+      "project_github_status",
+      "github_sync",
+      "github_repositories",
+      "github_read"
+    ],
+    "periodic_job_unchanged": true
+  }
+}
