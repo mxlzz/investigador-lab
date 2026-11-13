@@ -1,4 +1,4 @@
-> **Instalación y réplica en Windows:** [guía completa](docs/REPLICAR_EN_WINDOWS.md), [entorno de referencia](replication/environment.json), [repositorios por investigación](docs/PROJECT_REPOSITORIES.md) y [evidencia de aceptación](docs/PROJECT_REPOSITORIES_ACCEPTANCE.json). Usar el snapshot `replica/windows-2026-11-13`, que reúne la implementación y las herramientas; no asumir que `main` contiene estos cambios.
+> **Instalación y réplica en Windows:** [guía completa](docs/REPLICAR_EN_WINDOWS.md), [entorno de referencia](replication/environment.json), [repositorios por investigación](docs/PROJECT_REPOSITORIES.md) y [evidencia de aceptación](docs/PROJECT_REPOSITORIES_ACCEPTANCE.json). Usar el snapshot `replica/windows-2026-11-13-timeouts`, que reúne la implementación y las herramientas; no asumir que `main` contiene estos cambios.
 
 # Investigador Lab
 

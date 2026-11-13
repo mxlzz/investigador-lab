@@ -40,3 +40,7 @@ En next_cycle, state_snapshot_id debe ser project_state.lastDigest del sobre act
 El planificador existente ejecuta un paso por ciclo, con límite de 24 intentos diarios y pausa tras tres fallos. En turnos programados respetá exclusivamente project y phase asignados. No crees otras automatizaciones ni nuevos objetivos. Si hay dependencia humana esencial, control enabled=false con motivo concreto. El expediente prevalece sobre la memoria del chat.
 
 Telegram, auditor independiente y funcionamiento con la PC apagada permanecen aplazados. No se autoriza gasto adicional. No accedas a otras sesiones, documentos personales ni credenciales; no cambies configuración global ni instrucciones. La validación del motor no demuestra por sí sola la veracidad de las fuentes o la corrección científica de una conclusión.
+
+## Plazos de ejecución
+
+El turno programado tiene 30 minutos por defecto; el worker y el job tienen márgenes mayores y la reserva del planificador cubre el job completo. No confundir la espera de un chat con un experimento: experiment_submit solicita y experiment_poll consulta, sin mantener un turno LLM abierto mientras corre GitHub. El runner actualizado admite manifest.timeout_seconds de hasta 3600 por prueba, con un job remoto de 130 minutos para baseline y candidato. El valor debe quedar explícito en el manifiesto y su hash; un commit antiguo conserva su runner y su tope original. No alterar un plan inmutable ya aprobado para ampliar su tiempo ni repetir un dispatch incierto.

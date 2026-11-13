@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {spawn} from 'node:child_process';
+export const MAX_TRIAL_TIMEOUT_SECONDS=3600;
 
 const digest=value=>crypto.createHash('sha256').update(value).digest('hex');
 const validId=s=>typeof s==='string'&&/^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$/.test(s);
@@ -42,7 +43,7 @@ export async function runRemoteExperiment(root,manifest,{allowLocalForTest=false
  const requestedId=process.env.INVESTIGADOR_REQUEST_ID;
  if(requestedId)ensure(/^[0-9a-f-]{36}$/.test(requestedId),'ID de solicitud inválido');
  const timeoutMs=Number(manifest.timeout_seconds||30)*1000;
- ensure(timeoutMs>=1000&&timeoutMs<=180000,'Tiempo excede máximo del runner gratuito');
+ ensure(timeoutMs>=1000&&timeoutMs<=MAX_TRIAL_TIMEOUT_SECONDS*1000,'Tiempo excede máximo de 3600 segundos por prueba');
  const results=[];
  for(let i=0;i<2;i++){
   const trial=manifest.trials[i];
