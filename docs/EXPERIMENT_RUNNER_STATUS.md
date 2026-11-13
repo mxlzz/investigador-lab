@@ -1,6 +1,6 @@
 # Ejecutor experimental remoto — primera capacidad verificable
 
-**Estado:** experimental. No está integrado todavía al MCP ni al planificador local. No es una entrega científica completa.
+**Estado:** integración remota 0.4.0-dev verificada de extremo a extremo en GitHub Actions; despliegue en OpenClaw Windows pendiente. No es una entrega científica completa.
 
 - Un runner estándar GitHub Actions ejecuta pruebas en infraestructura efímera con `permissions: contents: read`, sin secretos y sin acceso a la PC.
 - Contrato `experiments/<id>/manifest.json`: dos trials `baseline` y `candidate`, scripts públicos bajo `experiments/`, métrica numérica y dirección, timeout acotado.
@@ -8,9 +8,9 @@
 - El smoke test `runner-smoke` solamente comprueba el **circuito técnico**, no una contribución científica.
 - No ejecutar código experimental con claves de API, token de Telegram, permisos GitHub de escritura, ni en el host Windows.
 - Scripts de `experiments/` podrían acceder a Internet en un runner hospedado; por lo tanto, esta primera versión **no demuestra aislamiento de red** ni debe procesar datos privados.
-- El recibo no es prueba de que una hipótesis general haya sido confirmada. Falta integrarlo de manera autenticada al expediente del proyecto, ejecutar benchmarks relevantes, medir incertidumbre, auditar el runner y habilitar selección autónoma de experimentos.
+- El recibo no es prueba de que una hipótesis general haya sido confirmada. Su integración verificada al expediente ya está probada en CI; faltan benchmarks científicos relevantes, incertidumbre estadística, auditoría profunda del runner y despliegue local.
 
-Este componente sí permite ejecutar y comparar dos implementaciones **públicas y reproducibles**, con límites, usando una capacidad ya gratuita en el repositorio público. Ejecutar automáticamente experimentos arbitrarios propuestos por LLM sigue prohibido.
+Este componente sí permite ejecutar y comparar dos implementaciones **públicas y reproducibles**, con límites, usando una capacidad ya gratuita en el repositorio público. Ejecutar automáticamente experimentos arbitrarios sin un plan público, un commit fijado y controles de alcance sigue prohibido.
 
 ## Actualización 0.4.0-dev
 

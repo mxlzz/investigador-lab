@@ -1,4 +1,4 @@
-# Motor documental local 0.3.0
+# Motor Investigador 0.4.0-dev — integración documental y experimental pública
 
 Implementación Node.js 24 sin dependencias npm. El modelo y sus credenciales los proporciona el Gateway existente de OpenClaw. No es todavía el sistema completo propuesto en spec/.
 
@@ -10,7 +10,7 @@ node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs
 node implementation/mcp-server.mjs
 ```
 
-El servidor MCP expone research: init/projects/state, prepare/accept, record, bibliography, arxiv_abstract, scheduler/control, report y gate. prepare conserva el sobre exacto y devuelve sus prompts y contrato. accept permite enviar envelope={task_id:ID} sin reconstruir el expediente. La versión y hashes de prompts se registran sin copiar recursivamente todo el historial.
+El servidor MCP expone research: init/projects/state, prepare/accept, record, bibliography, openalex_bibliography, arxiv_abstract, experiment_plan/experiment_submit/experiment_poll, scheduler/control, report y gate. prepare conserva el sobre exacto y devuelve sus prompts y contrato. accept permite enviar envelope={task_id:ID} sin reconstruir el expediente. La versión y hashes de prompts se registran sin copiar recursivamente todo el historial.
 
 bibliography consulta Crossref (hasta cinco resultados, reutilización de una consulta durante 24 h), guarda sus metadatos/resúmenes y una búsqueda ejecutada con procedencia HTTP. arxiv_abstract recupera únicamente resúmenes de URLs canónicas arxiv.org/abs. No requiere claves. Crossref no cubre toda la literatura ni reemplaza una búsqueda web general. Los contenidos externos son datos no confiables; no se ejecutan.
 
@@ -34,7 +34,7 @@ Los scripts de Telegram de 0.2 siguen disponibles, sin activar. No se pidieron n
 
 Los esquemas fuente siguen siendo borradores con campos abiertos. Se comprueban estructura, dependencias, versiones y referencias, no verdad científica ni respaldo semántico. Una afirmación de un paper no es una reproducción propia.
 
-El motor rechaza experimentos, transferencias remotas y publicaciones estables. No hay Docker ni WSL instalados en la PC comprobada. No se ejecuta código externo sin un runner aislado. El motor MCP no es un sandbox de todas las herramientas nativas de OpenClaw. No hay continuidad con la PC apagada ni sincronización de expedientes con GitHub.
+El motor rechaza la ejecución experimental local, los proyectos privados en el runner público y las publicaciones estables. Sí permite proyectos experimentales públicos preparados y ejecutados mediante GitHub Actions, con importación verificada. No hay Docker ni WSL instalados en la PC comprobada; no se ejecuta código externo en Windows. El motor MCP no es un sandbox de todas las herramientas nativas de OpenClaw. No hay continuidad con la PC apagada ni sincronización de expedientes con GitHub.
 
 La programación se conserva en el almacén nativo del Gateway. Una actualización de la app que cambie las rutas de Node/CLI requiere comprobar y ajustar la definición del job. No se reinició el Gateway del usuario para probar persistencia; se verificaron procesos nuevos de worker, estado guardado y definición nativa.
 
@@ -54,12 +54,12 @@ No publicar research-state/, credenciales, tokens ni configuración privada de O
 
 Para encargos en modo `research`, después del informe documental el planificador ahora ejecuta `next_cycle`: el modelo debe proponer una fase de investigación concreta, justificar su valor informativo y referenciar el estado exacto del expediente. El motor acepta solamente fases conocidas; el planificador crea una cola con esas fases y conserva el historial. Si no hay trabajo útil, el agente devuelve `selected_action:null` y el proyecto queda en reposo, sin ciclos artificiales. En modo `documentary` se cierra la síntesis sin forzar ciclos posteriores.
 
-**Límite:** este ciclo permite nueva investigación documental y diseño, pero NO habilita ejecución experimental no aislada. La prueba de mejora técnica sigue bloqueada mientras no haya runner seguro.
+**Límite:** no ejecuta experimentos directamente en Windows; para una prueba técnica necesita un plan público vinculado a hipótesis y diseño, GitHub Actions autorizado y un recibo verificado.
 
 
 ## Ejecutor experimental en GitHub Actions (primera capacidad)
 
-Se agregó un runner controlado de experimentos públicos de dos implementaciones y métricas numéricas, ejecutado solo en infraestructura GitHub Actions. El smoke test compara código real con baseline, conserva recibo descargable y verifica límites de ruta y ejecución. Consultar [docs/EXPERIMENT_RUNNER_STATUS.md](../docs/EXPERIMENT_RUNNER_STATUS.md) antes de interpretar el alcance: **aún no está conectado al ciclo autónomo del agente** y no debe utilizar datos privados.
+Se agregó un runner controlado de experimentos públicos de dos implementaciones y métricas numéricas, ejecutado solo en infraestructura GitHub Actions. El smoke test compara código real con baseline, conserva recibo descargable y verifica límites de ruta y ejecución. Consultar [docs/EXPERIMENT_RUNNER_STATUS.md](../docs/EXPERIMENT_RUNNER_STATUS.md) antes de interpretar el alcance: **ya está conectado mediante experiment_plan/submit/poll/evaluation**; no debe utilizar datos privados.
 
 ## Puerta de calidad del expediente
 
