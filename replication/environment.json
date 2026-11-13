@@ -1,0 +1,59 @@
+{
+  "snapshot_branch": "replica/windows-2026-11-13",
+  "recorded_on": "2026-11-13",
+  "engine_baseline_commit": "0ce89e9b1114926b155ca5d4b650872822a22733",
+  "platform": "Windows x64, OpenClaw Gateway MSIX",
+  "openclaw_version": "2026.11.1",
+  "msix_package_version": "2026.11.100.0",
+  "node_observed": "24.22.1",
+  "node_ci_major": "24",
+  "model_observed": "google/gemini-3.5-flash-lite",
+  "code_mode_observed": false,
+  "github_identity": "OpenClaw managed fine-grained PAT, System GitHub",
+  "official_runtime_dependencies": {
+    "@openclaw/fs-safe": "0.26.5",
+    "@openclaw/fs-safe-win32-x64-msvc": "0.26.5",
+    "yaml": "2.9.1",
+    "@esbuild/win32-x64": "0.28.2"
+  },
+  "github_cli_observed_optional": "2.104.0",
+  "job": {
+    "agent_id": "investigador",
+    "name": "investigador-documental-local",
+    "interval_ms": 900000,
+    "initial_state_in_generated_definition": "disabled"
+  },
+  "verified_scope": [
+    "documentary engine",
+    "per-project private repositories",
+    "source reads pinned to commits",
+    "sync idempotence and remote readback",
+    "portable runtime build in empty directory"
+  ],
+  "separate_or_pending": [
+    "complete Windows experimental acceptance",
+    "Telegram",
+    "independent auditor",
+    "PC-off execution"
+  ],
+  "never_distribute": [
+    "tokens",
+    "managed credential profiles",
+    "provider keys",
+    "sessions",
+    "personal OpenClaw config",
+    "private research-state",
+    "MSIX binaries"
+  ],
+  "research_day_timezone": "America/Argentina/Buenos_Aires",
+  "verification": {
+    "sample_config_merge_preserves_unrelated_settings": true,
+    "powershell_blocks_parsed": 16,
+    "total_local_passed": 70,
+    "fresh_os_install_claimed": false,
+    "replication_tool_tests": 3,
+    "offline_engine_tests": 67,
+    "copied_native_addon_loaded": true,
+    "portable_build_empty_directory": true
+  }
+}

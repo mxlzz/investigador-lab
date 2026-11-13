@@ -1,8 +1,8 @@
-> Implementación local 0.3.0: investigación documental y continuidad local: ver [guía del motor](implementation/README.md), [prueba real](docs/LOCAL_ACCEPTANCE.md) y [registro de avance](docs/IMPLEMENTATION_LOG.md). El texto siguiente describe la línea base de diseño; no se declara implementado todo su alcance.
+> **Instalación y réplica en Windows:** [guía completa](docs/REPLICAR_EN_WINDOWS.md), [entorno de referencia](replication/environment.json), [repositorios por investigación](docs/PROJECT_REPOSITORIES.md) y [evidencia de aceptación](docs/PROJECT_REPOSITORIES_ACCEPTANCE.json). Usar el snapshot `replica/windows-2026-11-13`, que reúne la implementación y las herramientas; no asumir que `main` contiene estos cambios.
 
 # Investigador Lab
 
-**Estado:** diseño preliminar — no hay implementación funcional ni experimentos ejecutados.
+**Estado:** implementación local de investigación documental, continuidad y repositorios privados por proyecto, con aceptación real en Windows. El runner experimental público tiene pruebas separadas; no se declara completo todo el alcance de investigación autónoma.
 **Fecha inicial:** 2026-11-12.
 
 Infraestructura universal de investigación y desarrollo autónomo, coordinable desde OpenClaw. Recibe **una meta o un tema**, investiga el conocimiento previo, detecta vacíos, propone hipótesis, verifica antecedentes antes de experimentar, implementa, evalúa y conserva trazabilidad.
@@ -41,5 +41,5 @@ Cloná o descargá el repositorio en una carpeta local. En Obsidian elegí **Ope
 
 ## Alcance actual
 
-Este repositorio contiene **especificaciones y registros iniciales de ejemplo**, no un agente autónomo operativo. Todavía no se integró AI Scientist v3 ni se validó la configuración de OpenClaw. Toda etapa de implementación requerirá pruebas.
+La referencia de Windows incluye el motor MCP, el planificador, lectura de repositorios fuente y creación/sincronización de repositorios por investigación. La guía de réplica documenta sus versiones, credenciales propias, configuración, pruebas y rollback. Las especificaciones originales y documentos históricos conservan propuestas que aún no están implementadas. No hay integración completa de AI Scientist v3, auditor independiente, Telegram activo ni ejecución con la PC apagada.
 

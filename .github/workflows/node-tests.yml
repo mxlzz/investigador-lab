@@ -18,7 +18,7 @@ jobs:
       - name: Show runtime
         run: node --version
       - name: Run documentary engine and MCP regression tests
-        run: node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs tests/remote-experiment-runner.test.mjs tests/github-experiments.test.mjs tests/github-credential.test.mjs tests/github-projects.test.mjs
+        run: node --test tests/engine.test.mjs tests/mcp.test.mjs tests/scheduler.test.mjs tests/remote-experiment-runner.test.mjs tests/github-experiments.test.mjs tests/github-credential.test.mjs tests/github-projects.test.mjs tests/replication-tools.test.mjs
       - name: Remote runner smoke experiment (public, no secrets)
         run: node implementation/remote-experiment-runner.mjs experiments/runner-smoke/manifest.json
       - name: Preserve experiment receipt
