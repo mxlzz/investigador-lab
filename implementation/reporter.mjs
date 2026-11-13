@@ -13,8 +13,10 @@ export async function deliver(root,report,send,now=Date.now()){
  const dir=path.join(root,'research-state','outbox');fs.mkdirSync(dir,{recursive:true});const p=path.join(dir,report.day+'.json');const lock=p+'.lock';let fd;try{fd=fs.openSync(lock,'wx')}catch{return {status:'busy'}};
  try{
  let s=fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):{status:'pending',attempts:0,report_hash:crypto.createHash('sha256').update(JSON.stringify(report)).digest('hex')};
- if(s.status==='sent'||s.status==='uncertain')return s;
- if(s.status==='sending'){s.status='uncertain';save(p,s);return s;}
+ if(s.status==='sent')return s;
+ // A prior send may have reached Telegram even if its acknowledgement was lost.
+ // Respect a retry window and reuse the persisted report; never strand it permanently.
+ if(s.status==='sending'){s.status='uncertain';s.next_attempt=now+60000;save(p,s);return s;}
  if((s.next_attempt||0)>now)return s;
  // Private content never leaves the workspace through this reporter.
  const publicReport={...report,projects:report.projects.filter(p=>p.visibility==='public')};

@@ -39,3 +39,9 @@ El motor rechaza experimentos, transferencias remotas y publicaciones estables. 
 La programación se conserva en el almacén nativo del Gateway. Una actualización de la app que cambie las rutas de Node/CLI requiere comprobar y ajustar la definición del job. No se reinició el Gateway del usuario para probar persistencia; se verificaron procesos nuevos de worker, estado guardado y definición nativa.
 
 No publicar research-state/, credenciales, tokens ni configuración privada de OpenClaw. El journal detecta cambios accidentales; su hash no es una firma contra un atacante con escritura total del workspace.
+
+## Correcciones posteriores a 0.3.0 (en rama experimental)
+
+- Selección por prioridad humana antes que antigüedad de último intento; turnos justos entre proyectos de igual prioridad. Un proyecto de mayor prioridad puede acaparar ejecución mientras tenga trabajo elegible: una política de equidad global requiere diseño específico.
+- Ante envío Telegram de resultado incierto, conservar informe y reintentar automáticamente tras una espera; puede existir un duplicado excepcional si Telegram había recibido la solicitud pero se perdió la confirmación. Se privilegia cumplir el envío sin intervención del usuario.
+- CI en GitHub comprueba Node 24 y la batería de tests en pushes y PRs. Una ejecución de CI no reemplaza pruebas sobre el Gateway, Telegram ni sandbox reales.

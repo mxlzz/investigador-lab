@@ -21,3 +21,9 @@ Se implementó una cola persistente con leases, exclusión, recuperación, pausa
 La prueba técnica ResNet completó el recorrido documental con fuentes públicas reales y continuaciones disparadas por el Gateway. La prueba final de cola vacía confirmó NO_REPLY. La versión final tiene 30 pruebas automatizadas aprobadas. Evidencia, correcciones y límites: LOCAL_ACCEPTANCE.md y su traza JSON sanitizada.
 
 Los puntos prioritarios 1 (investigación documental probada) y 2 (continuidad local entre sesiones) quedan operativos dentro del alcance descrito. El punto 3 no se habilita sin un ejecutor aislado; Docker no está disponible y WSL informó no estar instalado. Telegram, auditoría y continuidad remota continúan aplazados. No se publicaron credenciales ni el expediente privado completo, ni se hizo merge o release estable.
+
+## 2026-11-12 — auditoría de alcance y correcciones urgentes (rama experimental)
+
+Revisión externa al PR #2 identificó: integración limitada a fuentes Crossref/arXiv, motor de experimentos bloqueado por ausencia de sandbox, auditoría independiente no conectada, continuidad con PC apagada no implementada y reporte Telegram sin activar. Se corrigió en código el orden de prioridad de proyectos y el reintento de entregas inciertas. Se incorporaron pruebas de regresión y workflow de CI; los resultados de las pruebas **no se declaran aprobados** hasta observar su ejecución en GitHub.
+
+El estado de instalación local de Codex previo a estas correcciones no garantiza que el código nuevo esté desplegado en la PC; requiere sincronización y pruebas reales de OpenClaw. Ningún release estable ni merge a main fue realizado.
