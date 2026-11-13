@@ -48,6 +48,62 @@ export class Engine{
   const refs=[...(data.support_ids||[]),...(data.source_ids||[]),...(data.material_ids||[])];for(const r of refs)if(!s.events.some(e=>e.key===r))fail('Referencia inexistente '+r);
   return this.append(project,key,kind,data);
  });}
+
+ // The model may submit a public experiment plan but cannot invent execution.
+ planExperiment(project,key,data){return this.locked(project,()=>{
+  const s=this.state(project);
+  if(s.created.visibility!=='public')fail('Experimento remoto requiere proyecto expresamente público');
+  if(!s.completed.includes('novelty_review')||!s.completed.includes('experiment_design'))fail('Faltan novedad comprobada o diseño experimental');
+  if(!data||data.project_id!==project||typeof data.experiment_id!=='string'||!/^[-_A-Za-z0-9]{1,80}$/.test(data.experiment_id))fail('Identidad de experimento inválida');
+  if(typeof data.manifest_path!=='string'||!/^experiments\/[A-Za-z0-9_-]+\/manifest\.json$/.test(data.manifest_path))fail('Manifiesto fuera de directorio público');
+  if(!/^[0-9a-f]{40}$/.test(data.source_commit||'')||!/^[0-9a-f]{64}$/.test(data.manifest_sha256||''))fail('Se exige commit y SHA256 exactos');
+  if(!/^[a-z][a-z0-9_]{0,79}$/.test(data.metric||'')||!['minimize','maximize'].includes(data.direction))fail('Métrica y criterio de comparación inválidos');
+  if(data.classification!=='public'||data.monetary_budget!==0)fail('Solo código/datos públicos, gasto cero');
+  const h=s.events.find(e=>e.key===data.hypothesis_id&&e.kind==='hypothesis');
+  if(!h)fail('Hipótesis registrada inexistente');
+  const novelty=s.events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='novelty_review'&&e.data.output.status==='ok'&&e.data.output.hypothesis_id===data.hypothesis_id)?.data.output;
+  const design=s.events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='experiment_design'&&e.data.output.status==='ok'&&e.data.output.hypothesis_id===data.hypothesis_id)?.data.output;
+  if(!novelty||!design||!['experiment','replicate_for_validation','differentiate'].includes(novelty.recommendation))fail('Antecedentes y diseño no autorizan prueba');
+  if(s.events.some(e=>e.kind==='experiment_plan'&&e.data.experiment_id===data.experiment_id&&e.key!==key))fail('ID experimental ya usado');
+  return this.append(project,key,'experiment_plan',{
+   project_id:project,experiment_id:data.experiment_id,hypothesis_id:data.hypothesis_id,
+   manifest_path:data.manifest_path,manifest_sha256:data.manifest_sha256,
+   source_commit:data.source_commit,metric:data.metric,direction:data.direction,
+   classification:'public',monetary_budget:0,design_event_key:s.events.findLast(e=>e.kind==='phase'&&e.data.output===design)?.key||null
+  });
+ });}
+ experimentDispatch(project,key,data){return this.locked(project,()=>{
+  const s=this.state(project),plan=s.events.find(e=>e.key===data?.plan_key&&e.kind==='experiment_plan');
+  if(!plan)fail('Plan experimental inexistente');
+  if(s.events.some(e=>e.kind==='experiment_dispatch'&&e.data.plan_key===data.plan_key&&e.key!==key))fail('El experimento ya tiene solicitud de ejecución');
+  if(typeof data.request_id!=='string'||!/^[0-9a-f-]{36}$/.test(data.request_id)||data.workflow!=='investigador-experiment.yml')fail('Solicitud remota inválida');
+  if(typeof data.repository!=='string'||!/^[-.\w]+\/[-.\w]+$/.test(data.repository))fail('Repo inválido');
+  return this.append(project,key,'experiment_dispatch',data);
+ });}
+ // Restricted internal API: MCP exposes only experiment_poll, never direct import.
+ importVerifiedExperiment(project,key,data){return this.locked(project,()=>{
+  const s=this.state(project),plan=s.events.find(e=>e.key===data?.plan_key&&e.kind==='experiment_plan');
+  const dispatch=s.events.find(e=>e.key===data?.dispatch_key&&e.kind==='experiment_dispatch'&&e.data.plan_key===data.plan_key);
+  if(!plan||!dispatch)fail('No hay plan y solicitud vinculados');
+  const r=data.receipt,g=data.github;
+  if(!r||!g||r.project_id!==project||r.experiment_id!==plan.data.experiment_id||
+    r.manifest_sha256!==plan.data.manifest_sha256||r.source_commit!==plan.data.source_commit||
+    r.request_id!==dispatch.data.request_id||r.github_repository!==dispatch.data.repository||
+    String(r.github_run_id)!==String(g.run_id)||g.repository!==dispatch.data.repository||
+    g.workflow!==dispatch.data.workflow||g.conclusion!=='success')fail('Evidencia experimental incompatible con solicitud');
+  if(r.metric!==plan.data.metric||r.direction!==plan.data.direction||!Array.isArray(r.results)||
+    r.results.length!==2||r.results[0]?.id!=='baseline'||r.results[1]?.id!=='candidate')fail('Resultados no reproducen el contrato');
+  if(![r.baseline,r.candidate,r.improvement].every(Number.isFinite)||!Number.isSafeInteger(g.run_id))fail('Métricas o identificador de ejecución inválido');
+  if(s.events.some(e=>e.kind==='experiment_result'&&e.data.plan_key===data.plan_key&&e.key!==key))fail('El plan ya tiene resultado importado');
+  return this.append(project,key,'experiment_result',{
+   plan_key:data.plan_key,dispatch_key:data.dispatch_key,hypothesis_id:plan.data.hypothesis_id,
+   experiment_id:plan.data.experiment_id,metric:r.metric,direction:r.direction,
+   baseline:r.baseline,candidate:r.candidate,improvement:r.improvement,provisional:r.provisional,
+   source_commit:r.source_commit,manifest_sha256:r.manifest_sha256,
+   raw_receipt:r,github:g,verified_at:data.verified_at,
+   limitations:'Resultado observado en GitHub Actions para esta ejecución; superioridad general o causalidad todavía requieren evaluación.'
+  });
+ });}
  accept(project,key,envelope,output){return this.locked(project,()=>{
   if(envelope&&Object.keys(envelope).length===1&&envelope.task_id)envelope=read(path.join(this.dir(project),'envelopes',id(envelope.task_id)+'.json'));
   const s=this.state(project);const old=s.events.find(e=>e.key===key);if(old){if(old.kind!=='phase'||hash(old.data.output)!==hash(output)||(old.data.envelope_digest||hash(old.data.envelope))!==hash(envelope))fail('Conflicto de idempotencia');return old;}
@@ -84,13 +140,14 @@ export class Engine{
   return this.append(project,key,'phase',{envelope:{engine:envelope.engine,task_id:envelope.task_id,phase:envelope.phase,state_digest:s.lastDigest,approved_scope:envelope.approved_scope,prompt_hashes:envelope.prompt_hashes},envelope_digest:hash(envelope),output});
  });}
  gate(project,action,data={}){const s=this.state(project);if(action==='experiment'){
-  if(!s.completed.includes('novelty_review')||!s.completed.includes('experiment_design'))fail('Falta control de antecedentes/diseño');
-  fail('Ejecutor aislado con límites de CPU/RAM e inactividad no disponible; no se ejecuta código externo');
+  const plan=s.events.find(e=>e.key===data.plan_key&&e.kind==='experiment_plan');
+  if(!plan||s.created.visibility!=='public')fail('Solo plan público de GitHub Actions registrado');
+  return {allowed:true,mode:'github_actions_public',plan_key:plan.key,monetary_budget:0};
  }if(action==='remote'){if(s.created.visibility!=='public'||data.classification!=='public')fail('Datos privados no admitidos a remoto');fail('Ejecutor remoto y repositorio de proyecto aún no configurados');}
  if(action==='release'){if(s.events.some(e=>e.kind==='audit'&&e.data.findings.some(f=>f.severity==='critical')))fail('Publicación bloqueada por auditoría crítica');fail('Publicación estable requiere autorización humana externa; este motor no publica');}
  fail('Acción desconocida');}
  report(day){if(!/^\d{4}-\d{2}-\d{2}$/.test(day))fail('Fecha inválida');fs.mkdirSync(path.join(this.base,'projects'),{recursive:true});const projects=fs.readdirSync(path.join(this.base,'projects'),{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>this.state(e.name));const out=path.join(this.base,'reports',day+'.json');if(fs.existsSync(out))return read(out);const report={day,timezone:'America/Argentina/Buenos_Aires',created_at:new Date().toISOString(),projects:projects.map(s=>({project:s.project,visibility:s.created.visibility,request:s.created.request,completed:s.completed,last_digest:s.lastDigest,changes:s.events.filter(e=>new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Argentina/Buenos_Aires'}).format(new Date(e.time))===day).map(e=>({id:e.key,kind:e.kind})),blockers:['experiments_require_isolated_runner']}))};atomic(out,report);return report;}
- health(){return {version:VERSION,root:this.root,phases:Object.keys(PROMPTS),capabilities:{persistent_journal:true,schema_validation:true,evidence_reference_checks:true,documentary_workflow:true,bibliographic_search:'crossref',scheduler_queue:true,experiment_runner:false,remote_runner:false,independent_auditor:false,telegram_requires_credentials:true},not_a_security_boundary:true};}
+ health(){return {version:VERSION,root:this.root,phases:Object.keys(PROMPTS),capabilities:{persistent_journal:true,schema_validation:true,evidence_reference_checks:true,documentary_workflow:true,bibliographic_search:'crossref',scheduler_queue:true,experiment_runner:'github_actions_public_with_authorization',remote_runner:'github_actions_public_only',independent_auditor:false,telegram_requires_credentials:true},not_a_security_boundary:true};}
 }
 
 async function main(){const [cmd,...args]=process.argv.slice(2);const root=process.env.INVESTIGADOR_ROOT||path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');const e=new Engine(root);let out;
