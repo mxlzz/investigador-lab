@@ -5,22 +5,21 @@
     "failed": 0
   },
   "limitations": [
-    "remote creation and synchronization acceptance pending token permissions",
-    "experimental runner remains separate and requires Actions write",
+    "experimental runner remains separate and requires public project authorization",
     "no claim of scientific investigation from the infrastructure fixture"
   ],
   "live": {
-    "repository_creation": "blocked",
+    "repository_creation": "verified_private",
     "source_read": "verified",
     "repository_discovery": "verified",
     "fixture_paused": true,
-    "github_status": 403,
-    "sync": "blocked",
+    "github_status": 200,
+    "sync": "verified",
     "source_recorded_with_commit": true,
-    "required_creation_permission": [
-      "repository_creation=write",
-      "administration=write (alternative)"
-    ]
+    "repeated_sync": "unchanged",
+    "remote_snapshot_readback_matches": true,
+    "branch_ref_matches_commit": true,
+    "initial_permission_block_resolved": true
   },
   "installed": {
     "identity": "managed_memory_only",
@@ -34,5 +33,10 @@
       "github_read"
     ],
     "periodic_job_unchanged": true
+  },
+  "ci": {
+    "source_commit": "e94952b29ae59bf14da000a72f1c0469f2cf9e30",
+    "url": "https://github.com/mxlzz/investigador-lab/actions/runs/43411460755",
+    "conclusion": "success"
   }
 }

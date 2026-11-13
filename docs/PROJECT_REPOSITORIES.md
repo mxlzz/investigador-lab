@@ -64,3 +64,7 @@ Referencias oficiales: [creación de repositorios](https://docs.github.com/en/re
 Los repositorios privados son destinos documentales, no runners. Los experimentos públicos siguen usando el repositorio configurado en `INVESTIGADOR_GITHUB_REPO`, con sus controles de privacidad, commit, manifiesto y artefacto. Esta implementación no instala workflows ni ejecuta código automáticamente en los repositorios nuevos, y no depende de la shell genérica `gh` del paquete MSIX.
 
 No se habilitan Telegram, auditor independiente, ejecución con PC apagada ni gasto adicional. Las pruebas de integración de repositorios no son evidencia científica.
+
+## Aceptación real en Windows
+
+El agente instalado completó el circuito: expediente técnico privado → creación automática en GitHub → lectura real de una fuente → commit del avance en la rama de proyecto → segunda sincronización `unchanged`. Una comprobación independiente descargó `progress.json` usando el commit registrado y lo comparó exactamente con el snapshot local; también verificó la privacidad y el ref remoto. La fixture quedó pausada. Las 67 pruebas locales y la CI del commit de código e94952b aprobaron. Evidencia sanitizada: `PROJECT_REPOSITORIES_ACCEPTANCE.json`. El 403 inicial se resolvió guardando Contents y Repository creation con lectura/escritura; no fue necesario cambiar el valor del token.
