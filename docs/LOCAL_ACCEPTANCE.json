@@ -1,0 +1,98 @@
+{
+  "test": "Documentary acceptance on public ResNet sources",
+  "version": "0.3.0",
+  "automated_tests": 30,
+  "confirmed_phases": [
+    {
+      "phase": "intake",
+      "status": "ok",
+      "at": "2026-11-13T00:54:05.680Z"
+    },
+    {
+      "phase": "search_plan",
+      "status": "ok",
+      "at": "2026-11-13T00:55:59.089Z"
+    },
+    {
+      "phase": "extract_evidence",
+      "status": "ok",
+      "at": "2026-11-13T00:58:12.352Z"
+    },
+    {
+      "phase": "map_knowledge",
+      "status": "ok",
+      "at": "2026-11-13T00:58:53.521Z"
+    },
+    {
+      "phase": "report",
+      "status": "ok",
+      "at": "2026-11-13T01:00:51.015Z"
+    },
+    {
+      "phase": "report",
+      "status": "ok",
+      "at": "2026-11-13T01:05:21.362Z"
+    }
+  ],
+  "public_primary_sources": [
+    {
+      "url": "https://doi.org/10.1109/cvpr.2016.90",
+      "access_level": "metadata",
+      "retrieved_at": "2026-11-13T00:56:47.440Z",
+      "http_status": 200,
+      "sha256": "748cc3cacb534a9ce019fba61d0d658515b006e5e1b632d4b4c3b5f7b279911c"
+    },
+    {
+      "url": "https://arxiv.org/abs/1512.03385",
+      "access_level": "abstract",
+      "retrieved_at": "2026-11-13T00:56:55.796Z",
+      "http_status": 200,
+      "sha256": "1123388662751cb91e18ae53e49c4c3a5e10aeedcb423c17cd4c2dd99d6f1db1"
+    }
+  ],
+  "cycles": [
+    {
+      "phase": "intake",
+      "outcome": "progress",
+      "started_at": "2026-11-13T00:53:36.685Z",
+      "finished_at": "2026-11-13T00:54:08.516Z"
+    },
+    {
+      "phase": "search_plan",
+      "outcome": "progress",
+      "started_at": "2026-11-13T00:55:42.147Z",
+      "finished_at": "2026-11-13T00:56:02.080Z"
+    },
+    {
+      "phase": "gather_evidence",
+      "outcome": "progress",
+      "started_at": "2026-11-13T00:56:42.141Z",
+      "finished_at": "2026-11-13T00:58:15.182Z"
+    },
+    {
+      "phase": "map_knowledge",
+      "outcome": "progress",
+      "started_at": "2026-11-13T00:58:42.168Z",
+      "finished_at": "2026-11-13T01:00:03.296Z"
+    },
+    {
+      "phase": "report",
+      "outcome": "progress",
+      "started_at": "2026-11-13T01:00:42.129Z",
+      "finished_at": "2026-11-13T01:00:53.584Z"
+    },
+    {
+      "phase": "report",
+      "outcome": "progress",
+      "started_at": "2026-11-13T01:05:01.409Z",
+      "finished_at": "2026-11-13T01:05:29.419Z"
+    }
+  ],
+  "idle_receipt": {
+    "status": "ok",
+    "summary": "NO_REPLY",
+    "duration_ms": 119
+  },
+  "final_cadence_minutes": 15,
+  "experiments_executed": 0
+}

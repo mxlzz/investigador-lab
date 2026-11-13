@@ -1,3 +1,5 @@
+> Implementación local 0.3.0: investigación documental y continuidad local: ver [guía del motor](implementation/README.md), [prueba real](docs/LOCAL_ACCEPTANCE.md) y [registro de avance](docs/IMPLEMENTATION_LOG.md). El texto siguiente describe la línea base de diseño; no se declara implementado todo su alcance.
+
 # Investigador Lab
 
 **Estado:** diseño preliminar — no hay implementación funcional ni experimentos ejecutados.
@@ -40,3 +42,4 @@ Cloná o descargá el repositorio en una carpeta local. En Obsidian elegí **Ope
 ## Alcance actual
 
 Este repositorio contiene **especificaciones y registros iniciales de ejemplo**, no un agente autónomo operativo. Todavía no se integró AI Scientist v3 ni se validó la configuración de OpenClaw. Toda etapa de implementación requerirá pruebas.
+
