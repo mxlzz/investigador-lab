@@ -66,3 +66,7 @@ Documento de operación: `spec/12-auditores-chatgpt-operacion.md`. Identidad: `s
 ## Extensión futura — revisión estratégica de rumbo (solo diseño)
 
 Antes de implementar, leer `spec/13-revision-estrategica.md`, el prompt **existente** `spec/07-prompts/09-next-cycle.md` y DEC-0034. No crear fase ni prompt nuevo: el control longitudinal corresponde al contrato `next_cycle` y solo se solicita ante evidencia de posible desvío. Precisar los vínculos por línea, los disparadores y la validación del motor; probar R01–R08 antes de declarar que detecta estrategias instrumentales improductivas. El Auditor puede aportar evidencia mediante un Issue, sin sustituir al planificador.
+
+## Repriorización de interfaz (DEC-0035)
+
+**Obsidian está postergado**: no implementar la antigua etapa E6 en el siguiente trabajo. La presentación prioritaria será GitHub según `spec/14-github-readable-research.md` (README visible, BITACORA, RESULTADOS y páginas de conocimiento enlazadas), sin crear otro journal ni grafo. Probar G01–G12. Para repos vinculados no sobrescribir README ajenos; conservar datos canónicos y publicar solamente material autorizado. La comunicación Auditor–Investigador sigue siendo una capacidad separada.

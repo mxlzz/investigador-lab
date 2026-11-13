@@ -285,3 +285,12 @@
 - Propuesta simplificada: usar el ciclo `next_cycle` y añadir síntesis `line_assessment` solo si hay señales objetivas de repetición sin nueva evidencia, desvío instrumental, alternativa/baseline que cambia la evaluación o comentario fundado del Auditor. El host verifica referencias y no se conforma con una justificación textual.
 - **Se retira el umbral arbitrario de tres iteraciones, la fase independiente y el nuevo prompt `12-strategic-review.md`**. No crear otra automatización periódica. El control no prohíbe seguir cuando hay progreso real.
 - Contrato de diseño y pruebas R01–R08: `spec/13-revision-estrategica.md`; extensión condicional de `spec/07-prompts/09-next-cycle.md`. Queda por implementar y validar antes de atribuirle resultados.
+
+## DEC-0035 — GitHub como interfaz principal de investigación; Obsidian postergado
+- Fecha: 2026-11-13
+- Estado: **orientación acordada por pedido explícito del usuario; detalles técnicos propuestos, no implementados**.
+- Decisión: priorizar que cada repositorio de investigación sea inteligible desde GitHub, con README visible, bitácora cronológica de decisiones y razones, resultados enlazados y fichas de conocimiento navegables. Obsidian queda postergado.
+- Evitar un journal paralelo: las páginas son vistas regenerables de los eventos y evidencias existentes. El actual `progress.json` es un snapshot técnico, no la bitácora narrativa.
+- Reutilizar las relaciones tipadas ya previstas en E5, `map_knowledge.proposed_edges` y `record.schema.json.links`. Completar su persistencia/validación y convertirlas en enlaces Markdown comprobables. Consultar conexiones nuevas como **hipótesis**, no como hallazgos probados, y aplicar el novelty gate ya existente antes de invertir en experimentos.
+- Ajuste de visibilidad: actualmente `github-projects.mjs` publica bajo `.investigador/projects/` en una rama `investigador-<slug>`, lo que no asegura portada visible. Priorizar README accesible en la rama por defecto para repos nuevos gestionados; no sobrescribir repositorios vinculados preexistentes sin autorización.
+- Especificación y pruebas G01–G12: `spec/14-github-readable-research.md`. La especificación anterior `spec/11-obsidian-projection.md` queda histórica y pausada. Sin cambios de prompts operativos ni código en este chat.

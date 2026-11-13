@@ -1,6 +1,6 @@
 # Obsidian como proyección de consulta — diseño v0.1
 
-**Estado:** propuesta; no hay exportación automática instalada.  
+**Estado:** propuesta histórica **postergada (DEC-0035, 2026-11-13)**. GitHub es ahora la interfaz principal; no implementar exportación `vault/` ni sincronización Obsidian en la etapa siguiente. Ver `spec/14-github-readable-research.md`.  
 **Objetivo:** inspeccionar investigaciones e intervenciones del Auditor sin convertir notas Markdown en la fuente de verdad de un experimento.
 
 ## 1. Tres capas diferentes
