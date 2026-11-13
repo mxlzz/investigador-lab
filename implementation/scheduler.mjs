@@ -15,7 +15,8 @@ export function documentaryTask(state,workflow='research'){
   if(phase==='evaluation'){
    const review=state.events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='novelty_review'&&e.data.output.status==='ok')?.data.output;
    if(!review||!['experiment','replicate_for_validation','differentiate'].includes(review.recommendation))continue;
-   const plans=state.events.filter(e=>e.kind==='experiment_plan');
+   const design=state.events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='experiment_design'&&e.data.output.status==='ok');
+   const plans=state.events.filter(e=>e.kind==='experiment_plan'&&(!design||e.data.design_event_key===design.key));
    const plan=plans.at(-1);
    if(!plan)return 'experiment_plan';
    const done=state.events.some(e=>e.kind==='experiment_result'&&e.data.plan_key===plan.key);
@@ -36,7 +37,7 @@ export class Scheduler{
   if(alive)throw new Error('Planificador ocupado');fs.renameSync(this.lock,this.lock+'.recovered-'+crypto.randomUUID());fd=fs.openSync(this.lock,'wx');
  }try{fs.writeFileSync(fd,JSON.stringify({pid:process.pid}));const s=this.load();const result=fn(s);this.save(s);return result;}finally{fs.closeSync(fd);fs.unlinkSync(this.lock);}}
  states(){const dir=path.join(this.engine.base,'projects');return fs.existsSync(dir)?fs.readdirSync(dir,{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>this.engine.state(e.name)):[];}
- task(s,p){const config=s.projects[p.project]||{};return config.pending?.length?config.pending[0]:documentaryTask(p,config.workflow);}
+ task(s,p){const config=s.projects[p.project]||{};if(config.pending?.[0]==='evaluation')return documentaryTask({...p,completed:p.completed.filter(phase=>phase!=='evaluation')},config.workflow);return config.pending?.length?config.pending[0]:documentaryTask(p,config.workflow);}
  select(s,now){const quota=(s.daily[day(now)]||0)<24;
   return this.states().filter(p=>s.projects[p.project]?.enabled!==false&&(s.projects[p.project]?.nextAt||0)<=now&&this.task(s,p)&&(quota||['experiment_submit','experiment_poll'].includes(this.task(s,p)))).sort((a,b)=>(Number(a.created.priority??1)-Number(b.created.priority??1))||((s.projects[a.project]?.lastAt||0)-(s.projects[b.project]?.lastAt||0))).map(p=>({project:p.project,phase:this.task(s,p),beforeDigest:p.lastDigest,beforeSeq:p.events.length}))[0]||null;
  }
