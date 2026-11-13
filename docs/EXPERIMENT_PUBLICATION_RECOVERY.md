@@ -17,6 +17,8 @@ El worker exigía publicar scripts y un manifiesto antes de registrar el plan, p
 * Una intención durable conserva la propuesta antes de publicar. Si se pierde una confirmación de GitHub, recupera la referencia y verifica cada archivo contra el commit exacto. Solo entonces registra el plan. Un error de lectura o un contenido distinto impide aceptarlo.
 * experiment_publish expone la misma operación mediante MCP. Las ejecuciones programadas la realizan desde el host, sin secuencias repetidas de herramientas del modelo. Los scripts se ejecutan únicamente en GitHub Actions.
 * Una evaluación encolada pasa primero por plan, dispatch y poll. Un diseño nuevo no reutiliza planes de diseños anteriores.
+* Durante la aceptación real, evaluation repitió llamadas accept sin key/envelope. Se detuvo su turno exacto y se comprobaron agent.wait y cron terminales antes de reconciliar su reserva. evaluation y report ahora reciben un sobre estructurado y el host confirma la salida; evaluation debe referenciar la key del resultado verificado. No se repite el dispatch.
+* El modelo luego devolvió el ID lógico del experimento en vez de la key del recibo. El host normaliza esa referencia únicamente si identifica un resultado verificado único; rechaza ausencia o ambigüedad y no modifica los hallazgos. Se recuperó la respuesta ya generada comprobando que el estado seguía siendo el mismo, se aceptó la evaluación y se avanzó al informe sin otra llamada al modelo para esa evaluación.
 
 ## Despliegue y réplica
 
@@ -32,8 +34,8 @@ Los proyectos privados siguen sin poder publicar experimentos en infraestructura
 
 ## Evidencia de aceptación
 
-84 pruebas locales aprobadas. Se verifican referencias inventadas, proyectos privados, rutas fuera del directorio permitido, patrones de secretos, métricas incompatibles, recuperación de confirmación perdida, contenido remoto alterado, idempotencia, bloqueo estructurado y dependencias de evaluación. CI incluye la nueva suite.
+86 pruebas locales aprobadas. Se verifican referencias inventadas, proyectos privados, rutas fuera del directorio permitido, patrones de secretos, métricas incompatibles, recuperación de confirmación perdida, contenido remoto alterado, idempotencia, bloqueo estructurado, dependencias de evaluación, aceptación de evaluación/informe por el host y normalización no ambigua de IDs. CI incluye la nueva suite.
 
-En la instalación real: diseño nuevo aceptado con hipótesis existente; propuesta generada por el modelo y publicada por el host; plan registrado tras lectura independiente; dispatch único; Actions finalizado success; artefacto verificado e importado. Código público fijado en a16996100a4af642a9de1fcd284a135f19631d9d. Ejecución: [43519292261](https://github.com/mxlzz/investigador-lab/actions/runs/43519292261). El proyecto quedó habilitado con cero fallos consecutivos.
+En la instalación real: diseño nuevo aceptado con hipótesis existente; propuesta generada por el modelo y publicada por el host; plan registrado tras lectura independiente; dispatch único; Actions finalizado success; artefacto verificado e importado; evaluación e informe aceptados. Código público fijado en a16996100a4af642a9de1fcd284a135f19631d9d. Ejecución: [43519292261](https://github.com/mxlzz/investigador-lab/actions/runs/43519292261). El proyecto quedó habilitado con cero fallos consecutivos.
 
 Esto prueba el circuito experimental Windows → GitHub → Windows. No prueba superioridad general de un algoritmo: el primer script generado mide un caso sintético aleatorio, no toda la cobertura del diseño. La diferencia de heapUsed no equivale a memoria total asignada y puede estar afectada por GC y almacenamiento de typed arrays. La evaluación debe conservar estas limitaciones y proponer controles adicionales. No se publican tokens, sesiones o expedientes privados.

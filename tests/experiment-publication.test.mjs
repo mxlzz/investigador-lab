@@ -7,6 +7,7 @@ import {Engine} from '../implementation/engine.mjs';
 import {ExperimentPublication} from '../implementation/experiment-publication.mjs';
 import {Scheduler} from '../implementation/scheduler.mjs';
 import {spawnSync} from 'node:child_process';
+import {resolveEvaluationOutput} from '../implementation/scheduler-tick.mjs';
 function fixture(t,visibility='public'){
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'publication-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
  fs.cpSync(path.resolve(import.meta.dirname,'../spec'),path.join(root,'spec'),{recursive:true});const e=new Engine(root);e.init('demo','Public synthetic experiment',{visibility});
@@ -70,4 +71,22 @@ test('structured experiment preparation records an explicit block and releases t
  const cli=path.join(e.root,'blocked-model.mjs');fs.writeFileSync(cli,`import fs from 'node:fs';const text=fs.readFileSync(process.argv[process.argv.indexOf('--message-file')+1],'utf8');if(!text.startsWith('PLANIFICACIÓN ESTRUCTURADA'))throw Error('Wrong prompt');console.log(JSON.stringify({status:'ok',result:{payloads:[{text:JSON.stringify({status:'blocked',blockers:['Cannot implement this fixture faithfully']})}]}}));`);
  const r=spawnSync(process.execPath,[path.resolve(import.meta.dirname,'../implementation/scheduler-tick.mjs')],{env:{...process.env,INVESTIGADOR_ROOT:e.root,INVESTIGADOR_OPENCLAW_ENTRY:cli,INVESTIGADOR_GITHUB_PROFILE:'',INVESTIGADOR_GITHUB_TOKEN:''},encoding:'utf8',timeout:10000});
  assert.equal(r.status,1,r.stdout+r.stderr);assert.equal(s.load().lease,null);assert.equal(s.load().projects.demo.enabled,false);assert.match(s.load().projects.demo.reason,/Cannot implement/);assert.equal(e.events('demo').filter(e=>e.kind==='experiment_plan').length,0);
+});
+test('evaluation and report are structured host transactions referencing the verified result key',t=>{
+ const {e}=fixture(t),s=new Scheduler(e);
+ e.locked('demo',()=>{
+  for(const phase of ['intake','search_plan','extract_evidence','map_knowledge','hypotheses'])e.append('demo','fixture-'+phase,'phase',{output:{phase,status:'ok'}});
+  e.append('demo','plan','experiment_plan',{design_event_key:'design'});e.append('demo','verified-receipt','experiment_result',{plan_key:'plan'});
+ });
+ s.control('demo',true,'Test evaluation');
+ const cli=path.join(e.root,'evaluation-model.mjs');fs.writeFileSync(cli,`import fs from 'node:fs';const text=fs.readFileSync(process.argv[process.argv.indexOf('--message-file')+1],'utf8');if(!text.startsWith('PLANIFICACIÓN ESTRUCTURADA'))throw Error('Expected structured host prompt');const env=JSON.parse(text.slice(text.indexOf('{'))),out={};for(const k of env.output_contract.required){const p=env.output_contract.properties[k];out[k]=p.const??p.enum?.[0]??(p.type==='array'?[]:p.type==='object'?{}:'');}Object.assign(out,{status:'ok'});if(out.phase==='evaluation')out.experiment_id='verified-receipt';if(out.phase==='report')out.summary='Fixture result with limited scope';console.log(JSON.stringify({status:'ok',result:{payloads:[{text:JSON.stringify(out)}]}}));`);
+ for(const phase of ['evaluation','report']){
+  const r=spawnSync(process.execPath,[path.resolve(import.meta.dirname,'../implementation/scheduler-tick.mjs')],{env:{...process.env,INVESTIGADOR_ROOT:e.root,INVESTIGADOR_OPENCLAW_ENTRY:cli,INVESTIGADOR_GITHUB_PROFILE:'',INVESTIGADOR_GITHUB_TOKEN:''},encoding:'utf8',timeout:10000});assert.equal(r.status,0,r.stdout+r.stderr);assert.ok(e.state('demo').completed.includes(phase));assert.equal(s.load().lease,null);
+ }
+});
+test('evaluation ID normalization only resolves a unique verified receipt without changing findings',()=>{
+ const result={key:'receipt-key',kind:'experiment_result',data:{experiment_id:'logical-id'}},state={events:[result]},output={phase:'evaluation',status:'ok',experiment_id:'logical-id',limitations:['Only this run']};
+ assert.deepEqual(resolveEvaluationOutput(state,output),{...output,experiment_id:'receipt-key'});assert.equal(output.experiment_id,'logical-id');
+ assert.throws(()=>resolveEvaluationOutput({events:[]},output),/único resultado/);
+ assert.throws(()=>resolveEvaluationOutput({events:[result,{...result,key:'other-receipt'}]},output),/único resultado/);
 });

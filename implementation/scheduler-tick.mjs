@@ -8,6 +8,12 @@ import {syncIfConfigured} from './github-projects.mjs';
 import {researchTiming} from './timing.mjs';
 import crypto from 'node:crypto';
 import {ExperimentPublication,publicationContract} from './experiment-publication.mjs';
+export function resolveEvaluationOutput(state,output){
+ if(output?.phase!=='evaluation'||output.status!=='ok')return output;
+ const matches=state.events.filter(e=>e.kind==='experiment_result'&&(e.key===output.experiment_id||e.data.experiment_id===output.experiment_id));
+ if(matches.length!==1)throw Error('La evaluación requiere un único resultado verificado para su identificador');
+ return {...output,experiment_id:matches[0].key};
+}
 export function cycleMessage(task){return `Continuación documental autorizada. Proyecto: ${task.project}. Paso asignado: ${task.phase}. ID: ${task.token}.
 En TODAS las llamadas de este proyecto incluí project="${task.project}", también en accept. Para accept usá key="${task.phase}-${task.token}" y copiá todos los campos required del output_contract; no omitas los arrays vacíos ni budget_check. state_snapshot_id de next_cycle debe ser el project_state.lastDigest del sobre recién preparado, no un hash antiguo dentro del historial.
 La salida narrativa no confirma el paso: debés llamar prepare y accept con todos los campos obligatorios del contrato. En next_cycle, si no hay trabajo útil, igual registrá una decisión estructurada con selected_action=null y el state_snapshot_id exacto. No sustituyas esa confirmación por control/pausa. Si accept rechaza un campo, corregí ese campo siguiendo el mensaje y reintentá hasta dos veces; no anuncies éxito sin evento aceptado.
@@ -48,7 +54,7 @@ async function main(){const root=process.env.INVESTIGADOR_ROOT||path.resolve(imp
  try{
  if(!entry||!fs.existsSync(entry))throw Error('Falta ruta del CLI OpenClaw en INVESTIGADOR_OPENCLAW_ENTRY');
  if(task.phase==='novelty_review')engine.materializeHypotheses(task.project);
- const envelope=['next_cycle','novelty_review','experiment_design'].includes(task.phase)?engine.envelope(task.project,task.phase):null;
+ const envelope=['next_cycle','novelty_review','experiment_design','evaluation','report'].includes(task.phase)?engine.envelope(task.project,task.phase):null;
  if(task.phase==='experiment_plan'){
   const state=engine.state(task.project),design=state.events.findLast(e=>e.kind==='phase'&&e.data.output.phase==='experiment_design'&&e.data.output.status==='ok');
   if(!design)throw Error('Falta diseño experimental confirmado');
@@ -67,9 +73,10 @@ async function main(){const root=process.env.INVESTIGADOR_ROOT||path.resolve(imp
  }else{
  const phaseInstructions=task.phase==='novelty_review'?'La fase es novelty_review. Elegí hypothesis_id de los eventos kind=hypothesis del expediente; el host registró literalmente las propuestas confirmadas, sin inventar soporte. searches_reviewed debe contener objetos con search_id de eventos kind=search existentes. expected_new_information es string. Respetá los enum del contrato; no uses campos extra. Evaluá los antecedentes reales y sus límites; si no alcanzan, devolvé needs_evidence con búsquedas faltantes. No afirmes novedad ni experimentos ejecutados por razonamiento.':task.phase==='next_cycle'?'Usá state_snapshot_id='+envelope?.project_state.lastDigest+'. Si no hay trabajo útil autorizado, selected_action=null.':'';
  const designInstructions=task.phase==='experiment_design'?' Usá hypothesis_id de un evento kind=hypothesis real con revisión de novedad aceptada compatible; no inventes IDs. Diseñá un protocolo ejecutable en Node 24 con datos sintéticos públicos, controles, semillas y repeticiones, métricas y direction explícitas.':'';
- const message=envelope?'PLANIFICACIÓN ESTRUCTURADA POR EL ORQUESTADOR. El motor ya recuperó y preparó este sobre. Respondé únicamente con el objeto JSON exigido por output_contract, sin markdown ni llamadas a herramientas. El motor validará y persistirá la salida; no llames prepare, accept ni control. Incluí todos los campos required. '+phaseInstructions+designInstructions+' No inventes metas, evidencia ni ejecución.\n'+JSON.stringify(envelope):cycleMessage(task);
+ const resultInstructions=['evaluation','report'].includes(task.phase)?' Para evaluation, experiment_id es la KEY de un evento kind=experiment_result verificado, no el nombre del experimento. Basá las cifras y afirmaciones observadas en sus registros reales. Compará el protocolo ejecutado con el diseño: marcá coberturas faltantes, límites de medición, GC y ausencia de generalización o evidencia estadística. Una mejora numérica no prueba superioridad universal; no inventes mediciones ni controles. Para report, distinguí lo ejecutado de lo propuesto y conservá todas las limitaciones.':'';
+ const message=envelope?'PLANIFICACIÓN ESTRUCTURADA POR EL ORQUESTADOR. El motor ya recuperó y preparó este sobre. Respondé únicamente con el objeto JSON exigido por output_contract, sin markdown ni llamadas a herramientas. El motor validará y persistirá la salida; no llames prepare, accept ni control. Incluí todos los campos required. '+phaseInstructions+designInstructions+resultInstructions+' No inventes metas, evidencia ni ejecución.\n'+JSON.stringify(envelope):cycleMessage(task);
  fs.writeFileSync(prompt,message);
- const result=await runAgent(entry,prompt,{project:task.project,sessionTag:task.token});fs.writeFileSync(path.join(dir,task.token+'.json'),JSON.stringify(result,null,2));if(envelope){let text=(result.result?.payloads||[]).map(p=>p.text||'').join('\n').trim();text=text.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'');engine.accept(task.project,task.phase+'-'+task.token,{task_id:envelope.task_id},JSON.parse(text));}
+ const result=await runAgent(entry,prompt,{project:task.project,sessionTag:task.token});fs.writeFileSync(path.join(dir,task.token+'.json'),JSON.stringify(result,null,2));if(envelope){let text=(result.result?.payloads||[]).map(p=>p.text||'').join('\n').trim();text=text.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'');engine.accept(task.project,task.phase+'-'+task.token,{task_id:envelope.task_id},resolveEvaluationOutput(engine.state(task.project),JSON.parse(text)));}
  }
  }catch(e){error=e.message;}
  const finished=scheduler.finish(task.token,{error});const github=await syncIfConfigured(engine,task.project);console.log(JSON.stringify({project:task.project,phase:task.phase,outcome:finished.outcome,error,github}));if(error||finished.outcome==='failed')process.exitCode=1;
