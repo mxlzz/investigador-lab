@@ -37,3 +37,11 @@ Telegram, auditoría independiente de ChatGPT vía GitHub y ejecución remota qu
 
 Para encargos de síntesis documental, usá control con data.workflow=documentary y motivo. El flujo research conserva hipótesis y revisión de novedad. Para revisar un proyecto terminado ante evidencia nueva dentro de la misma meta, control permite data.restart_from=search_plan (o report para reformular el informe); se exigen nuevos registros confirmados. No reabrir automáticamente solo para consumir ciclos.
 
+
+## Capacidades agregadas en la rama experimental (requieren despliegue local)
+
+- Para ampliar cobertura de antecedentes, `openalex_bibliography` consulta OpenAlex además de Crossref. Respetá los límites gratuitos; no presupongas acceso completo a papers ni búsqueda exhaustiva. Si la fuente falla o devuelve 429, documentalo y seguí con otra ruta permitida.
+- En `research`, el planificador puede pedir la fase `next_cycle` después de `report`. Recuperá `project_state.lastDigest` del sobre y usalo como `state_snapshot_id`. Si hay una nueva pregunta o evidencia que justifique trabajo adicional, seleccioná solamente una fase autorizada en `selected_action.phase` (por ejemplo `search_plan`), con `selection_rationale` y `expected_artifacts` concretos. Si no hay trabajo útil, devolvé `selected_action:null`, sin inventar actividad.
+- La validación rechaza fases `ok` vacías, aunque el JSON cumpla la estructura. No fabriques consultas ni hallazgos para avanzar.
+- Existe un **runner experimental separado en GitHub Actions** para código y datos públicos (`implementation/remote-experiment-runner.mjs`). **Aún no está conectado al MCP ni autorizado para ejecutar experimentos iniciados por vos.** El comando local `gate('experiment')` sigue bloqueado. No eludas esa restricción.
+- Estas instrucciones no demuestran que el Gateway instalado en Windows haya sido actualizado. La versión local se considera antigua hasta sincronización y prueba en el equipo.

@@ -9,3 +9,10 @@
 - Telegram aplazado. Auditoría ChatGPT mediante GitHub aplazada. Ejecución con PC apagada aplazada.
 - Experimentos siguen bloqueados: no hay runner aislado instalado y validado; Docker y WSL no están instalados en el entorno comprobado.
 - No hay sandbox total de las herramientas nativas, validación semántica automática de papers ni garantía monetaria del proveedor de modelo.
+
+## Cambios posteriores presentes solo en GitHub hasta verificar instalación
+
+- Búsqueda OpenAlex complementaria, planificador `next_cycle` para investigación de múltiples vueltas y rechazo de fases vacías.
+- GitHub Actions validó **38 pruebas automatizadas** y un smoke test de comparación baseline/candidato en runner estándar sin secretos.
+- El runner remoto experimental todavía no se integra al Gateway ni al registro de resultados; no se puede declarar que Investigador autónomo ya ejecuta y aprende de experimentos.
+- Para la entrega operativa hace falta sincronizar el workspace instalado y hacer una prueba end-to-end con un encargo nuevo; preservar datos/secretos del usuario.
