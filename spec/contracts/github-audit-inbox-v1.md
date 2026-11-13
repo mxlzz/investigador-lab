@@ -40,12 +40,12 @@ El receptor debe funcionar incluso si hay otra investigación en curso. La inges
 
 ## 4. Formato mínimo que debe publicar ChatGPT
 
-Texto humano explicativo seguido de un bloque legible por máquina con marcador exacto:
+Texto humano explicativo seguido de un marcador y un bloque legible por máquina:
 
-```text
-Observación: el benchmark no parece haber usado el mismo dataset.
+> Observación: el benchmark no parece haber usado el mismo dataset.
 
-<!-- investigador-audit:1 -->
+El cuerpo del comentario debe incluir literalmente el marcador `<!-- investigador-audit:1 -->` y a continuación un único bloque JSON estructurado:
+
 ```json
 {
   "schema_version": "investigador-audit/1",
@@ -60,7 +60,6 @@ Observación: el benchmark no parece haber usado el mismo dataset.
   "requested_check": "Repetir baseline y candidato sobre idénticos datos.",
   "limitations": []
 }
-```
 ```
 
 El ejemplo muestra la estructura, **no un mensaje emitido**. El implementador debe definir el JSON Schema exacto, longitudes y IDs, y validar la procedencia de URLs; el marcador y los IDs no autentican al autor.

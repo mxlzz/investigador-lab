@@ -70,3 +70,12 @@ Un hallazgo crítico vigente debe ser leído por una verificación externa al LL
 ## 9. Fuera del alcance de esta especificación
 
 No se configura hoy la agenda ni el conector, no se crean tareas, no se alteran los PR #2–#7, no se publica una release ni se instala ningún agente en la PC. Esta especificación es material de diseño para revisión, no autorización de implementación.
+
+
+## Protocolo concreto de recepción y cierre — actualización de diseño
+
+La opción recomendada para el envío desde ChatGPT y la recepción por Investigador es **GitHub Issues + API de comentarios**, no la bandeja de notificaciones ni @menciones. Se consulta en el tick existente sin invocar el LLM en vacío; se guarda el comment ID y el cursor antes de avanzar. Consultar `contracts/github-audit-inbox-v1.md`.
+
+El Auditor puede publicar `closure_proposed` con resultado esperado, criterios, pruebas y commit. Investigador verifica autónomamente y responde; si hay desacuerdo, ambos buscan evidencia discriminante antes de elevar la decisión al usuario. Cerrar una investigación es distinto de cerrar el Issue, pausar por bloqueo y publicar una release. Contrato: `contracts/research-closure-v1.md`.
+
+Estas funciones están **solo diseñadas**: todavía no se ha verificado que la automatización programada de ChatGPT pueda escribir bajo identidad diferente en Issues privados.

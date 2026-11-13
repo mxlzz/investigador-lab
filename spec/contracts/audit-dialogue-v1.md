@@ -81,3 +81,12 @@ A08: dos ciclos de auditoría encuentran el mismo problema; reutilizan `finding_
 - Política exacta de aprobación y desbloqueo crítico disputado (DEC-0024).
 - Retención y visibilidad de adjuntos privados, y representación de evidencia local no exportable.
 - Versión definitiva de JSON Schema, catálogo de errores y migración de estados.
+
+
+## Canal Github Issues definido en propuesta posterior
+
+La interfaz de transporte preferida es un **Issue de auditoría por proyecto** y comentarios estructurados, con polling sin LLM cada 15 minutos, correlación, validación de actor, journal y reintento idempotente. Ver `github-audit-inbox-v1.md`. Los tipos propuestos se amplían con `closure_proposed`, `closure_accepted`, `closure_contested`, `closure_deferred` y `closure_reassessed`, sujetos a `research-closure-v1.md`.
+
+Un comentario de cierre no pausa ni archiva un proyecto automáticamente. El cierre requiere contraste de evidencias, registro de estado, sincronización y suspensión únicamente del proyecto. Un desacuerdo entre ambos agentes se intenta resolver con nuevas comprobaciones antes de escalar al usuario; el número de rondas sigue propuesto, no aprobado.
+
+**Límite de seguridad:** si el comentario del Auditor y el del Investigador aparecen publicados por el mismo usuario GitHub, no existe prueba de identidad diferenciada con el mero campo `user.login`. Hasta resolverlo, no debe otorgarse autoridad de bloqueo ni de cierre automático a un texto que reclama ser auditor.

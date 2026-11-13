@@ -35,3 +35,16 @@ Base sugerida: `fix/investigador-timeouts`. Esta rama de diseño contiene exclus
 ## No hacer en este chat
 
 No crear automatizaciones, agentes, tokens, permisos, PR de implementación, cambios en `implementation/`, workflows, instalación local, sincronización activa, merges ni releases. Una prueba de CI de Markdown no comprueba que ChatGPT programado pueda acceder a un repo privado.
+
+
+## Reglas concretas de implementación añadidas
+
+**E0b — Canal de comentarios.** Confirmar que GitHub Issues está habilitado en cada repo de resultados, que el usuario conectado a ChatGPT puede leer/escribir allí en ejecución programada y que existe un actor autenticable distinto de la identidad usada por Investigador. Si ambos publican bajo el mismo usuario GitHub, documentar el bloqueo de atribución de rol; no fingir autoridad independiente. Evaluar identidad técnica separada de GitHub App o cuenta dedicada (si compatible con ChatGPT).
+
+**E1b — Polling en tick.** Antes de reclamar una etapa LLM, consultar Issues autorizados, paginar, deduplicar `comment_id`, validar marcadores/envelope, registrar en el journal y recién entonces confirmar cursor. La ingesta no debe crear jobs duplicados, consumir LLM en vacío ni confundir una @mención con una notificación fiable. Ensayar casos I01–I11.
+
+**E2b — Propuesta de cierre.** Añadir `closure_proposed` como evento de auditoría y procesarlo con verificación del estado/criterios/experimentación desde el motor, sin ejecutar el texto del comentario. Respuestas `closure_accepted/contested/deferred`. Cierre solo luego de journal, checkpoint final y sincronización verificada; detener solo el proyecto, conservar el registro, permitir reapertura explícita con evento. Ensayar C01–C12.
+
+**E3b — Desacuerdo.** Intentar nuevas verificaciones y revisar evidencia aportada. Si no se resuelve dentro de las rondas propuestas y no hay prueba discriminante autorizada, elevar un único paquete al usuario. No pedir una decisión humana por cada hallazgo ni crear una conversación infinita sin información.
+
+Las opciones definitivas sobre actor separado de GitHub, umbral de dos rondas y reglas de cierre sin éxito se cierran en diseño antes de que Codex pueda introducir semántica propia.

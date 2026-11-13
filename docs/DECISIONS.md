@@ -242,3 +242,19 @@
 - Estado: acordada como **regla de trabajo de esta conversación**.
 - Decisión: en este chat se define, debate y versiona el comportamiento en GitHub. La implementación, instalación, configuración de tareas y aceptación operativa se realizan en otro chat tras la decisión pertinente.
 - Alcance de esta entrega: `spec/10-auditor-chatgpt.md`, `spec/contracts/audit-dialogue-v1.md`, `spec/11-obsidian-projection.md` y `handoff/AUDITOR_OBSIDIAN_DESIGN_BACKLOG.md`. Son propuestas de diseño donde no hay una decisión explícita; no confundirlas con funcionalidades instaladas.
+
+
+## DEC-0030 — Resolver desacuerdos entre Investigador y Auditor antes de escalar
+- Fecha: 2026-11-13
+- Estado: **acordada (diseño)** a partir de instrucción explícita del usuario.
+- Decisión: ante discrepancias entre Investigador y Auditor, ambos intentarán resolverlas autónomamente mediante comprobaciones y evidencia adicional, en lugar de pedir una decisión humana inmediata. Solo las discrepancias no resueltas o las que requieran una decisión o permiso que ninguno tiene se elevan al usuario, con ambos argumentos y evidencia trazable.
+- La propuesta de **máximo dos rondas sustantivas** sin nueva evidencia es un parámetro inicial por confirmar, no una decisión previamente tomada por el usuario.
+- La resolución autónoma no autoriza alterar metas o publicar versiones estables.
+
+## DEC-0031 — GitHub Issues como bandeja de auditoría y comentarios de cierre
+- Fecha: 2026-11-13
+- Estado: **propuesta de arquitectura para discusión**, no implementada.
+- Dirección: un Issue de control por proyecto como canal del Auditor, con comentarios estructurados, polling por el planificador local aproximadamente cada 15 minutos, journal y cursores; no depender de @menciones ni de GitHub Notifications. El comentario puede proponer `closure_proposed`; nunca cierra por sí mismo la investigación. Detalles en `spec/contracts/github-audit-inbox-v1.md` y `spec/contracts/research-closure-v1.md`.
+- Para `goal_met` o `research_concluded`, Investigador debe corroborar evidencias y realizar cierre auditable, preservando historial y deteniendo solo ese proyecto. Una pausa por falta de progreso no se confunde con meta cumplida ni cierre definitivo.
+- Riesgo pendiente: ChatGPT y OpenClaw pueden publicar bajo la misma identidad GitHub; se requiere separar y verificar la autoría para atribuir autoridad de auditoría. Sin eso, los comentarios se tratan como sugerencias no autenticadas.
+- Pendientes: capacidad real de comentarios desde tareas ChatGPT, identidad/credenciales, formato final, límites y reanudación, cierre de investigaciones exploratorias abiertas.
