@@ -55,7 +55,7 @@ export class Scheduler{
    fresh.some(e=>e.kind==='phase'&&e.data.output.phase===lease.phase&&e.data.output.status==='ok');
   const ok=!error&&progressed;
   const last=state.events.findLast(e=>e.kind==='phase')?.data.output;
-  const blocked=last?.phase===lease.phase&&last.status==='blocked';const p=s.projects[lease.project]||{};const failures=ok||pending?(p.failures||0):(p.failures||0)+1;
+  const blocked=last?.phase===lease.phase&&last.status==='blocked';const p=s.projects[lease.project]||{};const failures=ok?0:pending?(p.failures||0):(p.failures||0)+1;
   s.projects[lease.project]={...p,failures,nextAt:ok?now:pending?now+900000:now+Math.min(3600000,900000*2**(failures-1)),enabled:blocked||failures>=3?false:p.enabled!==false,reason:blocked?last.blockers.join('; '):error||(!progressed?'Sin fase confirmada':p.reason||'Trabajo documental activo')};
   // Finish the claimed step before applying any next-cycle plan.
   if(ok&&p.pending?.[0]===lease.phase)s.projects[lease.project].pending=p.pending.slice(1);

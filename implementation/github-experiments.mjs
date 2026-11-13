@@ -12,11 +12,11 @@ export function unzipReceipt(buf,name){
  guard(start+size<=at&&buf.readUInt32LE(start)===0x02014b50,'Directorio ZIP inválido');
  const len=buf.readUInt16LE(start+28),extra=buf.readUInt16LE(start+30),comment=buf.readUInt16LE(start+32),local=buf.readUInt32LE(start+42);
  const fname=buf.subarray(start+46,start+46+len).toString('utf8'),compressed=buf.readUInt32LE(start+20),uncompressed=buf.readUInt32LE(start+24);
- guard(fname===name&&/^[a-zA-Z0-9_-]+\.json$/.test(name)&&buf.readUInt16LE(start+10)===8&&compressed<=1e6&&uncompressed<=1e6&&start+46+len+extra+comment<=at,'Archivo inesperado');
+ guard(fname===name&&/^[a-zA-Z0-9_-]+\.json$/.test(name)&&[0,8].includes(buf.readUInt16LE(start+10))&&compressed<=1e6&&uncompressed<=1e6&&start+46+len+extra+comment<=at,'Archivo inesperado');
  guard(local+30<start&&buf.readUInt32LE(local)===0x04034b50,'Encabezado ZIP inválido');
  const data=local+30+buf.readUInt16LE(local+26)+buf.readUInt16LE(local+28);
  guard(data+compressed<=start,'Datos ZIP truncados');
- const raw=zlib.inflateRawSync(buf.subarray(data,data+compressed),{maxOutputLength:1000001});
+ const raw=buf.readUInt16LE(start+10)===0?buf.subarray(data,data+compressed):zlib.inflateRawSync(buf.subarray(data,data+compressed),{maxOutputLength:1000001});
  guard(raw.length===uncompressed,'Longitud ZIP incorrecta');
  return JSON.parse(raw.toString('utf8'));
 }
@@ -105,7 +105,7 @@ export class GitHubExperiments{
   guard([receipt.baseline,receipt.candidate,receipt.improvement].every(Number.isFinite),'Métricas inválidas');
   const delta=receipt.direction==='minimize'?receipt.baseline-receipt.candidate:receipt.candidate-receipt.baseline;
   guard(Math.abs(receipt.improvement-delta)<1e-8*Math.max(1,Math.abs(delta)),'Cálculo de mejora contradictorio');
-  const imported=this.engine.importVerifiedExperiment(project,'exp-'+plan.experiment_id+'-'+run.id,{
+  const imported=this.engine.importVerifiedExperiment(project,'experiment-result-'+hash(rid).slice(0,24),{
    plan_key:planKey,dispatch_key:dispatch.key,receipt,
    github:{repository:this.repo,workflow:W,run_id:run.id,run_attempt:run.run_attempt||1,conclusion:run.conclusion,artifact_id:artifact.id,artifact_digest:artifact.digest||'sha256:'+hash(zip),html_url:run.html_url},
    verified_at:new Date().toISOString()
