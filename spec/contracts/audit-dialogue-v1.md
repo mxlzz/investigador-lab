@@ -5,9 +5,11 @@
 
 ## 1. Canal de transporte y fuente de verdad
 
+**Un único envelope propuesto:** el contrato `investigador-audit/1` es común al protocolo de diálogo y al transporte por Issue. El prefijo de hallazgo auditor será `AUD-FIND-`, separado de `FND-` (hallazgo científico en `spec/05-knowledge.md`). Las dos especificaciones no deben generar formatos incompatibles: esta define significado/estados, `github-audit-inbox-v1.md` define lectura y envío por GitHub. Los ejemplos son parciales y no sustituyen el JSON Schema definitivo.
+
 El **expediente de investigación** permanece en el journal local del motor, con exportaciones versionadas en el repositorio privado/permitido de cada proyecto. El **expediente de auditoría** es otra secuencia persistente, separada, con eventos firmemente asociados a `project_id`, actor, fecha, `commit_sha` y hashes de adjuntos.
 
-**Propuesta de transporte:** GitHub por proyecto. Publicar un índice de auditorías y hallazgos bajo `.investigador/audit/` en una rama de auditoría o en un destino segregado con permisos mínimos; usar Issues/comentarios como interfaz conversacional **opcional**, no como única fuente del registro de estados. Si la conexión ChatGPT solo permite comentarios, adaptar el transporte sin alterar el contrato lógico. La ubicación definitiva, compatibilidad con el branch privado de resultados y permisos necesitan una prueba de implementación.
+**Transporte preferido para v1:** un Issue de auditoría por proyecto con comentarios estructurados y lectura por API (`github-audit-inbox-v1.md`). La persistencia canónica de auditorías y estados seguirá siendo estructurada e independiente de esos comentarios. La ruta física de su respaldo/índice en GitHub sigue a definir tras prueba real de permisos; no abrir un segundo canal alternativo sin motivo. Si la conexión ChatGPT solo permite comentarios, adaptar el transporte sin alterar el contrato lógico. La ubicación definitiva, compatibilidad con el branch privado de resultados y permisos necesitan una prueba de implementación.
 
 Los eventos son **append-only**, con IDs únicos y punteros a eventos anteriores. Las vistas de estado se derivan de los eventos; no se edita un hallazgo histórico para fingir que nunca existió. Un commit mutable de GitHub no es una firma criptográfica: la identidad del autor debe obtenerse de un actor autenticado y permisos separados, no de un campo `actor` arbitrario.
 
@@ -17,7 +19,7 @@ Cada mensaje tiene al menos estos campos, con tipos que se congelarán en un JSO
 
 | Campo | Significado |
 | --- | --- |
-| `schema_version` | `audit-dialogue/0.1` |
+| `schema_version` | `investigador-audit/1` (envelope compartido del canal) |
 | `message_id`, `thread_id`, `parent_message_id` | Correlación e idempotencia; parent puede ser null |
 | `audit_cycle_id`, `project_id` | Origen y proyecto |
 | `kind` | `finding_opened`, `acknowledged`, `evidence_submitted`, `finding_contested`, `additional_check_requested`, `finding_reassessed`, `finding_resolved`, `escalated` |
@@ -76,7 +78,7 @@ A08: dos ciclos de auditoría encuentran el mismo problema; reutilizan `finding_
 
 ## 7. Decisiones por cerrar antes de implementación
 
-- Dónde persistir el canal: rama de auditoría, Issue por hallazgo, o combinación, y quién puede escribir cada parte.
+- Persistencia canónica y permisos de auditoría: Issue por proyecto **propuesto** como transporte, destino versionado de los estados todavía pendiente, con autores diferenciables.
 - Nivel real de autorización para comentarios y archivos desde una tarea programada ChatGPT.
 - Política exacta de aprobación y desbloqueo crítico disputado (DEC-0024).
 - Retención y visibilidad de adjuntos privados, y representación de evidencia local no exportable.

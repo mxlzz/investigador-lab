@@ -52,10 +52,10 @@ El cuerpo del comentario debe incluir literalmente el marcador `<!-- investigado
 {
   "schema_version": "investigador-audit/1",
   "message_id": "audmsg-00027",
-  "thread_id": "finding-FND-27",
+  "thread_id": "finding-AUD-FIND-27",
   "project_id": "algoritmos-ordenamiento",
   "kind": "finding_opened",
-  "finding_id": "FND-27",
+  "finding_id": "AUD-FIND-27",
   "subject": { "type": "experiment", "id": "EXP-12", "commit_sha": "sha completo" },
   "evidence_refs": [ { "uri": "https://github.com/...", "verification": "read_only" } ],
   "claim": "La comparación no usa el mismo dataset.",
@@ -64,7 +64,7 @@ El cuerpo del comentario debe incluir literalmente el marcador `<!-- investigado
 }
 ```
 
-El ejemplo muestra la estructura, **no un mensaje emitido**. El implementador debe definir el JSON Schema exacto, longitudes y IDs, y validar la procedencia de URLs; el marcador y los IDs no autentican al autor.
+El ejemplo muestra la estructura, **no un mensaje emitido**. El identificador `AUD-FIND-` distingue objeciones del Auditor de `FND-`, reservado para hallazgos científicos; el envelope `investigador-audit/1` es compartido con `audit-dialogue-v1.md`. Debe congelarse **un único JSON Schema** antes de implementar, no dos formatos paralelos. El implementador debe definir el JSON Schema exacto, longitudes y IDs, y validar la procedencia de URLs; el marcador y los IDs no autentican al autor.
 
 Tipos reconocidos en primera versión: `finding_opened`, `additional_check_requested`, `finding_reassessed`, `closure_proposed`, `finding_resolved`. Las respuestas de Investigador usan el mismo envelope con `acknowledged`, `evidence_submitted`, `finding_contested`, `closure_accepted`, `closure_contested` y `closure_deferred`. Nunca se aceptan nombres de herramientas, shell o instrucciones de cambio de configuración como operaciones implícitas.
 

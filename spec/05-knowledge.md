@@ -22,7 +22,7 @@ El mapa no debe depender del recuerdo del LLM; debe ser reconstruible desde el a
 | Oportunidad | OPP-0001 | derivación lateral, relación a proyecto, prioridad |
 | Experimento | EXP-0001 | protocolo, código, artefactos, dictamen |
 | Decisión | DEC-0001 | alternativas, razones, evidencia, autoridad y versión |
-| Auditoría | AUD-0001 | revisión independiente, hallazgos y resolución |
+| Auditoría | AUD-0001 | revisión independiente, hallazgos y resolución; sus objeciones individuales usarán el prefijo propuesto `AUD-FIND-`, distinto del `FND-` científico |
 | Entrega | REL-0001 | versión, commit, criterios satisfechos |
 
 **Advertencia de nombres:** `DEC` se usa actualmente para decisiones del **diseño del sistema** en `docs/DECISIONS.md` y aparece también propuesto para decisiones **internas de una investigación**. Es una colisión semántica a resolver: propuesto distinguir `SYSDEC` de `PRJDEC` o utilizar un prefijo con ámbito; no renumerar historia hasta acordarlo.

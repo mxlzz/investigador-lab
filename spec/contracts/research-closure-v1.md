@@ -1,6 +1,6 @@
 # Propuesta de cierre de investigación desde el Auditor — diseño v0.1
 
-**Estado: propuesta no implementada.** Aplica al diálogo en `github-audit-inbox-v1.md` y al protocolo `audit-dialogue-v1.md`.  
+**Estado: propuesta no implementada.** El cierre por `goal_met` requiere resolver la discrepancia existente entre DEC-0007 (menciona disponer de versión estable) y DEC-0019 (permite declarar cumplimiento antes de publicar versión estable). Este documento no resuelve esa autoridad por su cuenta. El campo `schema_version` comparte el envelope `investigador-audit/1` del protocolo de comentarios; el ejemplo omite campos para legibilidad y no es un JSON Schema completo. Aplica al diálogo en `github-audit-inbox-v1.md` y al protocolo `audit-dialogue-v1.md`.  
 **Principio acordado:** primero intentar resolver desacuerdos entre Investigador y Auditor usando evidencia; solo escalar al usuario cuando no logren resolverlos. El usuario no debe ser consultado automáticamente por cada duda.
 
 ## 1. ¿Puede un comentario del Auditor pedir cerrar una investigación?
