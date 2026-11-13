@@ -277,11 +277,11 @@
 - Documentación: `spec/contracts/auditor-github-identity-v1.md`.
 
 
-## DEC-0034 — Revisión periódica de rumbo por línea de investigación
+## DEC-0034 — Control longitudinal de rumbo integrado en `next_cycle`
 - Fecha: 2026-11-13
-- Estado: **propuesta de diseño**, motivada por la consulta del usuario; intervalo y contrato aún por aprobar.
-- Observación: `novelty_review` evalúa equivalencias por hipótesis y `next_cycle` justifica cada próximo paso, pero no obligan a comparar el rendimiento acumulado de una línea frente a otras alternativas y la meta original. Una secuencia de tareas localmente justificables puede consumir recursos en detalles auxiliares sin progreso suficiente.
-- Propuesta: checkpoint estratégico de alcance por `research_line_id`, activado al cambiar de línea, acumular experimentos/ingeniería sin resultados nuevos, encontrar antecedentes que vuelven redundante la estrategia o comprometer recursos importantes. Como respaldo, considerar **tres iteraciones sustantivas** consecutivas de la misma línea sin revisión; no contar turnos LLM.
-- El checkpoint contrasta encargo literal y aceptación, progreso confirmado, soluciones existentes/equivalentes, alternativas y costo de oportunidad, próximo experimento discriminante y criterio de parada. Puede `continue`, `reuse_existing`, `pivot_within_goal`, `park_line`, `need_evidence` o `propose_project_closure`; no cambia la meta ni permisos.
-- Integración sugerida: el planificador exige checkpoint ante un disparador pendiente **antes de otra inversión importante sobre esa línea**; `next_cycle` lo aprovecha, y Auditor ChatGPT puede solicitarlo ante evidencia de desvío. No añade auditoría pesada a cada acción ni reemplaza el control de novedad.
-- Diseño y casos de aceptación en `spec/13-revision-estrategica.md` y propuesta literal de prompt `spec/07-prompts/12-strategic-review.md`. **No implementado ni activado**.
+- Estado: **propuesta revisada después de auditoría de duplicaciones del repositorio; no implementada**.
+- Diagnóstico: `CORE_RESEARCH_LOOP` y `next_cycle` ya exigen relevancia, alternativas, costo y resultado esperado; `novelty_review` ya revisa duplicación por hipótesis. No hace falta repetir estos controles en una segunda fase.
+- Capacidad faltante: rastrear resultados acumulados y trabajo auxiliar por línea entre decisiones sucesivas; comprobar con evidencia si otra inversión importante en la misma línea sigue justificada.
+- Propuesta simplificada: usar el ciclo `next_cycle` y añadir síntesis `line_assessment` solo si hay señales objetivas de repetición sin nueva evidencia, desvío instrumental, alternativa/baseline que cambia la evaluación o comentario fundado del Auditor. El host verifica referencias y no se conforma con una justificación textual.
+- **Se retira el umbral arbitrario de tres iteraciones, la fase independiente y el nuevo prompt `12-strategic-review.md`**. No crear otra automatización periódica. El control no prohíbe seguir cuando hay progreso real.
+- Contrato de diseño y pruebas R01–R08: `spec/13-revision-estrategica.md`; extensión condicional de `spec/07-prompts/09-next-cycle.md`. Queda por implementar y validar antes de atribuirle resultados.
