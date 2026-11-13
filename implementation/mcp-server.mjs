@@ -23,7 +23,7 @@ async function call(a){if(!a||typeof a!=='object')throw new Error('Argumentos in
  case 'projects':{const dir=path.join(engine.base,'projects');return fs.existsSync(dir)?fs.readdirSync(dir,{withFileTypes:true}).filter(d=>d.isDirectory()).map(d=>engine.state(d.name)):[];}
  case 'init':return engine.init(a.project,a.request,{visibility:a.visibility||'private'});
  case 'state':return engine.state(a.project);
- case 'prepare':return engine.envelope(a.project,a.phase);
+ case 'prepare':if(a.phase==='novelty_review')engine.materializeHypotheses(a.project);return engine.envelope(a.project,a.phase);
  case 'record':return engine.record(a.project,a.key,a.kind,a.data||{});
  case 'accept':{const result=engine.accept(a.project,a.key,a.envelope,a.output);return {...result,github_sync:await syncIfConfigured(engine,a.project)};}
  case 'gate':return engine.gate(a.project,a.action,a.data);
