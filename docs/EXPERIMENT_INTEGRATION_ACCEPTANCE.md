@@ -14,3 +14,8 @@
 | Prueba Windows integral | Solo se marca cumplida tras dispatch real desde el Gateway y evaluación recuperada |
 
 **Estado de pruebas:** pruebas unitarias sobre API simulada y runner real en CI verifican piezas del circuito. Falta ejecutar el circuito contra la API real desde el OpenClaw instalado en Windows y registrar sus IDs de run y resultados. No mezclar la muestra sintética de infraestructura con evidencia de descubrimiento o superioridad científica.
+
+
+## Evidencia real posterior
+
+La integración remota se validó con un **dispatch real** de GitHub Actions y posterior importación y evaluación exitosa del recibo; detalles, ID de corrida y commit en [EXPERIMENT_LIVE_ACCEPTANCE.md](EXPERIMENT_LIVE_ACCEPTANCE.md). Este resultado **no** cubre el despliegue en Windows.

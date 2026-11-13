@@ -17,3 +17,8 @@ Este componente sí permite ejecutar y comparar dos implementaciones **públicas
 Ya existe integración entre expediente/MCP/planificador y la API de GitHub Actions: `experiment_plan` → `experiment_submit` → `experiment_poll` → importación verificable de `experiment_result` → `evaluation` → `next_cycle`. El origen, run y artefacto se validan antes de aceptar las métricas. Los tests de API simulada y el smoke del runner son distintos de una aceptación end-to-end contra el Gateway real.
 
 La capacidad sigue **pendiente de despliegue local y de un workflow_dispatch real**. Las advertencias anteriores sobre ausencia total de integración describen la versión previa a este cambio.
+
+
+## Evidencia real posterior
+
+La integración remota se validó con un **dispatch real** de GitHub Actions y posterior importación y evaluación exitosa del recibo; detalles, ID de corrida y commit en [EXPERIMENT_LIVE_ACCEPTANCE.md](EXPERIMENT_LIVE_ACCEPTANCE.md). Este resultado **no** cubre el despliegue en Windows.

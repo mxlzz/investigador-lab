@@ -58,3 +58,7 @@ La actualización local se considera validada solo cuando:
 - El journal histórico sigue íntegro y el rollback sigue disponible.
 
 En caso de fallo, conservar evidencia privada, revertir los binarios/instrucciones y configuración MCP al snapshot, sin borrar `research-state/`. No afirmar «entregado» por haber pasado solo las pruebas de GitHub Actions.
+
+## Estado actual de la dependencia remota
+
+El workflow de dispatch está habilitado en `main` y la prueba real de GitHub Actions pasó. Ver `docs/EXPERIMENT_LIVE_ACCEPTANCE.md`. El paso pendiente para Codex es instalar y probar el mismo circuito desde Windows; no volver a plantear la conexión remota como inexistente.

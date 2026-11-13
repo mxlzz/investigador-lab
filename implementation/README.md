@@ -74,3 +74,7 @@ El planificador alterna `experiment_plan` (trabajo del modelo), `experiment_subm
 **Operación real:** se necesita un workflow habilitado en la rama predeterminada, un token local de GitHub Actions con permisos mínimos y la versión 0.4-dev instalada en OpenClaw. La CI automatizada solo prueba el circuito con respuestas de API simuladas y un smoke real del runner; **no equivale a una ejecución dispatch real desde Windows**. Consultar `docs/WINDOWS_DEPLOYMENT_RUNBOOK.md`.
 
 **Restricciones:** no admite proyectos privados, ejecución de scripts en Windows, gastos, publicación estable, ni experimentos fuera de `experiments/`. El runner alojado por GitHub no impide todo acceso de red: no se deben incluir secretos ni datos privados.
+
+## Aceptación de infraestructura
+
+El flujo de dispatch, ejecución, importación y evaluación pasó una prueba real en GitHub Actions (controlador 43350881884, experimento 43350903439). Ver `docs/EXPERIMENT_LIVE_ACCEPTANCE.md`. Queda pendiente la integración con la instalación local de OpenClaw.

@@ -20,3 +20,5 @@
 ## Estado de la rama 0.4.0-dev
 
 Se implementó el enlace MCP → plan aprobado → GitHub Actions → recibo recuperado → journal → evaluación y plan siguiente. Validación de identidad y hashes, prohibición de proyectos privados y registro persistente. Esta actualización está en GitHub, **no está confirmada su instalación en el Gateway**. La aprobación de pruebas automatizadas no sustituye una prueba de dispatch real ni evidencia científica general.
+
+Aceptación real remota validada: controlador GitHub Actions 43350881884 y runner 43350903439, con importación y evaluation confirmadas. El agente de Windows no se ha actualizado ni probado; consultar docs/WINDOWS_DEPLOYMENT_RUNBOOK.md.

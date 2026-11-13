@@ -39,3 +39,7 @@ Se agregó un runner de comparación baseline/candidato para código de `experim
 ## 2026-11-12 — Integración experimental pública 0.4.0-dev
 
 Se creó `implementation/github-experiments.mjs` y `.github/workflows/investigador-experiment.yml`. El planificador y el MCP ya pueden preparar un experimento público, solicitar ejecución, recuperar y validar el recibo GitHub y registrar el resultado de forma trazable antes de permitir `evaluation`. Se agregaron pruebas con API GitHub simulada, chequeos de proyectos privados y falsificación de recibos, y continúa el smoke real del runner en CI. El workflow de dispatch requiere presencia en la rama predeterminada y autorización GitHub desde el Gateway para poder correr. El estado instalado en Windows permanece por verificar.
+
+## Aceptación real del punto 1
+
+GitHub Actions ejecutó el workflow manual (run 43350903439); el controlador (run 43350881884) descargó y verificó el artefacto, escribió un experiment_result y aceptó evaluation. 43 pruebas pasaron en run 43350881800. Se habilitó **solo** el workflow de dispatch en main, sin merge del PR #2. Punto 2: Windows/Gateway pendiente. Referencias completas en docs/EXPERIMENT_LIVE_ACCEPTANCE.md.
