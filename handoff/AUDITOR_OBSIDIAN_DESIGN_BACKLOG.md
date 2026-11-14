@@ -1,0 +1,72 @@
+# Traspaso futuro: Auditor ChatGPT ↔ Investigador y Obsidian
+
+**SOLO DISEÑO; NO AUTORIZA IMPLEMENTACIÓN.** Fecha: 2026-11-13.  
+Base sugerida: `fix/investigador-timeouts`. Esta rama de diseño contiene exclusivamente Markdown. Consultar:
+- `spec/10-auditor-chatgpt.md`
+- `spec/contracts/audit-dialogue-v1.md`
+- `spec/11-obsidian-projection.md`
+- `docs/DECISIONS.md` (DEC-0028 y DEC-0029)
+- `spec/contracts/release-audit-gate.md` (autoridad de publicación anterior)
+
+## Secuencia recomendada para implementación en otro chat
+
+**E0 — Verificar factibilidad del canal ChatGPT.** Probar en un entorno controlado si la automatización programada de ChatGPT puede acceder al GitHub conectado, leer **el repo privado de prueba** y escribir una auditoría identificable. Comprobar permisos/sesiones y comportamiento ante desconexión. Si no puede, registrar bloqueo y proponer alternativas reales a decisión humana; no prometer auditoría autónoma usando solo recordatorios.
+
+**E1 — Contrato y persistencia del diálogo.** Congelar JSON Schemas, IDs, estados, verificación de actor, autorización, idempotencia, cursor, auditoría histórica y reintentos. Definir transporte GitHub validado (rama/archivos/Issues) sin modificar el journal canónico de Investigador. Pruebas A01–A08.
+
+**E2 — Ingesta por Investigador.** Consultar y reconocer hallazgos nuevos desde GitHub; aceptar únicamente datos y solicitudes de verificación, no comandos arbitrarios. Registrar respuestas, pruebas o desacuerdos, con push atómico y sin gastar turnos del LLM si basta un acuse técnico.
+
+**E3 — Auditor ChatGPT.** Definir prompt literal versionado, herramientas permitidas, matriz de alcance por severidad, lecturas por SHA, evidencia verificada y fallos `not_checked`. Probar una revisión breve con un caso de error real y un caso sin novedades.
+
+**E4 — Dos revisiones diarias.** Activar solamente cuando E0–E3 funcionen. Horarios a confirmar, con zona `America/Argentina/Buenos_Aires`. Probar dos ciclos sobre el mismo proyecto, cursor, ejecución omitida y reintento idempotente. Mantener auditoría profunda adicional por hitos sin confundirla con el informe de las 20:00.
+
+**E5 — Gate de release verificable.** Integrar hallazgos críticos en control de publicación sin sustituir aprobación humana; probar bloqueos y un caso de hallazgo disputado. La política de desbloqueo e indisponibilidad debe acordarse antes.
+
+**E6 — Proyección Obsidian.** Generar notas estables desde expediente/snapshot; sincronizar solo con repos autorizados; preservar ediciones humanas; comprobar O01–O07 y diferencia entre notas consultables y evidencia validada.
+
+## Decisiones necesarias antes de autorizar ingeniería
+
+- Horarios concretos de las dos auditorías (09:00 / 19:00 propuestos, NO aprobados) y si incluyen fines de semana (propuesta: sí).
+- Qué incluye una revisión de «todos los proyectos» con cuota/tiempo finitos; prioridad y paginación de los no revisados.
+- Medio de escritura real disponible para ChatGPT programado en GitHub privado.
+- Política del gate si no hubo auditoría o existe un hallazgo crítico disputado; autoridad para resolver/desbloquear.
+- Vault Obsidian por proyecto o agregador local, y estrategia de sincronización con copia local.
+
+## No hacer en este chat
+
+No crear automatizaciones, agentes, tokens, permisos, PR de implementación, cambios en `implementation/`, workflows, instalación local, sincronización activa, merges ni releases. Una prueba de CI de Markdown no comprueba que ChatGPT programado pueda acceder a un repo privado.
+
+
+## Reglas concretas de implementación añadidas
+
+**E0b — Canal de comentarios.** Confirmar que GitHub Issues está habilitado en cada repo de resultados, que el usuario conectado a ChatGPT puede leer/escribir allí en ejecución programada y que existe un actor autenticable distinto de la identidad usada por Investigador. Si ambos publican bajo el mismo usuario GitHub, documentar el bloqueo de atribución de rol; no fingir autoridad independiente. Evaluar identidad técnica separada de GitHub App o cuenta dedicada (si compatible con ChatGPT).
+
+**E1b — Polling en tick.** Antes de reclamar una etapa LLM, consultar Issues autorizados, paginar, deduplicar `comment_id`, validar marcadores/envelope, registrar en el journal y recién entonces confirmar cursor. La ingesta no debe crear jobs duplicados, consumir LLM en vacío ni confundir una @mención con una notificación fiable. Ensayar casos I01–I11.
+
+**E2b — Propuesta de cierre.** Añadir `closure_proposed` como evento de auditoría y procesarlo con verificación del estado/criterios/experimentación desde el motor, sin ejecutar el texto del comentario. Respuestas `closure_accepted/contested/deferred`. Cierre solo luego de journal, checkpoint final y sincronización verificada; detener solo el proyecto, conservar el registro, permitir reapertura explícita con evento. Ensayar C01–C12.
+
+**E3b — Desacuerdo.** Intentar nuevas verificaciones y revisar evidencia aportada. Si no se resuelve dentro de las rondas propuestas y no hay prueba discriminante autorizada, elevar un único paquete al usuario. No pedir una decisión humana por cada hallazgo ni crear una conversación infinita sin información.
+
+Las opciones definitivas sobre actor separado de GitHub, umbral de dos rondas y reglas de cierre sin éxito se cierran en diseño antes de que Codex pueda introducir semántica propia.
+
+
+## Arquitectura ChatGPT Proyectos / agenda global (propuesta posterior)
+
+**E0-a:** verificar que un usuario conectado a GitHub en ChatGPT puede leer repo privado y publicar un comentario desde una **tarea programada real**, sin quedar esperando aprobación. Diferenciar escritura y lectura. Los triggers nativos de GitHub documentados para Work son actividades compatibles de **PR**, no asumir issue_comment.
+
+**E0-b:** determinar si ChatGPT puede elegir una segunda cuenta GitHub dedicada para Auditor o una identidad GitHub App mediante integración aceptada. No generar nueva cuenta aún. Dos PAT de `mxlzz` no dan actores independientes y `mxlzz` usado por Investigador tampoco prueba aprobación humana de releases.
+
+**E0-c:** verificar creación/registro en un índice de auditorías **privado**, con altas de proyecto automáticas. No escribir nombres de investigaciones privadas en `investigador-lab` público.
+
+**E3–E4:** una **tarea central** dos veces al día que escanea todos los proyectos registrados, con cursor por proyecto y auditoría incremental; opcionalmente un proyecto ChatGPT llamado `Auditores` y un chat por proyecto para revisión interactiva. No programar un GPT personalizado ni una tarea por proyecto.
+
+Documento de operación: `spec/12-auditores-chatgpt-operacion.md`. Identidad: `spec/contracts/auditor-github-identity-v1.md`. Ambas son propuestas; no autorizan implementación.
+
+
+## Extensión futura — revisión estratégica de rumbo (solo diseño)
+
+Antes de implementar, leer `spec/13-revision-estrategica.md`, el prompt **existente** `spec/07-prompts/09-next-cycle.md` y DEC-0034. No crear fase ni prompt nuevo: el control longitudinal corresponde al contrato `next_cycle` y solo se solicita ante evidencia de posible desvío. Precisar los vínculos por línea, los disparadores y la validación del motor; probar R01–R08 antes de declarar que detecta estrategias instrumentales improductivas. El Auditor puede aportar evidencia mediante un Issue, sin sustituir al planificador.
+
+## Repriorización de interfaz (DEC-0035)
+
+**Obsidian está postergado**: no implementar la antigua etapa E6 en el siguiente trabajo. La presentación prioritaria será GitHub según `spec/14-github-readable-research.md` (README visible, BITACORA, RESULTADOS y páginas de conocimiento enlazadas), sin crear otro journal ni grafo. Probar G01–G12. Para repos vinculados no sobrescribir README ajenos; conservar datos canónicos y publicar solamente material autorizado. La comunicación Auditor–Investigador sigue siendo una capacidad separada.

@@ -227,3 +227,70 @@
 - El informe representa un **día de reporte identificable** y debe conservar estado de envío para evitar duplicación por reintentos o ejecución concurrente. Toda confirmación de entrega se basa en evidencia del servicio, no en la intención de enviar.
 - Pendiente: política de reintentos/intervalos, reconciliación si Telegram aceptó el mensaje pero se perdió el acuse, tratamiento de informes atrasados cuando ya corresponde el siguiente y tiempo máximo de conservación.
 - Motivo: preservar continuidad informativa pese a interrupciones temporales de red, scheduler o ejecutores.
+
+
+## DEC-0028 — Dos verificaciones breves diarias del Auditor ChatGPT
+- Fecha: 2026-11-13
+- Estado: acordada como **requisito de diseño** por pedido explícito del usuario; realización técnica pendiente.
+- Decisión: ChatGPT, como auditor externo al agente Investigador, debe realizar **dos verificaciones breves del avance por día**, independientes del informe diario de Investigador de las 20:00. La revisión profunda por hitos DEC-0025 se conserva.
+- Reemplaza en DEC-0022 **solo la frecuencia** de «una breve diaria». No implica tener ya una automatización conectada o habilitada.
+- Propuesta no aprobada: 09:00 y 19:00, hora `America/Argentina/Buenos_Aires`; falta acordar los horarios, la cobertura de fines de semana y verificar acceso a los repos privados desde una ejecución programada.
+- Fundamento: detectar errores y desvíos antes de que se acumulen ciclos, sin confundir revisión independiente con el propio reporte del Investigador.
+
+## DEC-0029 — Separar diseño de implementación para el canal Auditor–Investigador y Obsidian
+- Fecha: 2026-11-13
+- Estado: acordada como **regla de trabajo de esta conversación**.
+- Decisión: en este chat se define, debate y versiona el comportamiento en GitHub. La implementación, instalación, configuración de tareas y aceptación operativa se realizan en otro chat tras la decisión pertinente.
+- Alcance de esta entrega: `spec/10-auditor-chatgpt.md`, `spec/contracts/audit-dialogue-v1.md`, `spec/11-obsidian-projection.md` y `handoff/AUDITOR_OBSIDIAN_DESIGN_BACKLOG.md`. Son propuestas de diseño donde no hay una decisión explícita; no confundirlas con funcionalidades instaladas.
+
+
+## DEC-0030 — Resolver desacuerdos entre Investigador y Auditor antes de escalar
+- Fecha: 2026-11-13
+- Estado: **acordada (diseño)** a partir de instrucción explícita del usuario.
+- Decisión: ante discrepancias entre Investigador y Auditor, ambos intentarán resolverlas autónomamente mediante comprobaciones y evidencia adicional, en lugar de pedir una decisión humana inmediata. Solo las discrepancias no resueltas o las que requieran una decisión o permiso que ninguno tiene se elevan al usuario, con ambos argumentos y evidencia trazable.
+- La propuesta de **máximo dos rondas sustantivas** sin nueva evidencia es un parámetro inicial por confirmar, no una decisión previamente tomada por el usuario.
+- La resolución autónoma no autoriza alterar metas o publicar versiones estables.
+
+## DEC-0031 — GitHub Issues como bandeja de auditoría y comentarios de cierre
+- Fecha: 2026-11-13
+- Estado: **propuesta de arquitectura para discusión**, no implementada.
+- Dirección: un Issue de control por proyecto como canal del Auditor, con comentarios estructurados, polling por el planificador local aproximadamente cada 15 minutos, journal y cursores; no depender de @menciones ni de GitHub Notifications. El comentario puede proponer `closure_proposed`; nunca cierra por sí mismo la investigación. Detalles en `spec/contracts/github-audit-inbox-v1.md` y `spec/contracts/research-closure-v1.md`.
+- Para `goal_met` o `research_concluded`, Investigador debe corroborar evidencias y realizar cierre auditable, preservando historial y deteniendo solo ese proyecto. Una pausa por falta de progreso no se confunde con meta cumplida ni cierre definitivo.
+- Riesgo pendiente: ChatGPT y OpenClaw pueden publicar bajo la misma identidad GitHub; se requiere separar y verificar la autoría para atribuir autoridad de auditoría. Sin eso, los comentarios se tratan como sugerencias no autenticadas.
+- Pendientes: capacidad real de comentarios desde tareas ChatGPT, identidad/credenciales, formato final, límites y reanudación, cierre de investigaciones exploratorias abiertas.
+
+
+## DEC-0032 — Propuesta de auditoría global y proyecto ChatGPT «Auditores»
+- Fecha: 2026-11-13
+- Estado: **propuesta pendiente de aprobación**, elaborada a partir de la alternativa sugerida por el usuario.
+- Diseño preferido: un proyecto ChatGPT `Auditores` para revisión humana, con un chat opcional por investigación; una sola tarea programada central de ChatGPT que recorra el índice privado de proyectos y realice las dos revisiones breves diarias. Los chats no son procesos autónomos ni fuente canónica de progreso.
+- Los proyectos nuevos se registrarían desde OpenClaw en un índice de auditoría privado; la tarea central los detectaría sin necesidad de crear automáticamente un chat.
+- Debe verificarse que la tarea programada pueda leer y escribir en GitHub con permisos de usuario apropiados; que un conector permita elegir una segunda identidad es una hipótesis a comprobar. Los GPT personalizados no admiten actualmente tareas programadas, y las tareas creadas dentro de un proyecto no acceden a sus archivos adjuntos.
+- Sin cuenta técnica ni tarea activada por ahora. Documentación: `spec/12-auditores-chatgpt-operacion.md`.
+
+## DEC-0033 — Propuesta de separación de identidad de GitHub por actor
+- Fecha: 2026-11-13
+- Estado: **propuesta pendiente de aprobación**.
+- Una cuenta de máquina dedicada para Auditor podría distinguir sus comentarios de los del Investigador si ChatGPT la utiliza en el conector, o una GitHub App de Auditor podría hacerlo mediante un puente realmente autenticado. No crear cuentas por investigación.
+- La distinción entre identidad humana e Investigador también requiere atención porque OpenClaw actualmente opera con identidad `mxlzz`; un comentario de esa cuenta no acredita autorización humana de release.
+- Un PAT diferente del mismo usuario no demuestra autoría independiente. Permisos mínimos y prueba E0 antes de confiar en señales de cierre/bloqueo.
+- Documentación: `spec/contracts/auditor-github-identity-v1.md`.
+
+
+## DEC-0034 — Control longitudinal de rumbo integrado en `next_cycle`
+- Fecha: 2026-11-13
+- Estado: **propuesta revisada después de auditoría de duplicaciones del repositorio; no implementada**.
+- Diagnóstico: `CORE_RESEARCH_LOOP` y `next_cycle` ya exigen relevancia, alternativas, costo y resultado esperado; `novelty_review` ya revisa duplicación por hipótesis. No hace falta repetir estos controles en una segunda fase.
+- Capacidad faltante: rastrear resultados acumulados y trabajo auxiliar por línea entre decisiones sucesivas; comprobar con evidencia si otra inversión importante en la misma línea sigue justificada.
+- Propuesta simplificada: usar el ciclo `next_cycle` y añadir síntesis `line_assessment` solo si hay señales objetivas de repetición sin nueva evidencia, desvío instrumental, alternativa/baseline que cambia la evaluación o comentario fundado del Auditor. El host verifica referencias y no se conforma con una justificación textual.
+- **Se retira el umbral arbitrario de tres iteraciones, la fase independiente y el nuevo prompt `12-strategic-review.md`**. No crear otra automatización periódica. El control no prohíbe seguir cuando hay progreso real.
+- Contrato de diseño y pruebas R01–R08: `spec/13-revision-estrategica.md`; extensión condicional de `spec/07-prompts/09-next-cycle.md`. Queda por implementar y validar antes de atribuirle resultados.
+
+## DEC-0035 — GitHub como interfaz principal de investigación; Obsidian postergado
+- Fecha: 2026-11-13
+- Estado: **orientación acordada por pedido explícito del usuario; detalles técnicos propuestos, no implementados**.
+- Decisión: priorizar que cada repositorio de investigación sea inteligible desde GitHub, con README visible, bitácora cronológica de decisiones y razones, resultados enlazados y fichas de conocimiento navegables. Obsidian queda postergado.
+- Evitar un journal paralelo: las páginas son vistas regenerables de los eventos y evidencias existentes. El actual `progress.json` es un snapshot técnico, no la bitácora narrativa.
+- Reutilizar las relaciones tipadas ya previstas en E5, `map_knowledge.proposed_edges` y `record.schema.json.links`. Completar su persistencia/validación y convertirlas en enlaces Markdown comprobables. Consultar conexiones nuevas como **hipótesis**, no como hallazgos probados, y aplicar el novelty gate ya existente antes de invertir en experimentos.
+- Ajuste de visibilidad: actualmente `github-projects.mjs` publica bajo `.investigador/projects/` en una rama `investigador-<slug>`, lo que no asegura portada visible. Priorizar README accesible en la rama por defecto para repos nuevos gestionados; no sobrescribir repositorios vinculados preexistentes sin autorización.
+- Especificación y pruebas G01–G12: `spec/14-github-readable-research.md`. La especificación anterior `spec/11-obsidian-projection.md` queda histórica y pausada. Sin cambios de prompts operativos ni código en este chat.

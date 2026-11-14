@@ -21,7 +21,7 @@ Separar producción de afirmaciones y verificación de evidencia. El auditor pue
 
 **Profunda:** seleccionar muestras de fuentes/experimentos, abrir evidencia, repetir cálculos o comparar artefactos cuando el entorno lo permita, buscar precedentes omitidos, revisar contradicciones y detectar desviaciones del contrato aprobado.
 
-**Acordado (DEC-0022):** la **auditoría independiente de ChatGPT** tiene dos intensidades: revisión breve **diaria** y revisión **profunda al alcanzar hitos importantes**. Es distinta del informe consolidado a las 20:00 (DEC-0020). **DEC-0025** precisa hitos profundos: mejoras importantes, cierres de metas/investigaciones y candidatos a publicación estable. **DEC-0024** autoriza bloquear publicaciones estables ante hallazgos críticos fundamentados. Faltan criterios operativos de importancia, disparador técnico, acceso verificable a evidencias y procedimiento de desbloqueo. El agente puede declarar meta cumplida con pruebas válidas (DEC-0019); está abierto si clases de meta requerirán auditoría previa. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
+**Acordado (DEC-0022, con frecuencia ampliada por DEC-0028):** la **auditoría independiente de ChatGPT** tiene dos intensidades: **dos revisiones breves por día** y revisión **profunda al alcanzar hitos importantes**. Es distinta del informe consolidado a las 20:00 (DEC-0020). **DEC-0025** precisa hitos profundos: mejoras importantes, cierres de metas/investigaciones y candidatos a publicación estable. **DEC-0024** autoriza bloquear publicaciones estables ante hallazgos críticos fundamentados. Faltan criterios operativos de importancia, disparador técnico, acceso verificable a evidencias y procedimiento de desbloqueo. El agente puede declarar meta cumplida con pruebas válidas (DEC-0019); está abierto si clases de meta requerirán auditoría previa. También se considera revisión por evento (PR relevante, declaración de novedad o candidatura a release).
 
 ## 4. Informe de auditoría (PROPUESTA)
 
@@ -59,7 +59,10 @@ La auditoría automática no equivale a una revisión científica independiente 
 - U05: auditor recibe repositorio público y no necesita credenciales del agente para leer las fuentes públicas.
 
 ## Pendientes
-- Cómo integrar ChatGPT con el historial y disparar auditorías; cadencia ya acordada (breve diaria y profunda en hitos), pero horario y criterios de hito pendientes.
+- Cómo integrar ChatGPT con el historial y disparar auditorías; cadencia acordada (dos revisiones breves diarias y profunda en hitos), pero horario y criterios de hito pendientes.
 - Definición operacional de crítico y proceso de bloqueo/desbloqueo, incluyendo discrepancias y auditor indisponible (DEC-0024).
 - Canal de entrega, avisos, cuándo escalar y quién cierra un hallazgo.
 - Cómo reproducir experimentos bajo presupuesto y permisos del auditor.
+## Continuación de diseño (2026-11-13)
+
+La frecuencia breve acordada pasó a **dos veces por día** en DEC-0028. Los esquemas de orquestación y diálogo están propuestos en `spec/10-auditor-chatgpt.md` y `spec/contracts/audit-dialogue-v1.md`. Esta mención no indica que exista una automatización ChatGPT activa.

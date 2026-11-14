@@ -1,10 +1,10 @@
 # E5 — Memoria, mapa de conocimiento y trazabilidad
 
-**Estado:** borrador, aspectos centrales acordados: conservar investigación completa y hacerla consultable en Obsidian; tecnología detallada por cerrar.
+**Estado:** borrador, prioridad actual: publicación y consulta legible desde GitHub; Obsidian postergado por DEC-0035. Ver `spec/14-github-readable-research.md`.
 
 ## 1. Dos objetivos simultáneos
 
-1. **Consulta humana:** Obsidian como lector de Markdown y enlaces, con portada, búsquedas, filtros y mapas por proyecto.
+1. **Consulta humana:** GitHub como lector principal de Markdown y enlaces, con portada, bitácora, resultados y fichas por proyecto.
 2. **Consumo por agentes:** registros estructurados con entidades, IDs, relaciones y estados explícitos. Un enlace `[[...]]` no constituye por sí solo una prueba ni una relación tipificada.
 
 El mapa no debe depender del recuerdo del LLM; debe ser reconstruible desde el almacenamiento persistente y auditable mediante queries.
@@ -22,7 +22,7 @@ El mapa no debe depender del recuerdo del LLM; debe ser reconstruible desde el a
 | Oportunidad | OPP-0001 | derivación lateral, relación a proyecto, prioridad |
 | Experimento | EXP-0001 | protocolo, código, artefactos, dictamen |
 | Decisión | DEC-0001 | alternativas, razones, evidencia, autoridad y versión |
-| Auditoría | AUD-0001 | revisión independiente, hallazgos y resolución |
+| Auditoría | AUD-0001 | revisión independiente, hallazgos y resolución; sus objeciones individuales usarán el prefijo propuesto `AUD-FIND-`, distinto del `FND-` científico |
 | Entrega | REL-0001 | versión, commit, criterios satisfechos |
 
 **Advertencia de nombres:** `DEC` se usa actualmente para decisiones del **diseño del sistema** en `docs/DECISIONS.md` y aparece también propuesto para decisiones **internas de una investigación**. Es una colisión semántica a resolver: propuesto distinguir `SYSDEC` de `PRJDEC` o utilizar un prefijo con ámbito; no renumerar historia hasta acordarlo.
@@ -44,7 +44,8 @@ Se puede mapear a W3C PROV para exportaciones interoperables; no imponer PROV-O 
 
 ## 5. Archivos y estructura (PROPUESTA)
 
-- `vault/`: Markdown legible, YAML frontmatter simple, enlaces Obsidian.
+- README, BITACORA, RESULTADOS y `conocimiento/`: presentación GitHub prioritaria, derivada del journal (ver `spec/14-github-readable-research.md`).
+- `vault/`: propuesta de Obsidian aplazada, sin desarrollo actual.
 - `records/`: registros estructurados y snapshots de decisiones/búsquedas.
 - `projects/<id>/` o repositorio propio por proyecto, con límites claros de publicación.
 - `evidence-index/`: manifiestos de artefactos externos, hashes, tamaños, formatos y políticas de acceso.
@@ -62,9 +63,9 @@ Se puede mapear a W3C PROV para exportaciones interoperables; no imponer PROV-O 
 - En repositorio público publicar solo contenido expresamente permitido: nunca credenciales, datos personales, rutas privadas, texto no redistribuible, logs sensibles o secretos.
 - Copias de seguridad independientes de GitHub para resultados esenciales.
 
-## 7. Obsidian
+## 7. GitHub primero
 
-Markdown/YAML con propiedades atómicas (listas simples, IDs como texto) y enlaces `[[ruta/archivo]]`. Obsidian Graph View muestra enlaces de notas, no valida conocimiento. Para acceder a modificaciones remotas hay que actualizar la copia local por Git o sincronizador, no asumir sincronización automática.
+La navegación prioritaria comienza en el README visible de la rama principal, continúa por la bitácora, los resultados y los enlaces Markdown relativos de `conocimiento/`. Se conservan las relaciones tipadas y su procedencia estructurada. Obsidian no constituye criterio de entrega actual y su exportador permanece suspendido.
 
 ## 8. Casos de aceptación
 
@@ -72,12 +73,15 @@ Markdown/YAML con propiedades atómicas (listas simples, IDs como texto) y enlac
 - K02: refutar un hallazgo conserva su versión histórica y sus dependencias.
 - K03: archivar/restaurar tras interrupción sin usar conversaciones anteriores.
 - K04: objeto externo faltante queda marcado como incompleto.
-- K05: abrir `vault/` con Obsidian, navegar por enlaces sin plugin propietario.
+- K05: abrir el repositorio en GitHub y recorrer de README a bitácora, resultados y evidencias mediante enlaces válidos.
 - K06: un dataset de acceso restringido jamás se publica en un repo público.
 
 ## Pendientes para cerrar E5
 
 - IDs y scopes definitivos; formato formal JSON Schema/YAML para registros.
-- Sincronización Obsidian, almacenaje externo, backups y retención.
+- Publicación visible desde GitHub, almacenaje externo, backups y retención.
 - Nivel de reproducción de textos externos (resúmenes vs copias) y política de licencias.
 - Estrategia de indexación y búsqueda semántica que complemente Markdown sin duplicar la fuente de verdad.
+## Continuación de diseño (2026-11-13)
+
+La exportación Obsidian de `spec/11-obsidian-projection.md` queda postergada. Se prioriza `spec/14-github-readable-research.md`: vistas legibles en GitHub sobre un único expediente canónico; **no** se añade un segundo sistema de memoria ni un grafo paralelo.
