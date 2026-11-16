@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import {researchTiming} from './timing.mjs';
 import {auditSummary} from './github-audits.mjs';
+import {pendingSourceWorkflow} from './source-actions.mjs';
 const stages=['intake','search_plan','extract_evidence','map_knowledge','hypotheses','novelty_review','experiment_design','evaluation','report','next_cycle'];
 const day=ms=>new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Argentina/Buenos_Aires'}).format(new Date(ms));
 export function documentaryTask(state,workflow='research'){
@@ -38,9 +39,9 @@ export class Scheduler{
   if(alive)throw new Error('Planificador ocupado');fs.renameSync(this.lock,this.lock+'.recovered-'+crypto.randomUUID());fd=fs.openSync(this.lock,'wx');
  }try{fs.writeFileSync(fd,JSON.stringify({pid:process.pid}));const s=this.load();const result=fn(s);this.save(s);return result;}finally{fs.closeSync(fd);fs.unlinkSync(this.lock);}}
  states(){const dir=path.join(this.engine.base,'projects');return fs.existsSync(dir)?fs.readdirSync(dir,{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>this.engine.state(e.name)):[];}
- task(s,p){const config=s.projects[p.project]||{};if(auditSummary(p).pending.length)return 'audit_review';if(config.pending?.[0]==='evaluation')return documentaryTask({...p,completed:p.completed.filter(phase=>phase!=='evaluation')},config.workflow);return config.pending?.length?config.pending[0]:documentaryTask(p,config.workflow);}
+ task(s,p){const config=s.projects[p.project]||{};if(auditSummary(p).pending.length)return 'audit_review';const source=pendingSourceWorkflow(p);if(source)return source.phase;if(config.pending?.[0]==='evaluation')return documentaryTask({...p,completed:p.completed.filter(phase=>phase!=='evaluation')},config.workflow);return config.pending?.length?config.pending[0]:documentaryTask(p,config.workflow);}
  select(s,now){const quota=(s.daily[day(now)]||0)<24;
-  return this.states().filter(p=>s.projects[p.project]?.enabled!==false&&(s.projects[p.project]?.nextAt||0)<=now&&this.task(s,p)&&(quota||['experiment_submit','experiment_poll'].includes(this.task(s,p)))).sort((a,b)=>(Number(a.created.priority??1)-Number(b.created.priority??1))||((s.projects[a.project]?.lastAt||0)-(s.projects[b.project]?.lastAt||0))).map(p=>({project:p.project,phase:this.task(s,p),beforeDigest:p.lastDigest,beforeSeq:p.events.length}))[0]||null;
+  return this.states().filter(p=>s.projects[p.project]?.enabled!==false&&(s.projects[p.project]?.nextAt||0)<=now&&this.task(s,p)&&(quota||['experiment_submit','experiment_poll','source_workflow_submit','source_workflow_poll'].includes(this.task(s,p)))).sort((a,b)=>(Number(a.created.priority??1)-Number(b.created.priority??1))||((s.projects[a.project]?.lastAt||0)-(s.projects[b.project]?.lastAt||0))).map(p=>({project:p.project,phase:this.task(s,p),beforeDigest:p.lastDigest,beforeSeq:p.events.length}))[0]||null;
  }
  status(now=Date.now()){const s=this.load();return {policy:{oneProjectPerTick:true,maxAttemptsPerDay:24,leaseMinutes:researchTiming().leaseSeconds/60,agentTimeoutSeconds:researchTiming().agentSeconds,failuresBeforePause:3},lease:s.lease,projects:s.projects,attemptsToday:s.daily[day(now)]||0,next:s.lease&&s.lease.expiresAt>now?null:this.select(s,now),recent:s.history.slice(-10)};}
  control(project,enabled,reason,{workflow,restart_from}={}){this.engine.state(project);if(typeof enabled!=='boolean'||typeof reason!=='string'||!reason.trim())throw new Error('Control requiere enabled boolean y motivo');if(workflow&&!['documentary','research'].includes(workflow))throw new Error('Flujo inválido');return this.transaction(s=>{const mode=workflow||s.projects[project]?.workflow||'research';const sequence=['intake','search_plan','gather_evidence',...stages.slice(2)].filter(p=>mode!=='documentary'||!['hypotheses','novelty_review','experiment_design','evaluation','next_cycle'].includes(p));if(restart_from&&!sequence.includes(restart_from))throw new Error('Reanudación inválida');s.projects[project]={...s.projects[project],...(workflow?{workflow}:{}),...(restart_from?{pending:sequence.slice(sequence.indexOf(restart_from))}:{}),enabled,reason,failures:0,nextAt:0};return s.projects[project];});}
@@ -48,7 +49,7 @@ export class Scheduler{
   if(s.lease&&s.lease.expiresAt>now)return {status:'busy'};
   if(s.lease){s.history.push({...s.lease,outcome:'interrupted',finishedAt:now});s.lease=null;}
   const next=this.select(s,now);if(!next)return {status:'idle'};
-  const lease={...next,token:crypto.randomUUID(),startedAt:now,expiresAt:now+researchTiming().leaseSeconds*1000};s.lease=lease;if(!['experiment_submit','experiment_poll'].includes(next.phase))s.daily[day(now)]=(s.daily[day(now)]||0)+1;s.projects[next.project]={...s.projects[next.project],lastAt:now};return {status:'claimed',...lease};
+  const lease={...next,token:crypto.randomUUID(),startedAt:now,expiresAt:now+researchTiming().leaseSeconds*1000};s.lease=lease;if(!['experiment_submit','experiment_poll','source_workflow_submit','source_workflow_poll'].includes(next.phase))s.daily[day(now)]=(s.daily[day(now)]||0)+1;s.projects[next.project]={...s.projects[next.project],lastAt:now};return {status:'claimed',...lease};
  });}
  finish(token,{error=null,pending=false}={},now=Date.now()){return this.transaction(s=>{
   if(s.lease?.token!==token)throw new Error('Lease no vigente');const lease=s.lease;const state=this.engine.state(lease.project);const fresh=state.events.filter(e=>e.seq>(lease.beforeSeq??state.events.findIndex(e=>e.digest===lease.beforeDigest)+1));const progressed=lease.phase==='gather_evidence'?fresh.some(e=>e.kind==='search'):
@@ -56,6 +57,8 @@ export class Scheduler{
    lease.phase==='experiment_submit'?fresh.some(e=>e.kind==='experiment_dispatch'):
    lease.phase==='experiment_poll'?fresh.some(e=>e.kind==='experiment_result'):
    lease.phase==='audit_review'?fresh.some(e=>e.kind==='github_audit_review'):
+   lease.phase==='source_workflow_submit'?fresh.some(e=>e.kind==='source_workflow_dispatch'):
+   lease.phase==='source_workflow_poll'?fresh.some(e=>e.kind==='source_workflow_result'):
    fresh.some(e=>e.kind==='phase'&&e.data.output.phase===lease.phase&&e.data.output.status==='ok');
   const ok=!error&&!pending&&progressed;
   const last=state.events.findLast(e=>e.kind==='phase')?.data.output;
