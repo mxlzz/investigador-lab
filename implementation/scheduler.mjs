@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {researchTiming} from './timing.mjs';
+import {auditSummary} from './github-audits.mjs';
 const stages=['intake','search_plan','extract_evidence','map_knowledge','hypotheses','novelty_review','experiment_design','evaluation','report','next_cycle'];
 const day=ms=>new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Argentina/Buenos_Aires'}).format(new Date(ms));
 export function documentaryTask(state,workflow='research'){
@@ -37,7 +38,7 @@ export class Scheduler{
   if(alive)throw new Error('Planificador ocupado');fs.renameSync(this.lock,this.lock+'.recovered-'+crypto.randomUUID());fd=fs.openSync(this.lock,'wx');
  }try{fs.writeFileSync(fd,JSON.stringify({pid:process.pid}));const s=this.load();const result=fn(s);this.save(s);return result;}finally{fs.closeSync(fd);fs.unlinkSync(this.lock);}}
  states(){const dir=path.join(this.engine.base,'projects');return fs.existsSync(dir)?fs.readdirSync(dir,{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>this.engine.state(e.name)):[];}
- task(s,p){const config=s.projects[p.project]||{};if(config.pending?.[0]==='evaluation')return documentaryTask({...p,completed:p.completed.filter(phase=>phase!=='evaluation')},config.workflow);return config.pending?.length?config.pending[0]:documentaryTask(p,config.workflow);}
+ task(s,p){const config=s.projects[p.project]||{};if(auditSummary(p).pending.length)return 'audit_review';if(config.pending?.[0]==='evaluation')return documentaryTask({...p,completed:p.completed.filter(phase=>phase!=='evaluation')},config.workflow);return config.pending?.length?config.pending[0]:documentaryTask(p,config.workflow);}
  select(s,now){const quota=(s.daily[day(now)]||0)<24;
   return this.states().filter(p=>s.projects[p.project]?.enabled!==false&&(s.projects[p.project]?.nextAt||0)<=now&&this.task(s,p)&&(quota||['experiment_submit','experiment_poll'].includes(this.task(s,p)))).sort((a,b)=>(Number(a.created.priority??1)-Number(b.created.priority??1))||((s.projects[a.project]?.lastAt||0)-(s.projects[b.project]?.lastAt||0))).map(p=>({project:p.project,phase:this.task(s,p),beforeDigest:p.lastDigest,beforeSeq:p.events.length}))[0]||null;
  }
@@ -54,6 +55,7 @@ export class Scheduler{
    lease.phase==='experiment_plan'?fresh.some(e=>e.kind==='experiment_plan'):
    lease.phase==='experiment_submit'?fresh.some(e=>e.kind==='experiment_dispatch'):
    lease.phase==='experiment_poll'?fresh.some(e=>e.kind==='experiment_result'):
+   lease.phase==='audit_review'?fresh.some(e=>e.kind==='github_audit_review'):
    fresh.some(e=>e.kind==='phase'&&e.data.output.phase===lease.phase&&e.data.output.status==='ok');
   const ok=!error&&!pending&&progressed;
   const last=state.events.findLast(e=>e.kind==='phase')?.data.output;
@@ -61,6 +63,17 @@ export class Scheduler{
   s.projects[lease.project]={...p,failures,nextAt:ok?now:pending?now+900000:now+Math.min(3600000,900000*2**(failures-1)),enabled:blocked||failures>=3?false:p.enabled!==false,reason:blocked?last.blockers.join('; '):error||(!progressed?'Sin fase confirmada':p.reason||'Trabajo documental activo')};
   // Finish the claimed step before applying any next-cycle plan.
   if(ok&&p.pending?.[0]===lease.phase)s.projects[lease.project].pending=p.pending.slice(1);
+  if(ok&&lease.phase==='audit_review'){
+   const requested=fresh.filter(e=>e.kind==='github_audit_review'&&e.data.decision==='accepted').map(e=>e.data.follow_up_phase).filter(Boolean);
+   if(requested.length){
+    const selected=requested.sort((a,b)=>stages.indexOf(a)-stages.indexOf(b))[0];
+    let next=stages.slice(stages.indexOf(selected));
+    if(selected==='search_plan')next.splice(1,0,'gather_evidence');
+    if(p.workflow==='documentary')next=next.filter(phase=>!['hypotheses','novelty_review','experiment_design','evaluation','next_cycle'].includes(phase));
+    s.projects[lease.project].pending=next;
+    s.projects[lease.project].reason='Revisión de comentarios de auditoría; seguimiento documental dentro del encargo';
+   }
+  }
   // A next-cycle proposal cannot execute a command. It can only queue a
   // documented research phase that the engine has explicitly admitted.
   if(ok&&lease.phase==='next_cycle'){
