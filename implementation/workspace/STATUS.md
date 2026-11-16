@@ -22,3 +22,8 @@
 Se implementó el enlace MCP → plan aprobado → GitHub Actions → recibo recuperado → journal → evaluación y plan siguiente. Validación de identidad y hashes, prohibición de proyectos privados y registro persistente. Esta actualización está en GitHub, **no está confirmada su instalación en el Gateway**. La aprobación de pruebas automatizadas no sustituye una prueba de dispatch real ni evidencia científica general.
 
 Aceptación real remota validada: controlador GitHub Actions 43350881884 y runner 43350903439, con importación y evaluation confirmadas. El agente de Windows no se ha actualizado ni probado; consultar docs/WINDOWS_DEPLOYMENT_RUNBOOK.md.
+
+## Recepción de auditoría — 2026-11-16
+
+Implementada lectura de comentarios estructurados en GitHub con registro y evaluación local; independencia del auditor y ejecución periódica de ChatGPT no verificadas. Ver docs/GITHUB_AUDIT_INBOX.md. Las secciones anteriores conservan el historial de versiones.
+
