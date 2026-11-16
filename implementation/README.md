@@ -26,9 +26,9 @@ control con enabled=false pausa los próximos ciclos; no interrumpe una operaci�
 
 La automatización no entrega mensajes externos. El progreso se consulta al agente y en research-state/. La prueba técnica completa está documentada en docs/LOCAL_ACCEPTANCE.md.
 
-## Telegram y auditoría: aplazados
+## Telegram y ejecución autónoma del auditor: aplazados
 
-Los scripts de Telegram de 0.2 siguen disponibles, sin activar. No se pidieron ni publicaron tokens. La auditoría independiente se prevé con ChatGPT a través de GitHub, por indicación del usuario; no se conecta en esta etapa. No son requisitos para investigar documentos.
+Los scripts de Telegram de 0.2 siguen disponibles, sin activar. No se pidieron ni publicaron tokens. Se reciben comentarios estructurados de ChatGPT por GitHub: ver docs/GITHUB_AUDIT_INBOX.md. La misma cuenta no acredita independencia; no se programa por sí sola la ejecución de ChatGPT. No son requisitos para investigar documentos.
 
 ## Límites y mantenimiento
 
