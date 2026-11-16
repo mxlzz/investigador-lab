@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "projects": {
+    "acd": {
+      "repository": "mxlzz/ACD",
+      "ref": "dev/acd-v2-oidn-detail-eval",
+      "workflows": [
+        {"file": "blender-smoke.yml", "blob_sha": "4264ae9b467aef6b426ed7b6871cfd2c92c7fcfc", "purpose": "Reproducir integración Blender 5, comparaciones CPU y EXR existentes; no demostrar superioridad general"},
+        {"file": "ci.yml", "blob_sha": "841a93936954e57441a876ca38192aad1e35a17e", "purpose": "Reproducir tests numéricos, OpenEXR y trazabilidad existentes"}
+      ]
+    }
+  }
+}
