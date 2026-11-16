@@ -95,7 +95,7 @@ export class GitHubProjects{
   const s=this.engine.state(project),events=s.events.filter(e=>e.kind!=='github_sync');
   const sources=events.filter(e=>e.kind==='source').map(e=>({id:e.key,url:e.data.url,title:e.data.title||null,access_level:e.data.access_level,retrieved_at:e.data.retrieved_at,github:e.data.github||null}));
   const phases=events.filter(e=>e.kind==='phase').map(e=>({id:e.key,time:e.time,output:e.data.output}));
-  const value={schema_version:1,project,request:s.created.request,visibility:s.created.visibility,local_digest:events.at(-1).digest,completed:s.completed,source_repositories:events.filter(e=>e.kind==='github_source_repository').map(e=>e.data),sources,hypotheses:events.filter(e=>e.kind==='hypothesis').map(e=>({id:e.key,...e.data})),phases,audit_feedback:events.filter(e=>['github_audit_comment','github_audit_review'].includes(e.kind)).map(e=>({id:e.key,kind:e.kind,...e.data})),experiments:events.filter(e=>e.kind==='experiment_result').map(e=>({id:e.key,...e.data}))};
+  const value={schema_version:1,project,request:s.created.request,visibility:s.created.visibility,local_digest:events.at(-1).digest,completed:s.completed,source_repositories:events.filter(e=>e.kind==='github_source_repository').map(e=>e.data),sources,hypotheses:events.filter(e=>e.kind==='hypothesis').map(e=>({id:e.key,...e.data})),phases,source_workflows:events.filter(e=>['source_workflow_plan','source_workflow_dispatch','source_workflow_result','source_workflow_metrics','source_workflow_blocked'].includes(e.kind)).map(e=>({id:e.key,kind:e.kind,...e.data})),audit_feedback:events.filter(e=>['github_audit_comment','github_audit_review'].includes(e.kind)).map(e=>({id:e.key,kind:e.kind,...e.data})),experiments:events.filter(e=>e.kind==='experiment_result').map(e=>({id:e.key,...e.data}))};
   const content=JSON.stringify(value,null,2)+'\n';
   guard(Buffer.byteLength(content)<1500000,'El avance supera el límite de sincronización');
   guard(!/(?:github_pat_[A-Za-z0-9_]{15,}|gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9_-]{24,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)/.test(content),'Sincronización bloqueada: posible secreto en el expediente');
@@ -148,7 +148,8 @@ export class GitHubProjects{
  }
  async read(project,{repository,file,ref}={}){
   const remote=await this.addSource(project,repository),base='/repos/'+repository;
-  const reference=ref||remote.default_branch;guard(typeof reference==='string'&&reference.length>0&&reference.length<=200,'Referencia inválida');
+  const configFile=path.join(this.engine.root,'source-workflows.json');const configured=fs.existsSync(configFile)?JSON.parse(fs.readFileSync(configFile,'utf8')).projects?.[project]:null;
+  const reference=ref||(configured?.repository===repository?configured.ref:null)||remote.default_branch;guard(typeof reference==='string'&&reference.length>0&&reference.length<=200,'Referencia inválida');
   const commit=await this.api.request(base+'/commits/'+encodeURIComponent(reference));
   guard(/^[0-9a-f]{40}$/.test(commit.sha),'No se pudo fijar el commit fuente');
   if(!file){
